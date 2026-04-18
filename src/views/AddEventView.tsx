@@ -6,10 +6,10 @@ export default function AddEventView(): JSX.Element {
     event_date: "",
   });
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    fetch("https://.../set-date", {
+    fetch("https://tom-the-shop-server.onrender.com/set-date", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,9 +21,9 @@ export default function AddEventView(): JSX.Element {
     });
   }
 
-  function handleInputChange(e) {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  }
+  // function handleInputChange(e: React.SyntheticEvent<HTMLFormElement>) {
+  //   setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  // }
 
   return (
     <>
