@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import type { useState } from "react";
+import { useState } from "react";
 
 export default function AddEventView(): JSX.Element {
   const [formValues, setFormValues] = useState({
