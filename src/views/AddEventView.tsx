@@ -25,14 +25,9 @@ export default function AddEventView(): JSX.Element {
     });
   }
 
-  function handleInputChange() {
-    // e: React.SyntheticEvent<HTMLFormElement>
-    // setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  function handleInputChange(e: React.ChangeEvent<HTMLFormElement>) {
+    setFormValues({ ...formValues, [e.target.name]: e.target.value });
   }
-
-  // function handleInputChange(e: React.SyntheticEvent<HTMLFormElement>) {
-  //   setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  // }
 
   return (
     <>
