@@ -3,9 +3,9 @@ import { useState } from "react";
 
 export default function AddEventView(): JSX.Element {
   const [formValues, setFormValues] = useState({
-    event_title: "",
-    start_date: "",
-    end_date: "",
+    title: "",
+    start: "",
+    end: "",
   });
 
   function handleSubmit(
@@ -21,9 +21,9 @@ export default function AddEventView(): JSX.Element {
       body: JSON.stringify(formValues),
     });
     setFormValues({
-      event_title: "",
-      start_date: "",
-      end_date: "",
+      title: "",
+      start: "",
+      end: "",
     });
   }
 
@@ -38,33 +38,33 @@ export default function AddEventView(): JSX.Element {
       <div className="form-div main-div">
         <h3>Post a gig</h3>
         <form id="form" onSubmit={handleSubmit}>
-          <label htmlFor="event_title">Event Title:</label>
+          <label htmlFor="title">Event Title:</label>
           <input
             type="text"
-            id="event_title"
-            name="event_title"
+            id="title"
+            name="title"
             required
-            value={formValues.event_title}
+            value={formValues.title}
             onChange={handleInputChange}
           />
 
-          <label htmlFor="start_date">Start Date:</label>
+          <label htmlFor="start">Start Date:</label>
           <input
             type="date"
-            id="start_date"
-            name="start_date"
+            id="start"
+            name="start"
             required
-            value={formValues.start_date}
+            value={formValues.start}
             onChange={handleInputChange}
           />
 
-          <label htmlFor="end_date">End Date:</label>
+          <label htmlFor="end">End Date:</label>
           <input
             type="date"
-            id="end_date"
-            name="end_date"
+            id="end"
+            name="end"
             required
-            value={formValues.end_date}
+            value={formValues.end}
             onChange={handleInputChange}
           />
 

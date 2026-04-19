@@ -2,6 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import listPlugin from "@fullcalendar/list";
 import { useState, useEffect } from "react";
+import { startOfDay } from "@fullcalendar/core/internal";
 
 export default function TestCalendar() {
   const [events, setEvents] = useState([]);
@@ -16,21 +17,37 @@ export default function TestCalendar() {
       setEvents(data);
     }
     fetchData();
-    // TODO: add events variable to dependancies
+    console.log(events);
   }, []);
+
+  // TODO: add db polling
+
+  const test_events = [
+    {
+      start: "2026-04-24T00:00:00.000Z",
+      end: "2026-04-26T00:00:00.000Z",
+      title: "test event 1",
+    },
+    {
+      start: "2026-05-01T00:00:00.000Z",
+      end: "2026-05-02T00:00:00.000Z",
+      title: "test event 2",
+    },
+  ];
 
   return (
     <FullCalendar
       plugins={[multiMonthPlugin, listPlugin]}
       initialView="multiMonthYear"
       multiMonthMaxColumns={1}
-      //   height={"100%"}
+      // height={"90vh"}
       headerToolbar={{
         start: "multiMonthYear listYear",
         center: "title",
         end: "today prev,next",
       }}
       events={events}
+      // events={test_events}
     />
   );
 }
