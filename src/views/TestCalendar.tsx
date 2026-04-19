@@ -9,13 +9,14 @@ export default function TestCalendar() {
   // fetch request for events
   useEffect(() => {
     async function fetchData() {
-      //TODO: update fetch request to deplyed server URL
-      const response = await fetch("https://.../stored-events");
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/stored-events",
+      );
       const data = await response.json();
       setEvents(data);
     }
     fetchData();
-    //TODO: add events variable to dependancies?
+    // TODO: add events variable to dependancies
   }, []);
 
   return (
