@@ -8,7 +8,9 @@ export default function AddEventView(): JSX.Element {
     end_date: "",
   });
 
-  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+  function handleSubmit(
+    e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
+  ) {
     e.preventDefault();
 
     fetch("https://tom-the-shop-server.onrender.com/set-date", {
@@ -25,7 +27,7 @@ export default function AddEventView(): JSX.Element {
     });
   }
 
-  function handleInputChange(e: React.ChangeEvent<HTMLFormElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   }
 
