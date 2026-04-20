@@ -1,59 +1,55 @@
-// import type { JSX } from "react";
-// import { Calendar } from "@fullcalendar/core";
-// import multiMonthPlugin from "@fullcalendar/multimonth";
-
-// export default function CalendarView(): JSX.Element {
-//   // const calendar = new Calendar(calendarEl, {
-//   //   plugins: [multiMonthPlugin],
-//   //   initialView: "multiMonthYear",
-//   //   multiMonthMaxColumns: 1, // force a single column
-//   // });
-
-//   return (
-//     <>
-//       <h1>Calendar</h1>
-//       {/* {calendar} */}
-//     </>
-//   );
-// }
-
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction"; // for clicking + dragging
 import multiMonthPlugin from "@fullcalendar/multimonth";
-import "@fullcalendar/common/main.css";
+import listPlugin from "@fullcalendar/list";
+import dayGridPlugin from "@fullcalendar/daygrid";
+// import moment from "moment";
+import { useState, useEffect } from "react";
 
 export default function CalendarView() {
-  const events = [
-    {
-      title: "Meeting",
-      start: "2025-04-20T10:00:00",
-      end: "2025-04-20T11:00:00",
-    },
-    {
-      title: "Lunch",
-      start: "2025-04-21T12:00:00",
-    },
-  ];
+  const [events, setEvents] = useState([]);
+
+  // fetch request for events
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/stored-events",
+      );
+      const data = await response.json();
+      setEvents(data);
+      console.log(data);
+    }
+    fetchData();
+    
+  }, []);
+
+  // TODO: add db polling
+
+  // const test_events = [
+  //   {
+  //     start: "2026-04-24",
+  //     end: "2026-04-26",
+  //     title: "test event 1",
+  //   },
+  //   {
+  //     start: "2026-05-01T00:00:00.000Z",
+  //     end: "2026-05-02T00:00:00.000Z",
+  //     title: "test event 2",
+  //   },
+  // ];
 
   return (
-    <div style={{ padding: "1rem" }}>
+    <div className="calendar">
       <FullCalendar
-        plugins={[
-          dayGridPlugin,
-          timeGridPlugin,
-          interactionPlugin,
-          multiMonthPlugin,
-        ]}
-        initialView="dayGridMonth"
+        plugins={[multiMonthPlugin, listPlugin, dayGridPlugin]}
+        initialView="multiMonthYear"
+        multiMonthMaxColumns={1}
         headerToolbar={{
-          left: "prev,next today",
+          start: "multiMonthYear listYear",
           center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay,multiMonthYear",
+          end: "today prev,next",
         }}
         events={events}
-        height="80vh"
+        // events={test_events}
       />
     </div>
   );
