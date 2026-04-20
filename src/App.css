@@ -6,7 +6,7 @@
 }
 
 .menu {
-  width: 12%;
+  width: 10vw;
   display: flex;
   flex-direction: column;
   gap: 1rem;
