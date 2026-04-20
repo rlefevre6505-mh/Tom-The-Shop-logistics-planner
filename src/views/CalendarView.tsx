@@ -2,7 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import listPlugin from "@fullcalendar/list";
 import dayGridPlugin from "@fullcalendar/daygrid";
-// import moment from "moment";
+import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useEffect } from "react";
 
 export default function CalendarView() {
@@ -19,28 +19,19 @@ export default function CalendarView() {
       console.log(data);
     }
     fetchData();
-    
   }, []);
 
-  // TODO: add db polling
-
-  // const test_events = [
-  //   {
-  //     start: "2026-04-24",
-  //     end: "2026-04-26",
-  //     title: "test event 1",
-  //   },
-  //   {
-  //     start: "2026-05-01T00:00:00.000Z",
-  //     end: "2026-05-02T00:00:00.000Z",
-  //     title: "test event 2",
-  //   },
-  // ];
+  // TODO: add db polling?
 
   return (
     <div className="calendar">
       <FullCalendar
-        plugins={[multiMonthPlugin, listPlugin, dayGridPlugin]}
+        plugins={[
+          multiMonthPlugin,
+          listPlugin,
+          dayGridPlugin,
+          interactionPlugin,
+        ]}
         initialView="multiMonthYear"
         multiMonthMaxColumns={1}
         headerToolbar={{
@@ -49,7 +40,18 @@ export default function CalendarView() {
           end: "today prev,next",
         }}
         events={events}
-        // events={test_events}
+        //make date cells clickable
+        selectable={true}
+        select={() => {
+          console.log("date cell clicked");
+          // TODO: store clicked date in state (to be used in add-event form)
+        }}
+        //make events interactable
+        editable={true}
+        eventClick={() => {
+          console.log("event clicked");
+          // TODO: store clicked event in state  (to be used in edit-event form)
+        }}
       />
     </div>
   );
