@@ -1,37 +1,19 @@
 import type { JSX } from "react";
-import { useEffect } from "react";
 import { useAppSelector } from "../app/hooks.ts";
 
 export default function EventView(): JSX.Element {
-  const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
-
-  // fetch request for events
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/selected-event",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id: SelectedEvent }),
-        },
-      );
-
-      const data = await response.json();
-      console.log("Event data:", data);
-    }
-
-    if (SelectedEvent) {
-      fetchData();
-    }
-  }, [SelectedEvent]);
+  const EventDetails = useAppSelector((state) => state.EventDetails.value);
 
   return (
     <>
       <h1>Event View</h1>
-      <h2>Event ID: {SelectedEvent}</h2>
+      <p>
+        {EventDetails?.title}: {EventDetails?.start} - {EventDetails?.end}
+      </p>
+      <p>{EventDetails?.date_added}</p>
+      {EventDetails?.location && (
+        <p>Event location: {EventDetails?.location}</p>
+      )}
     </>
   );
 }
