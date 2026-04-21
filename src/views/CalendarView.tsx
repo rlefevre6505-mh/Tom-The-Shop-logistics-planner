@@ -4,9 +4,14 @@ import listPlugin from "@fullcalendar/list";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useEffect } from "react";
+import { useAppDispatch } from "../app/hooks.ts";
+import { changeView } from "../features/view/viewSlice.ts";
+import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 
 export default function CalendarView() {
   const [events, setEvents] = useState([]);
+
+  const dispatch = useAppDispatch();
 
   // fetch request for events
   useEffect(() => {
@@ -48,9 +53,11 @@ export default function CalendarView() {
         }}
         //make events interactable
         editable={true}
-        eventClick={() => {
-          console.log("event clicked");
-          // TODO: store clicked event in state  (to be used in edit-event form)
+        eventClick={(info) => {
+          dispatch(changeView("event-view"));
+          // TODO: store clicked event id in Redux state  (to be used in edit-event form)
+          console.log(info.event.id);
+          dispatch(changeSelectedEvent(info.event.id));
         }}
       />
     </div>
