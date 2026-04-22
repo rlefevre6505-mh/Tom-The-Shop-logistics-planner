@@ -38,10 +38,9 @@ export default function CalendarView() {
       },
     );
     const data = await response.json();
-    console.log(data);
+    dispatch(changeEventDetails(data));
+    // TODO: add db polling?
   }
-
-  // TODO: add db polling?
 
   return (
     <div className="calendar">
@@ -69,10 +68,9 @@ export default function CalendarView() {
         //make events interactable:
         editable={true}
         eventClick={(info) => {
-          dispatch(changeView("event-view"));
           dispatch(changeSelectedEvent(info.event.id));
           fetchSelectedEvent();
-          dispatch(changeEventDetails(info.event));
+          dispatch(changeView("event-view"));
         }}
       />
     </div>

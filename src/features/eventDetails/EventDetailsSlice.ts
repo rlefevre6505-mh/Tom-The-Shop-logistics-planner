@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type eventDetailsObject = {
   title: string;
-  start: string;
-  end: string;
-  date_added?: string;
+  start: Date;
+  end: Date;
+  date_added?: Date;
   num_of_shops?: number;
   location?: string;
 };
