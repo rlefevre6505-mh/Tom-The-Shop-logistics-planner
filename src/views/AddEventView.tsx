@@ -1,7 +1,45 @@
 import type { JSX } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import "./AddEvent.css";
 
 export default function AddEventView(): JSX.Element {
+  type shop = {
+    id: number;
+    shop_name: string;
+  };
+  type vehicle = {
+    id: number;
+    vehicle_name: string;
+  };
+  const [shopsState, setShopsState] = useState<shop[]>([]);
+  const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
+
+  useEffect(() => {
+    async function fetchShops() {
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/get-shops",
+      );
+      const data: shop[] = await response.json();
+      setShopsState(data);
+    }
+    fetchShops();
+  }, []);
+
+  useEffect(() => {
+    async function fetchVehicles() {
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/get-vehicles",
+      );
+      const data: vehicle[] = await response.json();
+      setVehiclesState(data);
+    }
+    fetchVehicles();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(vehiclesState);
+  // }, [vehiclesState]);
+
   type FormValues = {
     title: string;
     start: string;
@@ -9,10 +47,10 @@ export default function AddEventView(): JSX.Element {
     date_added: Date;
     location: string;
     num_of_shops: number;
-    shops: [];
+    shops: number[];
     num_of_vehicles: number;
-    vehicles: [];
-    notes: [];
+    vehicles: number[];
+    notes: string[];
   };
   const [formValues, setFormValues] = useState<FormValues>({
     title: "",
@@ -55,15 +93,14 @@ export default function AddEventView(): JSX.Element {
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    console.log(formValues.vehicles);
+    // console.log(formValues.vehicles);
   }
 
   return (
     <>
-      <h1>Add Event</h1>
+      <h1>Add A New Event</h1>
       <div className="form-div main-div">
-        <h3>Post a gig</h3>
-        <form id="form" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
           <label htmlFor="title">Event Title:</label>
           <input
             type="text"
@@ -110,23 +147,25 @@ export default function AddEventView(): JSX.Element {
             id="num_of_shops"
             name="num_of_shops"
             min={0}
+            maxLength={2}
             required
             value={formValues.num_of_shops}
             onChange={handleInputChange}
           />
 
-          {Number(formValues.num_of_shops) > 0 &&
-            Array.from({ length: Number(formValues.num_of_shops) }).map(
-              (_, i) => (
-                <div key={i}>
-                  <select>
-                    {/* TODO: map stored vehicles in DB into options*/}
-                    <option>a</option>
-                    <option>b</option>
+          <div className="select-div">
+            {Number(formValues.num_of_shops) > 0 &&
+              Array.from({ length: Number(formValues.num_of_shops) }).map(
+                (_, i) => (
+                  <select key={`shop-select${i}`}>
+                    <option>Please select an option</option>
+                    {shopsState.map((s) => {
+                      return <option value={s.id}>{s.shop_name}</option>;
+                    })}
                   </select>
-                </div>
-              ),
-            )}
+                ),
+              )}
+          </div>
 
           <label htmlFor="num_of_vehicles">Number of shops required:</label>
           <input
@@ -134,23 +173,25 @@ export default function AddEventView(): JSX.Element {
             id="num_of_vehicles"
             name="num_of_vehicles"
             min={0}
+            maxLength={2}
             required
             value={formValues.num_of_vehicles}
             onChange={handleInputChange}
           />
 
-          {Number(formValues.num_of_vehicles) > 0 &&
-            Array.from({ length: Number(formValues.num_of_vehicles) }).map(
-              (_, i) => (
-                <div key={i}>
-                  <select>
-                    {/* TODO: map stored vehicles in DB into options*/}
-                    <option>a</option>
-                    <option>b</option>
+          <div className="select-div">
+            {Number(formValues.num_of_vehicles) > 0 &&
+              Array.from({ length: Number(formValues.num_of_vehicles) }).map(
+                (_, i) => (
+                  <select key={`vehicle-select${i}`}>
+                    <option>Please select an option</option>
+                    {vehiclesState.map((v) => {
+                      return <option value={v.id}>{v.vehicle_name}</option>;
+                    })}
                   </select>
-                </div>
-              ),
-            )}
+                ),
+              )}
+          </div>
 
           <button type="submit">Submit</button>
         </form>

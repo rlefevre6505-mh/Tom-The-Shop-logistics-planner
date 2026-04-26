@@ -4,14 +4,14 @@ import listPlugin from "@fullcalendar/list";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks.ts";
+import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 
 export default function CalendarView() {
   const [events, setEvents] = useState([]);
-  const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
+  // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
   const dispatch = useAppDispatch();
 
   // fetch request for events
@@ -26,7 +26,7 @@ export default function CalendarView() {
     fetchData();
   }, []);
 
-  async function fetchSelectedEvent() {
+  async function fetchSelectedEvent(id: number) {
     const response = await fetch(
       "https://tom-the-shop-server.onrender.com/selected-event",
       {
@@ -34,11 +34,12 @@ export default function CalendarView() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: SelectedEvent }),
+        body: JSON.stringify({ id }),
       },
     );
     const data = await response.json();
     dispatch(changeEventDetails(data));
+    // console.log(data);
     // TODO: add db polling?
   }
 
@@ -67,9 +68,9 @@ export default function CalendarView() {
         }}
         //make events interactable:
         editable={true}
-        eventClick={(info) => {
+        eventClick={async (info) => {
           dispatch(changeSelectedEvent(info.event.id));
-          fetchSelectedEvent();
+          await fetchSelectedEvent(parseInt(info.event.id));
           dispatch(changeView("event-view"));
         }}
       />

@@ -1,16 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+type shop = {
+  id: number;
+  shop_name: string;
+};
+
+type vehicle = {
+  id: number;
+  vehicle_name: string;
+  vehicle_reg: string;
+};
+
 type eventDetailsObject = {
+  id: number;
   title: string;
   start: Date;
   end: Date;
-  date_added?: Date;
-  num_of_shops?: number;
+  date_added: Date;
   location?: string;
+  num_of_shops?: number;
+  shops?: shop[];
+  num_of_vehicles?: number;
+  vehicles?: vehicle[];
 };
 
 interface EventDetailsState {
-  // TODO: change to eventDetailsObject once complete
   value: null | eventDetailsObject;
 }
 
