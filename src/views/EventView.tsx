@@ -17,8 +17,8 @@ export default function EventView(): JSX.Element {
       <p>Currently Allocated:</p>
       <ul>
         {EventDetails?.shops?.length !== 0 ? (
-          EventDetails?.shops?.map((s) => {
-            return <li>{s.shop_name}</li>;
+          EventDetails?.shops?.map((s, i) => {
+            return <li key={`shop${i}`}>{s.shop_name}</li>;
           })
         ) : (
           <p>NONE</p>
@@ -31,8 +31,8 @@ export default function EventView(): JSX.Element {
       <p>Currently Allocated:</p>
       <ul>
         {EventDetails?.vehicles?.length !== 0 ? (
-          EventDetails?.vehicles?.map((v) => {
-            return <li>{v.vehicle_name}</li>;
+          EventDetails?.vehicles?.map((v, i) => {
+            return <li key={`vehicle${i}`}>{v.vehicle_name}</li>;
           })
         ) : (
           <p>NONE</p>

@@ -36,10 +36,6 @@ export default function AddEventView(): JSX.Element {
     fetchVehicles();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(vehiclesState);
-  // }, [vehiclesState]);
-
   type FormValues = {
     title: string;
     start: string;
@@ -93,8 +89,21 @@ export default function AddEventView(): JSX.Element {
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    // console.log(formValues.vehicles);
   }
+
+  function handleShopSelect(i: number, value: number) {
+    const updated = [...formValues.shops];
+    updated[i] = value;
+    setFormValues({ ...formValues, shops: updated });
+  }
+  const selectedShopIds = formValues.shops;
+
+  function handleVehicleSelect(i: number, value: number) {
+    const updated = [...formValues.vehicles];
+    updated[i] = value;
+    setFormValues({ ...formValues, vehicles: updated });
+  }
+  const selectedVehicleIds = formValues.vehicles;
 
   return (
     <>
@@ -157,11 +166,24 @@ export default function AddEventView(): JSX.Element {
             {Number(formValues.num_of_shops) > 0 &&
               Array.from({ length: Number(formValues.num_of_shops) }).map(
                 (_, i) => (
-                  <select key={`shop-select${i}`}>
-                    <option>Please select an option</option>
-                    {shopsState.map((s) => {
-                      return <option value={s.id}>{s.shop_name}</option>;
-                    })}
+                  <select
+                    key={`shop-select${i}`}
+                    onChange={(e) =>
+                      handleShopSelect(i, Number(e.target.value))
+                    }
+                  >
+                    <option key={`vehicle-option${i}`}>
+                      Please select an option
+                    </option>
+                    {shopsState
+                      .filter(
+                        (s) =>
+                          !selectedShopIds.includes(s.id) ||
+                          s.id === formValues.shops[i],
+                      )
+                      .map((s) => {
+                        return <option value={s.id}>{s.shop_name}</option>;
+                      })}
                   </select>
                 ),
               )}
@@ -183,11 +205,24 @@ export default function AddEventView(): JSX.Element {
             {Number(formValues.num_of_vehicles) > 0 &&
               Array.from({ length: Number(formValues.num_of_vehicles) }).map(
                 (_, i) => (
-                  <select key={`vehicle-select${i}`}>
-                    <option>Please select an option</option>
-                    {vehiclesState.map((v) => {
-                      return <option value={v.id}>{v.vehicle_name}</option>;
-                    })}
+                  <select
+                    key={`vehicle-select${i}`}
+                    onChange={(e) =>
+                      handleVehicleSelect(i, Number(e.target.value))
+                    }
+                  >
+                    <option key={`vehicle-option${i}`}>
+                      Please select an option
+                    </option>
+                    {vehiclesState
+                      .filter(
+                        (v) =>
+                          !selectedVehicleIds.includes(v.id) ||
+                          v.id === formValues.vehicles[i],
+                      )
+                      .map((v) => {
+                        return <option value={v.id}>{v.vehicle_name}</option>;
+                      })}
                   </select>
                 ),
               )}
