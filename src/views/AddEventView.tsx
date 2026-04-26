@@ -189,7 +189,7 @@ export default function AddEventView(): JSX.Element {
               )}
           </div>
 
-          <label htmlFor="num_of_vehicles">Number of shops required:</label>
+          <label htmlFor="num_of_vehicles">Number of vehicles required:</label>
           <input
             type="number"
             id="num_of_vehicles"
