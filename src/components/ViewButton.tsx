@@ -2,15 +2,15 @@ import type { JSX } from "react";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 
-type buttonProps = {
+type viewButtonProps = {
   containedString: string;
   stateString: string;
 };
 
-export default function Button({
+export default function ViewButton({
   containedString,
   stateString,
-}: buttonProps): JSX.Element {
+}: viewButtonProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   return (

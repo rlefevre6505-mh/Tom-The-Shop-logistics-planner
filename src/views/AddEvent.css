@@ -6,9 +6,21 @@ h1 {
   width: 80vw;
   display: flex;
   flex-direction: column;
+  gap: 0.8rem;
   margin: auto;
   align-items: center;
   justify-content: center;
+}
+
+.form-row {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
 }
 
 input,
@@ -16,6 +28,7 @@ select {
   padding: 0.4rem;
   margin-bottom: 0.8rem;
   min-width: 12rem;
+  border-radius: 0.4rem;
 }
 
 select {

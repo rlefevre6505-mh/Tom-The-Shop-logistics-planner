@@ -1,6 +1,9 @@
 import type { JSX } from "react";
 import { useState, useEffect } from "react";
 import "./AddEvent.css";
+import FormInput from "../components/FormInput";
+import FormNumberInput from "../components/FormNumberInput";
+import SubmitButton from "../components/SubmitButton";
 
 export default function AddEventView(): JSX.Element {
   type shop = {
@@ -110,58 +113,51 @@ export default function AddEventView(): JSX.Element {
       <h1>Add A New Event</h1>
       <div className="form-div main-div">
         <form className="form" onSubmit={handleSubmit}>
-          <label htmlFor="title">Event Title:</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            required
-            value={formValues.title}
-            onChange={handleInputChange}
-          />
+          <div className="form-row">
+            <div>
+              <FormInput
+                name="title"
+                type="text"
+                value={formValues.title}
+                onChange={handleInputChange}
+                labelText="Title"
+              />
+            </div>
+            <FormInput
+              name="location"
+              type="text"
+              value={formValues.location}
+              onChange={handleInputChange}
+              labelText="Location"
+            />
+          </div>
 
-          <label htmlFor="start">Start Date:</label>
-          <input
-            type="date"
-            id="start"
-            name="start"
-            required
-            value={formValues.start}
-            onChange={handleInputChange}
-          />
+          <div className="form-row">
+            <FormInput
+              name="start"
+              type="date"
+              value={formValues.start}
+              onChange={handleInputChange}
+              labelText="Start Date"
+            />
+            <FormInput
+              name="end"
+              type="date"
+              value={formValues.end}
+              onChange={handleInputChange}
+              labelText="End Date"
+            />
+          </div>
 
-          <label htmlFor="end">End Date:</label>
-          <input
-            type="date"
-            id="end"
-            name="end"
-            required
-            value={formValues.end}
-            onChange={handleInputChange}
-          />
-
-          <label htmlFor="location">Event location:</label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            required
-            value={formValues.location}
-            onChange={handleInputChange}
-          />
-
-          <label htmlFor="num_of_shops">Number of shops required:</label>
-          <input
-            type="number"
-            id="num_of_shops"
+          <FormNumberInput
             name="num_of_shops"
-            min={0}
-            maxLength={2}
-            required
+            type="number"
             value={formValues.num_of_shops}
             onChange={handleInputChange}
+            labelText="Number Of Shops"
+            min={0}
+            maxLength={2}
           />
-
           <div className="select-div">
             {Number(formValues.num_of_shops) > 0 &&
               Array.from({ length: Number(formValues.num_of_shops) }).map(
@@ -189,18 +185,15 @@ export default function AddEventView(): JSX.Element {
               )}
           </div>
 
-          <label htmlFor="num_of_vehicles">Number of vehicles required:</label>
-          <input
-            type="number"
-            id="num_of_vehicles"
+          <FormNumberInput
             name="num_of_vehicles"
-            min={0}
-            maxLength={2}
-            required
+            type="number"
             value={formValues.num_of_vehicles}
             onChange={handleInputChange}
+            labelText="Number Of Vehicles"
+            min={0}
+            maxLength={2}
           />
-
           <div className="select-div">
             {Number(formValues.num_of_vehicles) > 0 &&
               Array.from({ length: Number(formValues.num_of_vehicles) }).map(
@@ -227,8 +220,7 @@ export default function AddEventView(): JSX.Element {
                 ),
               )}
           </div>
-
-          <button type="submit">Submit</button>
+          <SubmitButton containedString="Submit" />
         </form>
       </div>
     </>

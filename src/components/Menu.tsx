@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import Button from "./Button";
+import ViewButton from "./ViewButton.js";
 import Header from "./Header.js";
 
 export default function Menu(): JSX.Element {
@@ -7,10 +7,13 @@ export default function Menu(): JSX.Element {
     <>
       <div className="menu">
         <Header />
-        <Button containedString={"View Calendar"} stateString={"calendar"} />
-        <Button containedString={"Add Event"} stateString={"add-event"} />
-        <Button containedString={"Edit Event"} stateString={"edit-event"} />
-        <Button containedString={"Edit Lists"} stateString={"edit-lists"} />
+        <ViewButton
+          containedString={"View Calendar"}
+          stateString={"calendar"}
+        />
+        <ViewButton containedString={"Add Event"} stateString={"add-event"} />
+        <ViewButton containedString={"Edit Event"} stateString={"edit-event"} />
+        <ViewButton containedString={"Edit Lists"} stateString={"edit-lists"} />
       </div>
     </>
   );

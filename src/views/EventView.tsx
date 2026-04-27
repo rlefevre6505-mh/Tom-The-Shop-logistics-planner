@@ -3,7 +3,7 @@ import { useAppSelector } from "../app/hooks.ts";
 
 export default function EventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
-  console.log("EventDetails in Redux:", EventDetails);
+
   return (
     <>
       <h1>Event: {EventDetails?.title}</h1>
