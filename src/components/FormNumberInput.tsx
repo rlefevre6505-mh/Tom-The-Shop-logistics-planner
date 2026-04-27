@@ -1,7 +1,7 @@
 type FormNumberInputProps = {
   type: string;
   name: string;
-  value: string | number;
+  value: string | number | undefined;
   min: number;
   maxLength: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

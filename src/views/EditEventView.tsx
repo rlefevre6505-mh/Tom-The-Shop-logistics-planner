@@ -1,6 +1,10 @@
 import type { JSX } from "react";
 import { useState, useEffect } from "react";
 import { useAppSelector } from "../app/hooks.ts";
+import "./AddEvent.css";
+import FormInput from "../components/FormInput.tsx";
+import FormNumberInput from "../components/FormNumberInput";
+import SubmitButton from "../components/SubmitButton";
 
 export default function EditEventView(): JSX.Element {
   type shop = {
@@ -41,25 +45,24 @@ export default function EditEventView(): JSX.Element {
     title: string | undefined;
     start: string | undefined;
     end: string | undefined;
-    date_added: Date | undefined;
     location: string | undefined;
     num_of_shops: number | undefined;
-    shops: shop[] | undefined;
+    shops: shop[];
     num_of_vehicles: number | undefined;
-    vehicles: vehicle[] | undefined;
+    vehicles: vehicle[];
     notes: string[];
   };
+
   const [formValues, setFormValues] = useState<FormValues>({
-    title: "",
-    start: "",
-    end: "",
-    date_added: new Date(),
-    location: "",
-    num_of_shops: 0,
-    shops: [],
-    num_of_vehicles: 0,
-    vehicles: [],
-    notes: [],
+    title: EventDetails?.title,
+    start: EventDetails?.start,
+    end: EventDetails?.end,
+    location: EventDetails?.location,
+    num_of_shops: EventDetails?.num_of_shops,
+    shops: EventDetails?.shops ?? [], // ← always array
+    num_of_vehicles: EventDetails?.num_of_vehicles,
+    vehicles: EventDetails?.vehicles ?? [], // ← always array
+    notes: EventDetails?.notes ?? [],
   });
 
   function handleSubmit(
@@ -67,24 +70,23 @@ export default function EditEventView(): JSX.Element {
   ) {
     e.preventDefault();
 
-    fetch("https://tom-the-shop-server.onrender.com/add-event", {
-      method: "POST",
+    fetch("https://tom-the-shop-server.onrender.com/edit-event", {
+      method: "UPDATE", // TODO: update server query
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formValues),
     });
     setFormValues({
-      title: EventDetails?.title,
-      start: EventDetails?.start.toString(),
-      end: EventDetails?.end.toString(),
-      date_added: EventDetails?.date_added,
-      location: EventDetails?.location,
-      num_of_shops: EventDetails?.num_of_shops,
-      shops: EventDetails?.shops,
-      num_of_vehicles: EventDetails?.num_of_vehicles,
-      vehicles: EventDetails?.vehicles,
-      notes: EventDetails?.notes,
+      title: "",
+      start: "",
+      end: "",
+      location: "",
+      num_of_shops: 0,
+      shops: [],
+      num_of_vehicles: 0,
+      vehicles: [],
+      notes: [],
     });
   }
 
@@ -92,155 +94,146 @@ export default function EditEventView(): JSX.Element {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   }
 
-  function handleShopSelect(i: number, value: number) {
-    const updated = [...formValues.shops];
-    updated[i] = value;
+  function handleShopSelect(i: number, id: number) {
+    const selected = shopsState.find((s) => s.id === id);
+    if (!selected) return;
+    const updated = [...(formValues.shops ?? [])];
+    updated[i] = selected;
+
     setFormValues({ ...formValues, shops: updated });
   }
+
   const selectedShopIds = formValues.shops;
 
-  function handleVehicleSelect(i: number, value: number) {
-    const updated = [...formValues.vehicles];
-    updated[i] = value;
+  function handleVehicleSelect(i: number, id: number) {
+    const selected = vehiclesState.find((v) => v.id === id);
+    if (!selected) return;
+    const updated = [...(formValues.vehicles ?? [])];
+    updated[i] = selected;
     setFormValues({ ...formValues, vehicles: updated });
   }
+
   const selectedVehicleIds = formValues.vehicles;
 
   return (
     <>
-      <h1>Edit Event</h1>
-      return (
-      <>
-        <h1>Add A New Event</h1>
-        <div className="form-div main-div">
-          <form className="form" onSubmit={handleSubmit}>
-            <label htmlFor="title">Event Title:</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              required
-              defaultValue={EventDetails?.title}
-              placeholder={EventDetails?.title}
-              value={formValues.title}
-              onChange={handleInputChange}
-            />
-
-            <label htmlFor="start">Start Date:</label>
-            <input
-              type="date"
-              id="start"
-              name="start"
-              required
-              value={formValues.start}
-              onChange={handleInputChange}
-            />
-
-            <label htmlFor="end">End Date:</label>
-            <input
-              type="date"
-              id="end"
-              name="end"
-              required
-              value={formValues.end}
-              onChange={handleInputChange}
-            />
-
-            <label htmlFor="location">Event location:</label>
-            <input
-              type="text"
-              id="location"
+      <h1>Add A New Event</h1>
+      <div className="form-div main-div">
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div>
+              <FormInput
+                name="title"
+                type="text"
+                value={formValues.title}
+                onChange={handleInputChange}
+                labelText="Title"
+              />
+            </div>
+            <FormInput
               name="location"
-              required
+              type="text"
               value={formValues.location}
               onChange={handleInputChange}
+              labelText="Location"
             />
+          </div>
 
-            <label htmlFor="num_of_shops">Number of shops required:</label>
-            <input
-              type="number"
-              id="num_of_shops"
-              name="num_of_shops"
-              min={0}
-              maxLength={2}
-              required
-              value={formValues.num_of_shops}
+          <div className="form-row">
+            <FormInput
+              name="start"
+              type="date"
+              value={formValues.start}
               onChange={handleInputChange}
+              labelText="Start Date"
             />
-
-            <div className="select-div">
-              {Number(formValues.num_of_shops) > 0 &&
-                Array.from({ length: Number(formValues.num_of_shops) }).map(
-                  (_, i) => (
-                    <select
-                      key={`shop-select${i}`}
-                      onChange={(e) =>
-                        handleShopSelect(i, Number(e.target.value))
-                      }
-                    >
-                      <option key={`vehicle-option${i}`}>
-                        Please select an option
-                      </option>
-                      {shopsState
-                        .filter(
-                          (s) =>
-                            !selectedShopIds.includes(s.id) ||
-                            s.id === formValues.shops[i],
-                        )
-                        .map((s) => {
-                          return <option value={s.id}>{s.shop_name}</option>;
-                        })}
-                    </select>
-                  ),
-                )}
-            </div>
-
-            <label htmlFor="num_of_vehicles">
-              Number of vehicles required:
-            </label>
-            <input
-              type="number"
-              id="num_of_vehicles"
-              name="num_of_vehicles"
-              min={0}
-              maxLength={2}
-              required
-              value={formValues.num_of_vehicles}
+            <FormInput
+              name="end"
+              type="date"
+              value={formValues.end}
               onChange={handleInputChange}
+              labelText="End Date"
             />
+          </div>
 
-            <div className="select-div">
-              {Number(formValues.num_of_vehicles) > 0 &&
-                Array.from({ length: Number(formValues.num_of_vehicles) }).map(
-                  (_, i) => (
-                    <select
-                      key={`vehicle-select${i}`}
-                      onChange={(e) =>
-                        handleVehicleSelect(i, Number(e.target.value))
-                      }
-                    >
-                      <option key={`vehicle-option${i}`}>
-                        Please select an option
-                      </option>
-                      {vehiclesState
-                        .filter(
-                          (v) =>
-                            !selectedVehicleIds.includes(v.id) ||
-                            v.id === formValues.vehicles[i],
-                        )
-                        .map((v) => {
-                          return <option value={v.id}>{v.vehicle_name}</option>;
-                        })}
-                    </select>
-                  ),
-                )}
-            </div>
+          <FormNumberInput
+            name="num_of_shops"
+            type="number"
+            value={formValues.num_of_shops}
+            onChange={handleInputChange}
+            labelText="Number Of Shops"
+            min={0}
+            maxLength={2}
+          />
+          <div className="select-div">
+            {Number(formValues.num_of_shops) > 0 &&
+              Array.from({ length: Number(formValues.num_of_shops) }).map(
+                (_, i) => (
+                  <select
+                    key={`shop-select${i}`}
+                    onChange={(e) =>
+                      handleShopSelect(i, Number(e.target.value))
+                    }
+                  >
+                    <option key={`vehicle-option${i}`}>
+                      Please select an option
+                    </option>
+                    {shopsState
+                      .filter(
+                        (s) =>
+                          !selectedShopIds.some((sel) => sel.id === s.id) ||
+                          s.id === formValues.shops[i]?.id,
+                      )
+                      .map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.shop_name}
+                        </option>
+                      ))}
+                  </select>
+                ),
+              )}
+          </div>
 
-            <button type="submit">Submit</button>
-          </form>
-        </div>
-      </>
-      ); ``
+          <FormNumberInput
+            name="num_of_vehicles"
+            type="number"
+            value={formValues.num_of_vehicles}
+            onChange={handleInputChange}
+            labelText="Number Of Vehicles"
+            min={0}
+            maxLength={2}
+          />
+          <div className="select-div">
+            {Number(formValues.num_of_vehicles) > 0 &&
+              Array.from({ length: Number(formValues.num_of_vehicles) }).map(
+                (_, i) => (
+                  <select
+                    key={`vehicle-select${i}`}
+                    onChange={(e) =>
+                      handleVehicleSelect(i, Number(e.target.value))
+                    }
+                  >
+                    <option key={`vehicle-option${i}`}>
+                      Please select an option
+                    </option>
+                    {vehiclesState
+                      .filter(
+                        (v) =>
+                          !selectedVehicleIds.some((sel) => sel.id === v.id) ||
+                          v.id === formValues.vehicles[i]?.id,
+                      )
+                      .map((v) => (
+                        <option key={v.id} value={v.id}>
+                          {v.vehicle_name}
+                        </option>
+                      ))}
+                  </select>
+                ),
+              )}
+          </div>
+          <SubmitButton containedString="Submit" />
+        </form>
+      </div>
     </>
   );
 }

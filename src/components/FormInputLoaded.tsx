@@ -1,15 +1,17 @@
 type FormInputProps = {
   type: string;
   name: string;
-  value: string | number | undefined;
+  value: string | number;
+  defaultValue: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   labelText: string;
 };
 
-export default function FormInput({
+export default function FormInputLoaded({
   type,
   name,
   value,
+  defaultValue,
   onChange,
   labelText,
 }: FormInputProps) {
@@ -22,6 +24,7 @@ export default function FormInput({
         name={name}
         required
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
       />
     </div>

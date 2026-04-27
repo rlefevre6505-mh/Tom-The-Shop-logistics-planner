@@ -14,14 +14,15 @@ type vehicle = {
 type eventDetailsObject = {
   id: number;
   title: string;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   date_added: Date;
   location?: string;
   num_of_shops?: number;
   shops?: shop[];
   num_of_vehicles?: number;
   vehicles?: vehicle[];
+  notes?: string[];
 };
 
 interface EventDetailsState {
