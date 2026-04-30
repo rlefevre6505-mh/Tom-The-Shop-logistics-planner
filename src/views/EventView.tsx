@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { useAppSelector } from "../app/hooks.ts";
+import ViewButton from "../components/ViewButton.tsx";
 
 export default function EventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
@@ -43,6 +44,8 @@ export default function EventView(): JSX.Element {
           </p>
         )}
       </ul>
+      <ViewButton containedString={"Edit Event"} stateString={"edit-event"} />
+      <ViewButton containedString={"Add A Note"} stateString={"add-note"} />
     </>
   );
 }

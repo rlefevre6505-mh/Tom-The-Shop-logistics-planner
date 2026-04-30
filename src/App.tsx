@@ -6,6 +6,7 @@ import AddEventView from "./views/AddEventView.tsx";
 import EditEventView from "./views/EditEventView.tsx";
 import EditListsView from "./views/EditListsView.tsx";
 import EventView from "./views/EventView.tsx";
+import AddNotesView from "./views/AddNotesView.tsx";
 import { useAppSelector } from "./app/hooks.ts";
 
 export default function App(): JSX.Element {
@@ -22,6 +23,7 @@ export default function App(): JSX.Element {
           {view === "edit-event" && <EditEventView />}
           {view === "edit-lists" && <EditListsView />}
           {view === "event-view" && <EventView />}
+          {view === "add-note" && <AddNotesView />}
         </div>
       </div>
     </>

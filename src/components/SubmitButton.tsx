@@ -8,7 +8,11 @@ export default function SubmitButton({
   containedString,
 }: submitButtonProps): JSX.Element {
   return (
-    <button type="submit" className="submit-button">
+    <button
+      type="submit"
+      className="submit-button"
+      // onClick={() => dispatch(changeView(stateString))}
+    >
       {containedString}
     </button>
   );

@@ -12,7 +12,6 @@ export default function Menu(): JSX.Element {
           stateString={"calendar"}
         />
         <ViewButton containedString={"Add Event"} stateString={"add-event"} />
-        <ViewButton containedString={"Edit Event"} stateString={"edit-event"} />
         <ViewButton containedString={"Edit Lists"} stateString={"edit-lists"} />
       </div>
     </>

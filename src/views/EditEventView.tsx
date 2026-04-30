@@ -5,6 +5,7 @@ import "./AddEvent.css";
 import FormInput from "../components/FormInput.tsx";
 import FormNumberInput from "../components/FormNumberInput";
 import SubmitButton from "../components/SubmitButton";
+import ViewButton from "../components/ViewButton.tsx";
 
 export default function EditEventView(): JSX.Element {
   type shop = {
@@ -117,7 +118,7 @@ export default function EditEventView(): JSX.Element {
 
   return (
     <>
-      <h1>Add A New Event</h1>
+      <h1>Edit Event Details</h1>
       <div className="form-div main-div">
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-row">
@@ -231,8 +232,10 @@ export default function EditEventView(): JSX.Element {
                 ),
               )}
           </div>
+
           <SubmitButton containedString="Submit" />
         </form>
+        <ViewButton containedString={"Cancel"} stateString={"event-view"} />
       </div>
     </>
   );
