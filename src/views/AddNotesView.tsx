@@ -1,17 +1,21 @@
 import type { JSX } from "react";
 import { useState } from "react";
-import { useAppSelector } from "../app/hooks.ts";
+import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
+import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
+import { changeView } from "../features/view/viewSlice.ts";
 import SubmitButton from "../components/SubmitButton";
 import FormTextArea from "../components/FormTextArea";
 import ViewButton from "../components/ViewButton";
 
 export default function AddEventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
+  const dispatch = useAppDispatch();
 
   type FormValues = {
     note: string;
     event_id: number | undefined;
   };
+
   const [formValues, setFormValues] = useState<FormValues>({
     note: "",
     event_id: EventDetails?.id,
@@ -21,21 +25,43 @@ export default function AddEventView(): JSX.Element {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(
-    e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
-  ) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    fetch("https://tom-the-shop-server.onrender.com/add-note", {
+    await fetch("https://tom-the-shop-server.onrender.com/add-note", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formValues),
     });
+
+    async function fetchSelectedEvent(id: number) {
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/selected-event",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        },
+      );
+      const data = await response.json();
+      dispatch(changeEventDetails(data));
+      console.log(data);
+    }
+
+    if (EventDetails?.id) {
+      fetchSelectedEvent(EventDetails.id);
+    }
+
     setFormValues({
       note: "",
-      event_id: undefined,
+      event_id: EventDetails?.id,
     });
+    console.log("updated");
+
+    dispatch(changeView("event-view"));
   }
 
   return (

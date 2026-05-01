@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 type FormInputProps = {
   type: string;
   name: string;
@@ -12,7 +13,7 @@ export default function FormInput({
   value,
   onChange,
   labelText,
-}: FormInputProps) {
+}: FormInputProps): JSX.Element {
   return (
     <div className="form-input">
       <label htmlFor={name}>{labelText}</label>

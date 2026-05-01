@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 type FormNumberInputProps = {
   type: string;
   name: string;
@@ -16,7 +17,7 @@ export default function FormNumberInput({
   maxLength,
   onChange,
   labelText,
-}: FormNumberInputProps) {
+}: FormNumberInputProps): JSX.Element {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Prevent typing more digits than allowed
     if (e.target.value.length <= maxLength) {

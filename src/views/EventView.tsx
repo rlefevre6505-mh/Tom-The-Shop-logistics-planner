@@ -1,9 +1,15 @@
-import type { JSX } from "react";
+import { useEffect, type JSX } from "react";
 import { useAppSelector } from "../app/hooks.ts";
 import ViewButton from "../components/ViewButton.tsx";
+import Note from "../components/Note.tsx";
+import "./AddEvent.css";
 
 export default function EventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
+
+  useEffect(() => {
+    console.log(EventDetails);
+  });
 
   return (
     <>
@@ -45,7 +51,16 @@ export default function EventView(): JSX.Element {
         )}
       </ul>
       <ViewButton containedString={"Edit Event"} stateString={"edit-event"} />
-      <ViewButton containedString={"Add A Note"} stateString={"add-note"} />
+      <div className="notes-section">
+        {EventDetails?.notes && <h3>Notes</h3>}
+        <div className="notes-container">
+          {EventDetails?.notes &&
+            EventDetails?.notes?.map((n, i) => {
+              return <Note text={n.note} i={i} />;
+            })}
+        </div>
+        <ViewButton containedString={"Add A Note"} stateString={"add-note"} />
+      </div>
     </>
   );
 }

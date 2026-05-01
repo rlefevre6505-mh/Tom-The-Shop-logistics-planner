@@ -39,8 +39,6 @@ export default function CalendarView() {
     );
     const data = await response.json();
     dispatch(changeEventDetails(data));
-    // console.log(data);
-    // TODO: add db polling?
   }
 
   return (

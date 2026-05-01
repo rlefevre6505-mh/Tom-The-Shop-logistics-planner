@@ -11,6 +11,10 @@ type vehicle = {
   vehicle_reg: string;
 };
 
+type note = {
+  note: string;
+};
+
 type eventDetailsObject = {
   id: number;
   title: string;
@@ -22,7 +26,7 @@ type eventDetailsObject = {
   shops?: shop[];
   num_of_vehicles?: number;
   vehicles?: vehicle[];
-  notes?: string[];
+  notes?: note[];
 };
 
 interface EventDetailsState {

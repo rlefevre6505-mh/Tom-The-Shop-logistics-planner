@@ -42,6 +42,10 @@ export default function EditEventView(): JSX.Element {
     fetchVehicles();
   }, []);
 
+  type note = {
+    note: string;
+  };
+
   type FormValues = {
     title: string | undefined;
     start: string | undefined;
@@ -51,7 +55,8 @@ export default function EditEventView(): JSX.Element {
     shops: shop[];
     num_of_vehicles: number | undefined;
     vehicles: vehicle[];
-    notes: string[];
+    notes: note[];
+    event_id: number | undefined;
   };
 
   const [formValues, setFormValues] = useState<FormValues>({
@@ -60,39 +65,105 @@ export default function EditEventView(): JSX.Element {
     end: EventDetails?.end,
     location: EventDetails?.location,
     num_of_shops: EventDetails?.num_of_shops,
-    shops: EventDetails?.shops ?? [], // ← always array
+    shops: EventDetails?.shops ?? [],
     num_of_vehicles: EventDetails?.num_of_vehicles,
-    vehicles: EventDetails?.vehicles ?? [], // ← always array
+    vehicles: EventDetails?.vehicles ?? [],
     notes: EventDetails?.notes ?? [],
+    event_id: EventDetails?.id,
   });
 
-  function handleSubmit(
-    e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
-  ) {
-    e.preventDefault();
+  useEffect(() => {
+    if (EventDetails) {
+      setFormValues({
+        title: EventDetails.title,
+        start: EventDetails.start,
+        end: EventDetails.end,
+        location: EventDetails.location,
+        num_of_shops: EventDetails.num_of_shops,
+        shops: EventDetails.shops ?? [],
+        num_of_vehicles: EventDetails.num_of_vehicles,
+        vehicles: EventDetails.vehicles ?? [],
+        notes: EventDetails.notes ?? [],
+        event_id: EventDetails.id,
+      });
+    }
+  }, [EventDetails]);
 
-    fetch("https://tom-the-shop-server.onrender.com/edit-event", {
-      method: "UPDATE", // TODO: update server query
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValues),
-    });
-    setFormValues({
-      title: "",
-      start: "",
-      end: "",
-      location: "",
-      num_of_shops: 0,
-      shops: [],
-      num_of_vehicles: 0,
-      vehicles: [],
-      notes: [],
-    });
+  // async function handleSubmit(
+  //   e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
+  // ) {
+  //   e.preventDefault();
+
+  //   await fetch("https://tom-the-shop-server.onrender.com/edit-event", {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(formValues),
+  //   });
+
+  //   if (!response.ok) {
+  //     console.error("Server error:", response.status);
+  //     return;
+  //   }
+
+  //   setFormValues({
+  //     title: "",
+  //     start: "",
+  //     end: "",
+  //     location: "",
+  //     num_of_shops: 0,
+  //     shops: [],
+  //     num_of_vehicles: 0,
+  //     vehicles: [],
+  //     notes: [],
+  //     event_id: EventDetails?.id,
+  //   });
+  //   console.log("submitted");
+  // }
+
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.log("Form values being submitted:", formValues);
+    try {
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/edit-event",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formValues),
+        },
+      );
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error("Server error:", response.status, errorData);
+        return;
+      }
+      console.log("Event updated successfully");
+      // Reset AFTER success
+      setFormValues({
+        title: "",
+        start: "",
+        end: "",
+        location: "",
+        num_of_shops: 0,
+        shops: [],
+        num_of_vehicles: 0,
+        vehicles: [],
+        notes: [],
+        event_id: EventDetails?.id,
+      });
+    } catch (err) {
+      console.error("Network error:", err);
+    }
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+    const parsedValue = type === "number" ? Number(value) : value;
+    setFormValues({ ...formValues, [name]: parsedValue });
   }
 
   function handleShopSelect(i: number, id: number) {

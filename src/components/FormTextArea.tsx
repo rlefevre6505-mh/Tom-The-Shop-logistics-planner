@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 type FormTextAreaProps = {
   name: string;
   value: string | number | undefined;
@@ -10,7 +11,7 @@ export default function FormTextArea({
   value,
   onChange,
   labelText,
-}: FormTextAreaProps) {
+}: FormTextAreaProps): JSX.Element {
   return (
     <div className="form-textarea">
       <label htmlFor={name}>{labelText}</label>

@@ -6,7 +6,7 @@
 }
 
 .menu {
-  width: 10vw;
+  width: 15vw;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -14,12 +14,12 @@
 }
 
 .view-div {
-  /* width: 85vw; */
-  /* height: 99vh; */
+  width: 80vw;
+  height: 98vh;
 }
 
 .calendar {
-  width: 80vw;
+  width: 75vw;
   background-color: skyblue;
   padding: 20px;
 }
