@@ -1,6 +1,8 @@
 import type { JSX } from "react";
 import { useState, useEffect } from "react";
-import { useAppSelector } from "../app/hooks.ts";
+import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
+import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
+import { changeView } from "../features/view/viewSlice.ts";
 import "./AddEvent.css";
 import FormInput from "../components/FormInput.tsx";
 import FormNumberInput from "../components/FormNumberInput";
@@ -8,6 +10,8 @@ import SubmitButton from "../components/SubmitButton";
 import ViewButton from "../components/ViewButton.tsx";
 
 export default function EditEventView(): JSX.Element {
+  const dispatch = useAppDispatch();
+
   type shop = {
     id: number;
     shop_name: string;
@@ -16,6 +20,7 @@ export default function EditEventView(): JSX.Element {
     id: number;
     vehicle_name: string;
   };
+
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
@@ -101,8 +106,7 @@ export default function EditEventView(): JSX.Element {
         console.error("Server error:", response.status, errorData);
         return;
       }
-      console.log("Event updated successfully");
-      // Reset AFTER success
+
       setFormValues({
         event_id: EventDetails?.id,
         title: "",
@@ -114,9 +118,30 @@ export default function EditEventView(): JSX.Element {
         num_of_vehicles: 0,
         vehicles: [],
       });
-    } catch (err) {
-      console.error("Network error:", err);
+    } catch (error) {
+      console.error("Network error:", error);
     }
+    async function fetchSelectedEvent(id: number) {
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/selected-event",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        },
+      );
+      const data = await response.json();
+      dispatch(changeEventDetails(data));
+      console.log(data);
+    }
+
+    if (EventDetails?.id) {
+      fetchSelectedEvent(EventDetails.id);
+    }
+
+    dispatch(changeView("event-view"));
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
