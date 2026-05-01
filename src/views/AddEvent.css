@@ -37,12 +37,43 @@ select {
 /* select {
   margin: 0 0.4rem;
 } */
-
+/* 
 .select-div {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-bottom: 0.8rem;
+}
+ */
+
+.select-div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.select-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.select-row select {
+  flex: 1;
+}
+
+.remove-btn {
+  padding: 0.4rem 0.6rem;
+  background-color: #c62828;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background-color: #b71c1c;
 }
 
 .warning {
