@@ -42,11 +42,8 @@ export default function EditEventView(): JSX.Element {
     fetchVehicles();
   }, []);
 
-  type note = {
-    note: string;
-  };
-
   type FormValues = {
+    event_id: number | undefined;
     title: string | undefined;
     start: string | undefined;
     end: string | undefined;
@@ -55,11 +52,10 @@ export default function EditEventView(): JSX.Element {
     shops: shop[];
     num_of_vehicles: number | undefined;
     vehicles: vehicle[];
-    notes: note[];
-    event_id: number | undefined;
   };
 
   const [formValues, setFormValues] = useState<FormValues>({
+    event_id: EventDetails?.id,
     title: EventDetails?.title,
     start: EventDetails?.start,
     end: EventDetails?.end,
@@ -68,13 +64,12 @@ export default function EditEventView(): JSX.Element {
     shops: EventDetails?.shops ?? [],
     num_of_vehicles: EventDetails?.num_of_vehicles,
     vehicles: EventDetails?.vehicles ?? [],
-    notes: EventDetails?.notes ?? [],
-    event_id: EventDetails?.id,
   });
 
   useEffect(() => {
     if (EventDetails) {
       setFormValues({
+        event_id: EventDetails.id,
         title: EventDetails.title,
         start: EventDetails.start,
         end: EventDetails.end,
@@ -83,44 +78,9 @@ export default function EditEventView(): JSX.Element {
         shops: EventDetails.shops ?? [],
         num_of_vehicles: EventDetails.num_of_vehicles,
         vehicles: EventDetails.vehicles ?? [],
-        notes: EventDetails.notes ?? [],
-        event_id: EventDetails.id,
       });
     }
   }, [EventDetails]);
-
-  // async function handleSubmit(
-  //   e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
-  // ) {
-  //   e.preventDefault();
-
-  //   await fetch("https://tom-the-shop-server.onrender.com/edit-event", {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(formValues),
-  //   });
-
-  //   if (!response.ok) {
-  //     console.error("Server error:", response.status);
-  //     return;
-  //   }
-
-  //   setFormValues({
-  //     title: "",
-  //     start: "",
-  //     end: "",
-  //     location: "",
-  //     num_of_shops: 0,
-  //     shops: [],
-  //     num_of_vehicles: 0,
-  //     vehicles: [],
-  //     notes: [],
-  //     event_id: EventDetails?.id,
-  //   });
-  //   console.log("submitted");
-  // }
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -144,6 +104,7 @@ export default function EditEventView(): JSX.Element {
       console.log("Event updated successfully");
       // Reset AFTER success
       setFormValues({
+        event_id: EventDetails?.id,
         title: "",
         start: "",
         end: "",
@@ -152,8 +113,6 @@ export default function EditEventView(): JSX.Element {
         shops: [],
         num_of_vehicles: 0,
         vehicles: [],
-        notes: [],
-        event_id: EventDetails?.id,
       });
     } catch (err) {
       console.error("Network error:", err);
@@ -243,13 +202,12 @@ export default function EditEventView(): JSX.Element {
                 (_, i) => (
                   <select
                     key={`shop-select${i}`}
+                    value={formValues.shops[i]?.id ?? ""}
                     onChange={(e) =>
                       handleShopSelect(i, Number(e.target.value))
                     }
                   >
-                    <option key={`vehicle-option${i}`}>
-                      Please select an option
-                    </option>
+                    <option value="">Please select an option</option>
                     {shopsState
                       .filter(
                         (s) =>
@@ -281,22 +239,21 @@ export default function EditEventView(): JSX.Element {
                 (_, i) => (
                   <select
                     key={`vehicle-select${i}`}
+                    value={formValues.vehicles[i]?.id ?? ""}
                     onChange={(e) =>
                       handleVehicleSelect(i, Number(e.target.value))
                     }
                   >
-                    <option key={`vehicle-option${i}`}>
-                      Please select an option
-                    </option>
+                    <option value="">Please select an option</option>
                     {vehiclesState
                       .filter(
-                        (v) =>
-                          !selectedVehicleIds.some((sel) => sel.id === v.id) ||
-                          v.id === formValues.vehicles[i]?.id,
+                        (s) =>
+                          !selectedVehicleIds.some((sel) => sel.id === s.id) ||
+                          s.id === formValues.vehicles[i]?.id,
                       )
-                      .map((v) => (
-                        <option key={v.id} value={v.id}>
-                          {v.vehicle_name}
+                      .map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.vehicle_name}
                         </option>
                       ))}
                   </select>
