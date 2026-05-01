@@ -87,6 +87,21 @@ export default function EditEventView(): JSX.Element {
     }
   }, [EventDetails]);
 
+  async function fetchSelectedEvent(id: number) {
+    const response = await fetch(
+      "https://tom-the-shop-server.onrender.com/selected-event",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      },
+    );
+    const data = await response.json();
+    dispatch(changeEventDetails(data));
+  }
+
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("Form values being submitted:", formValues);
@@ -121,26 +136,9 @@ export default function EditEventView(): JSX.Element {
     } catch (error) {
       console.error("Network error:", error);
     }
-    async function fetchSelectedEvent(id: number) {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/selected-event",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id }),
-        },
-      );
-      const data = await response.json();
-      dispatch(changeEventDetails(data));
-      console.log(data);
-    }
-
     if (EventDetails?.id) {
-      fetchSelectedEvent(EventDetails.id);
+      await fetchSelectedEvent(EventDetails.id);
     }
-
     dispatch(changeView("event-view"));
   }
 
@@ -158,7 +156,6 @@ export default function EditEventView(): JSX.Element {
 
     setFormValues({ ...formValues, shops: updated });
   }
-
   const selectedShopIds = formValues.shops;
 
   function handleVehicleSelect(i: number, id: number) {
@@ -168,8 +165,26 @@ export default function EditEventView(): JSX.Element {
     updated[i] = selected;
     setFormValues({ ...formValues, vehicles: updated });
   }
-
   const selectedVehicleIds = formValues.vehicles;
+
+  function removeShop(i: number) {
+    const updated = [...formValues.shops];
+    updated.splice(i, 1);
+    setFormValues({
+      ...formValues,
+      shops: updated,
+      num_of_shops: updated.length,
+    });
+  }
+  function removeVehicle(i: number) {
+    const updated = [...formValues.vehicles];
+    updated.splice(i, 1);
+    setFormValues({
+      ...formValues,
+      vehicles: updated,
+      num_of_vehicles: updated.length,
+    });
+  }
 
   return (
     <>
@@ -225,26 +240,35 @@ export default function EditEventView(): JSX.Element {
             {Number(formValues.num_of_shops) > 0 &&
               Array.from({ length: Number(formValues.num_of_shops) }).map(
                 (_, i) => (
-                  <select
-                    key={`shop-select${i}`}
-                    value={formValues.shops[i]?.id ?? ""}
-                    onChange={(e) =>
-                      handleShopSelect(i, Number(e.target.value))
-                    }
-                  >
-                    <option value="">Please select an option</option>
-                    {shopsState
-                      .filter(
-                        (s) =>
-                          !selectedShopIds.some((sel) => sel.id === s.id) ||
-                          s.id === formValues.shops[i]?.id,
-                      )
-                      .map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.shop_name}
-                        </option>
-                      ))}
-                  </select>
+                  <div className="select-row" key={`shop-row-${i}`}>
+                    <select
+                      key={`shop-select${i}`}
+                      value={formValues.shops[i]?.id ?? ""}
+                      onChange={(e) =>
+                        handleShopSelect(i, Number(e.target.value))
+                      }
+                    >
+                      <option value="">Please select an option</option>
+                      {shopsState
+                        .filter(
+                          (s) =>
+                            !selectedShopIds.some((sel) => sel.id === s.id) ||
+                            s.id === formValues.shops[i]?.id,
+                        )
+                        .map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.shop_name}
+                          </option>
+                        ))}
+                    </select>
+                    <button
+                      type="button"
+                      className="remove-btn"
+                      onClick={() => removeShop(i)}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 ),
               )}
           </div>
@@ -262,26 +286,36 @@ export default function EditEventView(): JSX.Element {
             {Number(formValues.num_of_vehicles) > 0 &&
               Array.from({ length: Number(formValues.num_of_vehicles) }).map(
                 (_, i) => (
-                  <select
-                    key={`vehicle-select${i}`}
-                    value={formValues.vehicles[i]?.id ?? ""}
-                    onChange={(e) =>
-                      handleVehicleSelect(i, Number(e.target.value))
-                    }
-                  >
-                    <option value="">Please select an option</option>
-                    {vehiclesState
-                      .filter(
-                        (s) =>
-                          !selectedVehicleIds.some((sel) => sel.id === s.id) ||
-                          s.id === formValues.vehicles[i]?.id,
-                      )
-                      .map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.vehicle_name}
-                        </option>
-                      ))}
-                  </select>
+                  <div className="select-row" key={`vehicle-row-${i}`}>
+                    <select
+                      key={`vehicle-select${i}`}
+                      value={formValues.vehicles[i]?.id ?? ""}
+                      onChange={(e) =>
+                        handleVehicleSelect(i, Number(e.target.value))
+                      }
+                    >
+                      <option value="">Please select an option</option>
+                      {vehiclesState
+                        .filter(
+                          (s) =>
+                            !selectedVehicleIds.some(
+                              (sel) => sel.id === s.id,
+                            ) || s.id === formValues.vehicles[i]?.id,
+                        )
+                        .map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.vehicle_name}
+                          </option>
+                        ))}
+                    </select>
+                    <button
+                      type="button"
+                      className="remove-btn"
+                      onClick={() => removeVehicle(i)}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 ),
               )}
           </div>
