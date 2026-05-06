@@ -4,16 +4,9 @@ import "./AddEvent.css";
 import FormInput from "../components/FormInput";
 import FormNumberInput from "../components/FormNumberInput";
 import SubmitButton from "../components/SubmitButton";
+import type { shop, vehicle } from "../lib/types.ts";
 
 export default function AddEventView(): JSX.Element {
-  type shop = {
-    id: number;
-    shop_name: string;
-  };
-  type vehicle = {
-    id: number;
-    vehicle_name: string;
-  };
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
 
@@ -49,7 +42,6 @@ export default function AddEventView(): JSX.Element {
     shops: number[];
     num_of_vehicles: number;
     vehicles: number[];
-    notes: string[];
   };
   const [formValues, setFormValues] = useState<FormValues>({
     title: "",
@@ -61,13 +53,14 @@ export default function AddEventView(): JSX.Element {
     shops: [],
     num_of_vehicles: 0,
     vehicles: [],
-    notes: [],
   });
 
   function handleSubmit(
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
+
+    console.log(formValues);
 
     fetch("https://tom-the-shop-server.onrender.com/add-event", {
       method: "POST",
@@ -86,7 +79,6 @@ export default function AddEventView(): JSX.Element {
       shops: [],
       num_of_vehicles: 0,
       vehicles: [],
-      notes: [],
     });
   }
 

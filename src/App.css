@@ -1,12 +1,16 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .main {
-  width: 97vw;
-  height: 97vh;
-  display: flex;
-  /* flex-direction: row; */
+  display: grid;
+  grid-template-columns: 18vw 1fr;
+  min-height: 100dvh;
 }
 
 .menu {
-  width: 15vw;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -14,12 +18,10 @@
 }
 
 .view-div {
-  width: 80vw;
-  height: 98vh;
 }
 
 .calendar {
-  width: 75vw;
+  /* width: 75vw; */
   background-color: skyblue;
   padding: 20px;
 }

@@ -13,6 +13,10 @@ export default function Menu(): JSX.Element {
         />
         <ViewButton containedString={"Add Event"} stateString={"add-event"} />
         <ViewButton containedString={"Edit Lists"} stateString={"edit-lists"} />
+        <ViewButton
+          containedString={"Clash Checker"}
+          stateString={"clash-checker"}
+        />
       </div>
     </>
   );

@@ -1,5 +1,27 @@
-h1 {
-  text-align: center;
+.view-div {
+  h1,
+  h2,
+  p,
+  ul,
+  li {
+    text-align: center;
+    margin-left: 0;
+  }
+  li {
+    list-style-type: none;
+    margin-left: -2rem;
+  }
+}
+
+.notes-section {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  max-width: 50vw;
+  .note-div {
+    margin: 0.4rem;
+  }
 }
 
 .form {
@@ -107,5 +129,18 @@ select {
     top: 5vw;
     right: 5vw;
     max-width: 50vw;
+  }
+  .view-div {
+    p,
+    h1,
+    h2,
+    ul {
+      margin-left: 4rem;
+      text-align: start;
+    }
+    li {
+      margin-left: 0.8rem;
+      text-align: start;
+    }
   }
 }
