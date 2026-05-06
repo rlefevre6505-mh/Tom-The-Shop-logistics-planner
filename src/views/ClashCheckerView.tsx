@@ -1,37 +1,96 @@
 import { useEffect, useState, type JSX } from "react";
-import type { eventDetailsObject } from "../lib/types";
-import EventClash from "../components/EventClash";
+// import EventClash from "../components/EventClash";
 // import { useAppSelector } from "../app/hooks.ts";
 // import "./AddEvent.css";
 
 export default function ClashCheckerView(): JSX.Element {
-  type eventsArray = eventDetailsObject[];
-  const [allEvents, setAllEvents] = useState<eventsArray>([]);
+  type Event = {
+    id: number;
+    title: string;
+    start: string;
+    end: string;
+  };
 
-  //   const EventDetails = useAppSelector((state) => state.EventDetails.value);
+  type Overlap = {
+    event: Event;
+    overlapsWith: Event[];
+  };
 
-  // fetch all events
+  const [overlaps, setOverlaps] = useState<Overlap[]>([]);
+
+  // function findOverlappingEvents(events: Event[]): Overlap[] {
+  //   const results: Overlap[] = [];
+  //   for (let i = 0; i < events.length; i++) {
+  //     const a = events[i];
+  //     const overlapsWith: Event[] = [];
+  //     for (let j = 0; j < events.length; j++) {
+  //       if (i === j) continue;
+  //       const b = events[j];
+  //       const overlap =
+  //         new Date(a.start) < new Date(b.end) &&
+  //         new Date(a.end) > new Date(b.start);
+  //       if (overlap) {
+  //         overlapsWith.push(b);
+  //       }
+  //     }
+  //     if (overlapsWith.length > 0) {
+  //       results.push({ event: a, overlapsWith });
+  //     }
+  //   }
+  //   console.log(results);
+  //   return results;
+  // }
+
+  function findOverlappingEvents(events: Event[]): Overlap[] {
+    const results: Overlap[] = [];
+    for (let i = 0; i < events.length; i++) {
+      const a = events[i];
+      const overlapsWith: Event[] = [];
+      for (let j = i + 1; j < events.length; j++) {
+        const b = events[j];
+        const overlap =
+          new Date(a.start) < new Date(b.end) &&
+          new Date(a.end) > new Date(b.start);
+        if (overlap) {
+          overlapsWith.push(b);
+        }
+      }
+      if (overlapsWith.length > 0) {
+        results.push({ event: a, overlapsWith });
+      }
+    }
+    console.log(results);
+    return results;
+  }
+
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(
         "https://tom-the-shop-server.onrender.com/all-event-details",
       );
-      const data = await response.json();
-      setAllEvents(data);
-      console.log(data);
+      const data: Event[] = await response.json();
+
+      const found = findOverlappingEvents(data);
+      setOverlaps(found);
     }
+
     fetchData();
   }, []);
 
   return (
     <>
-      <h1>Clashes</h1>
-
-      {allEvents.map(() => {
-        return;
-        <>
-          <EventClash></EventClash>
-        </>;
+      <h3>Clashes (ordered by Start Date of first event)</h3>
+      {overlaps.map((o, i) => {
+        return (
+          <>
+            <p key={`overlap${i}`}>{`${o.event.title} is overlapped by:`}</p>
+            <ul>
+              {o.overlapsWith.map((clash) => {
+                return <li>{clash.title}</li>;
+              })}
+            </ul>
+          </>
+        );
       })}
     </>
   );
