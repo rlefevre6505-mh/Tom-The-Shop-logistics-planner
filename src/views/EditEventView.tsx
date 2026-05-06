@@ -4,7 +4,7 @@ import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import "./AddEvent.css";
-import type { shop, vehicle, FormValues } from "../lib/types.ts";
+import type { shop, vehicle } from "../lib/types.ts";
 import FormInput from "../components/FormInput.tsx";
 import FormNumberInput from "../components/FormNumberInput";
 import SubmitButton from "../components/SubmitButton";
@@ -39,6 +39,17 @@ export default function EditEventView(): JSX.Element {
     fetchVehicles();
   }, []);
 
+  type FormValues = {
+    event_id: number | undefined;
+    title: string | undefined;
+    start: string | undefined;
+    end: string | undefined;
+    location: string | undefined;
+    num_of_shops: number | undefined;
+    shops: shop[];
+    num_of_vehicles: number | undefined;
+    vehicles: vehicle[];
+  };
   const [formValues, setFormValues] = useState<FormValues>({
     event_id: EventDetails?.id,
     title: EventDetails?.title,
