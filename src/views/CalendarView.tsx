@@ -22,7 +22,7 @@ export default function CalendarView() {
       );
       const data = await response.json();
       setEvents(data);
-      console.log(data);
+      // console.log(data);
     }
     fetchData();
   }, []);
