@@ -82,8 +82,17 @@ export default function AddEventView(): JSX.Element {
     });
   }
 
+  // function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  // }
+
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+
+    setFormValues({
+      ...formValues,
+      [name]: type === "number" ? Number(value) : value,
+    });
   }
 
   function handleShopSelect(i: number, value: number) {
@@ -156,6 +165,7 @@ export default function AddEventView(): JSX.Element {
                 (_, i) => (
                   <select
                     key={`shop-select${i}`}
+                    value={formValues.shops[i] ?? ""}
                     onChange={(e) =>
                       handleShopSelect(i, Number(e.target.value))
                     }
@@ -192,6 +202,7 @@ export default function AddEventView(): JSX.Element {
                 (_, i) => (
                   <select
                     key={`vehicle-select${i}`}
+                    value={formValues.vehicles[i] ?? ""}
                     onChange={(e) =>
                       handleVehicleSelect(i, Number(e.target.value))
                     }

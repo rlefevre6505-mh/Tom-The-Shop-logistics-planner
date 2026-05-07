@@ -4,6 +4,7 @@ import listPlugin from "@fullcalendar/list";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useEffect } from "react";
+import type { calendarEvent } from "../lib/types.ts";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
@@ -21,8 +22,17 @@ export default function CalendarView() {
         "https://tom-the-shop-server.onrender.com/stored-events",
       );
       const data = await response.json();
-      setEvents(data);
-      // console.log(data);
+
+      // FIX: make end date inclusive for FullCalendar
+      const fixedEvents = data.map((event: calendarEvent) => {
+        const end = new Date(event.end);
+        end.setDate(end.getDate() + 1);
+        return {
+          ...event,
+          end: end.toISOString().slice(0, 10),
+        };
+      });
+      setEvents(fixedEvents);
     }
     fetchData();
   }, []);

@@ -12,6 +12,15 @@ export type note = {
   note: string;
 };
 
+export type calendarEvent = {
+  end: string;
+  id: number;
+  start: string;
+  title: string;
+};
+
+export type allCalendarEvents = calendarEvent[];
+
 export type eventDetailsObject = {
   id: number;
   title: string;
