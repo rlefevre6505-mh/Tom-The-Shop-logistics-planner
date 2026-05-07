@@ -18,29 +18,6 @@ export default function ClashCheckerView(): JSX.Element {
 
   const [overlaps, setOverlaps] = useState<Overlap[]>([]);
 
-  // function findOverlappingEvents(events: Event[]): Overlap[] {
-  //   const results: Overlap[] = [];
-  //   for (let i = 0; i < events.length; i++) {
-  //     const a = events[i];
-  //     const overlapsWith: Event[] = [];
-  //     for (let j = 0; j < events.length; j++) {
-  //       if (i === j) continue;
-  //       const b = events[j];
-  //       const overlap =
-  //         new Date(a.start) < new Date(b.end) &&
-  //         new Date(a.end) > new Date(b.start);
-  //       if (overlap) {
-  //         overlapsWith.push(b);
-  //       }
-  //     }
-  //     if (overlapsWith.length > 0) {
-  //       results.push({ event: a, overlapsWith });
-  //     }
-  //   }
-  //   console.log(results);
-  //   return results;
-  // }
-
   function findOverlappingEvents(events: Event[]): Overlap[] {
     const results: Overlap[] = [];
     for (let i = 0; i < events.length; i++) {
@@ -86,7 +63,11 @@ export default function ClashCheckerView(): JSX.Element {
             <p key={`overlap${i}`}>{`${o.event.title} is overlapped by:`}</p>
             <ul>
               {o.overlapsWith.map((clash) => {
-                return <li>{clash.title}</li>;
+                return (
+                  <>
+                    <li>{clash.title}</li>
+                  </>
+                );
               })}
             </ul>
           </>
