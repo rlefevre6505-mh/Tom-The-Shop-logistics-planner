@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import type { addNoteFormValues } from "../lib/types.ts";
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
@@ -11,12 +12,7 @@ export default function AddEventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
   const dispatch = useAppDispatch();
 
-  type FormValues = {
-    note: string;
-    event_id: number | undefined;
-  };
-
-  const [formValues, setFormValues] = useState<FormValues>({
+  const [formValues, setFormValues] = useState<addNoteFormValues>({
     note: "",
     event_id: EventDetails?.id,
   });

@@ -1,3 +1,17 @@
+export type addEventFormValues = {
+  title: string;
+  start: string;
+  end: string;
+  date_added: Date;
+  location: string;
+  num_of_shops: number;
+  shops: number[];
+  num_of_vehicles: number;
+  vehicles: number[];
+};
+
+export type addNoteFormValues = { note: string; event_id: number | undefined };
+
 export type shop = {
   id: number;
   shop_name: string;
@@ -13,13 +27,11 @@ export type note = {
 };
 
 export type calendarEvent = {
-  end: string;
-  id: number;
-  start: string;
-  title: string;
+  end?: string;
+  id?: number;
+  start?: string;
+  title?: string;
 };
-
-export type allCalendarEvents = calendarEvent[];
 
 export type eventDetailsObject = {
   id: number;

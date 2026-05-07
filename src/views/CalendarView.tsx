@@ -4,6 +4,7 @@ import listPlugin from "@fullcalendar/list";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useEffect } from "react";
+import type { EventInput } from "@fullcalendar/core";
 import type { calendarEvent } from "../lib/types.ts";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
@@ -11,7 +12,7 @@ import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlic
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 
 export default function CalendarView() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<calendarEvent[]>([]);
   // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
   const dispatch = useAppDispatch();
 
@@ -25,7 +26,7 @@ export default function CalendarView() {
 
       // FIX: make end date inclusive for FullCalendar
       const fixedEvents = data.map((event: calendarEvent) => {
-        const end = new Date(event.end);
+        const end = new Date(String(event.end));
         end.setDate(end.getDate() + 1);
         return {
           ...event,
@@ -68,7 +69,7 @@ export default function CalendarView() {
           center: "title",
           end: "today prev,next",
         }}
-        events={events}
+        events={events as EventInput[]}
         //make date cells clickable:
         selectable={true}
         select={() => {
