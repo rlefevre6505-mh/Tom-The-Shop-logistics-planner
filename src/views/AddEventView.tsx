@@ -4,7 +4,7 @@ import "./AddEvent.css";
 import FormInput from "../components/FormInput";
 import FormNumberInput from "../components/FormNumberInput";
 import SubmitButton from "../components/SubmitButton";
-import type { shop, vehicle } from "../lib/types.ts";
+import type { shop, vehicle, addEventFormValues } from "../lib/types.ts";
 
 export default function AddEventView(): JSX.Element {
   const [shopsState, setShopsState] = useState<shop[]>([]);
@@ -32,18 +32,7 @@ export default function AddEventView(): JSX.Element {
     fetchVehicles();
   }, []);
 
-  type FormValues = {
-    title: string;
-    start: string;
-    end: string;
-    date_added: Date;
-    location: string;
-    num_of_shops: number;
-    shops: number[];
-    num_of_vehicles: number;
-    vehicles: number[];
-  };
-  const [formValues, setFormValues] = useState<FormValues>({
+  const [formValues, setFormValues] = useState<addEventFormValues>({
     title: "",
     start: "",
     end: "",
