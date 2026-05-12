@@ -5,10 +5,10 @@ import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.t
 import { changeView } from "../features/view/viewSlice.ts";
 import "./AddEvent.css";
 import type { shop, vehicle } from "../lib/types.ts";
-import FormInput from "../components/FormInput.tsx";
-import FormNumberInput from "../components/FormNumberInput";
-import SubmitButton from "../components/SubmitButton";
-import ViewButton from "../components/ViewButton.tsx";
+import FormInput from "../components/form-elements/FormInput.tsx";
+import FormNumberInput from "../components/form-elements/FormNumberInput.tsx";
+import SubmitButton from "../components/buttons/SubmitButton.tsx";
+import ViewButton from "../components/buttons/ViewButton.tsx";
 
 export default function EditEventView(): JSX.Element {
   const dispatch = useAppDispatch();

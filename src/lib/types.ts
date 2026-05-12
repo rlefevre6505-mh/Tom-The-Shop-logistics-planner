@@ -46,3 +46,17 @@ export type eventDetailsObject = {
   vehicles?: vehicle[];
   notes?: note[];
 };
+
+export type Event = {
+  id: number;
+  title: string;
+  start: string;
+  end: string;
+  date_added: string;
+  location: string;
+  notes: note[];
+  num_of_shops: number;
+  num_of_vehicles: number;
+  shops: shop[];
+  vehicles: vehicle[];
+};

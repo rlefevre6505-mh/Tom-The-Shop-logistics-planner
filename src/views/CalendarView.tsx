@@ -10,6 +10,7 @@ import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
+import "./CalendarView.css";
 
 export default function CalendarView() {
   const [events, setEvents] = useState<calendarEvent[]>([]);

@@ -1,5 +1,5 @@
 import type { JSX } from "react";
 
-export default function Header(): JSX.Element {
+export default function Event(): JSX.Element {
   return <></>;
 }

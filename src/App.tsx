@@ -9,6 +9,7 @@ import EventView from "./views/EventView.tsx";
 import AddNotesView from "./views/AddNotesView.tsx";
 import ClashCheckerView from "./views/ClashCheckerView.tsx";
 import { useAppSelector } from "./app/hooks.ts";
+import ListOfEvents from "./views/ListOfEventsView.tsx";
 
 export default function App(): JSX.Element {
   const view = useAppSelector((state) => state.view.value);
@@ -19,6 +20,7 @@ export default function App(): JSX.Element {
         <Menu />
         <div className="view-div">
           {view === "calendar" && <CalendarView />}
+          {view === "list-of-events" && <ListOfEvents />}
           {view === "add-event" && <AddEventView />}
           {view === "edit-event" && <EditEventView />}
           {view === "edit-lists" && <EditListsView />}
