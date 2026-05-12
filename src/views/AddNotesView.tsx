@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import { changeView } from "../features/view/viewSlice.ts";
-import SubmitButton from "../components/SubmitButton";
-import FormTextArea from "../components/FormTextArea";
-import ViewButton from "../components/ViewButton";
+import SubmitButton from "../components/buttons/SubmitButton.tsx";
+import FormTextArea from "../components/form-elements/FormTextArea.tsx";
+import ViewButton from "../components/buttons/ViewButton";
 
 export default function AddEventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);

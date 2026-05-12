@@ -1,14 +1,17 @@
 import type { JSX } from "react";
 import { useState, useEffect } from "react";
 import "./AddEvent.css";
-import FormInput from "../components/FormInput";
-import FormNumberInput from "../components/FormNumberInput";
-import SubmitButton from "../components/SubmitButton";
+import FormInput from "../components/form-elements/FormInput.tsx";
+import FormNumberInput from "../components/form-elements/FormNumberInput.tsx";
+import SubmitButton from "../components/buttons/SubmitButton.tsx";
 import type { shop, vehicle, addEventFormValues } from "../lib/types.ts";
+import { useAppDispatch } from "../app/hooks.ts";
+import { changeView } from "../features/view/viewSlice.ts";
 
 export default function AddEventView(): JSX.Element {
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function fetchShops() {
@@ -48,9 +51,6 @@ export default function AddEventView(): JSX.Element {
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-
-    console.log(formValues);
-
     fetch("https://tom-the-shop-server.onrender.com/add-event", {
       method: "POST",
       headers: {
@@ -69,15 +69,11 @@ export default function AddEventView(): JSX.Element {
       num_of_vehicles: 0,
       vehicles: [],
     });
+    dispatch(changeView("calendar"));
   }
-
-  // function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  // }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type } = e.target;
-
     setFormValues({
       ...formValues,
       [name]: type === "number" ? Number(value) : value,

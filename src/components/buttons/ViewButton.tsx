@@ -1,6 +1,6 @@
 import type { JSX } from "react";
-import { useAppDispatch } from "../app/hooks.ts";
-import { changeView } from "../features/view/viewSlice.ts";
+import { useAppDispatch } from "../../app/hooks.ts";
+import { changeView } from "../../features/view/viewSlice.ts";
 
 type viewButtonProps = {
   containedString: string;

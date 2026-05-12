@@ -1,6 +1,6 @@
 import { useEffect, type JSX } from "react";
 import { useAppSelector } from "../app/hooks.ts";
-import ViewButton from "../components/ViewButton.tsx";
+import ViewButton from "../components/buttons/ViewButton.tsx";
 import Note from "../components/Note.tsx";
 import "./AddEvent.css";
 
