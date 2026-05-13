@@ -1,11 +1,11 @@
 import { type JSX, useState, useEffect } from "react";
-import type {Event} from '../../lib/types'
-import  {toUKdate} from '../../lib/functions'
+import type { Event } from "../../lib/types";
+import { toUKdate } from "../../lib/functions";
 
 export default function EditEventList(): JSX.Element {
-  const [eventsState, setEventsState] = useState<Event[]>([])
+  const [eventsState, setEventsState] = useState<Event[]>([]);
 
-    useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const response = await fetch(
         "https://tom-the-shop-server.onrender.com/all-event-details",
@@ -20,24 +20,15 @@ export default function EditEventList(): JSX.Element {
   return (
     <>
       <h1>Delete Events From List</h1>
-          
-      {eventsState.map((e, i) => {
+
+      {eventsState.map((e) => {
         return (
-          <div
-            className="event-div"
-            key={`event${i}`}
-            onClick={async () => {
-              dispatch(changeSelectedEvent(e.id));
-              await fetchSelectedEvent(e.id);
-              dispatch(changeView("event-view"));
-            }}
-          >
+          <div>
             <p>{`${e.title} at ${e.location}`}</p>
             <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
           </div>
         );
       })}
-    
     </>
   );
 }
