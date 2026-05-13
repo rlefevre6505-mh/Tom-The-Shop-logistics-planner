@@ -79,7 +79,6 @@ export default function EditEquipmentInventory(): JSX.Element {
   return (
     <>
       <h1>Edit Equipment Inventory</h1>
-
       {inventory.map((item) => (
         <div
           key={item.id}
@@ -121,6 +120,7 @@ export default function EditEquipmentInventory(): JSX.Element {
           )}
         </div>
       ))}
+      // TODO: add button to go to add inventory item form
     </>
   );
 }
