@@ -20,6 +20,7 @@ export type shop = {
 export type vehicle = {
   id: number;
   vehicle_name: string;
+  vehicle_reg: string;
 };
 
 export type note = {
@@ -59,4 +60,10 @@ export type Event = {
   num_of_vehicles: number;
   shops: shop[];
   vehicles: vehicle[];
+};
+
+export type EquipmentItem = {
+  id: number;
+  equipment_name: string;
+  current_amount: number;
 };

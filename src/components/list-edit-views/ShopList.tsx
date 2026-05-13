@@ -23,7 +23,6 @@ const [shopState, setShopState] = useState<shop[]>([])
         return(
         <div>
           <p>{s.shop_name}</p>
-         
         </div>)
       })}
     </>

@@ -1,4 +1,4 @@
-import { type JSX, useState, useEffect } from "react";
+import { type JSX } from "react";
 import type {} from '../../lib/types'
 
 export default function EditEquipmentList(): JSX.Element {
