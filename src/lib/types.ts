@@ -11,6 +11,7 @@ export type addEventFormValues = {
 };
 
 export type addNoteFormValues = { note: string; event_id: number | undefined };
+export type AddInventoryItemValues = { name: string; amount: number };
 
 export type shop = {
   id: number;

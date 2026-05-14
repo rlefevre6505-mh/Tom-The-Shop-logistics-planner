@@ -1,5 +1,7 @@
 import { type JSX, useState, useEffect } from "react";
 import type { EquipmentItem } from "../../lib/types";
+import ConfirmationModal from "./ConfirmationModal";
+import ViewButton from "../buttons/ViewButton";
 
 export default function EditEquipmentInventory(): JSX.Element {
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
@@ -8,6 +10,8 @@ export default function EditEquipmentInventory(): JSX.Element {
     equipment_name: "",
     current_amount: 0,
   });
+  const [showModal, setShowModal] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     async function fetchInventory() {
@@ -115,12 +119,37 @@ export default function EditEquipmentInventory(): JSX.Element {
               <p>{item.current_amount}</p>
 
               <button onClick={() => startEditing(item)}>Edit</button>
-              <button onClick={() => handleDelete(item.id)}>Delete</button>
+              <button
+                onClick={() => {
+                  setPendingDeleteId(item.id);
+                  setShowModal(true);
+                }}
+              >
+                Delete
+              </button>
             </>
           )}
         </div>
       ))}
-      // TODO: add button to go to add inventory item form
+
+      {showModal && pendingDeleteId !== null && (
+        <ConfirmationModal
+          message={`Are you sure you want to permanently delete this item?`}
+          onConfirm={async () => {
+            await handleDelete(pendingDeleteId);
+            setShowModal(false);
+            setPendingDeleteId(null);
+          }}
+          onCancel={() => {
+            setShowModal(false);
+            setPendingDeleteId(null);
+          }}
+        />
+      )}
+      <ViewButton
+        containedString={`Add a new item`}
+        stateString={`add-inventory-item`}
+      />
     </>
   );
 }

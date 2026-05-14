@@ -71,14 +71,16 @@ export default function CalendarView() {
           end: "today prev,next",
         }}
         events={events as EventInput[]}
-        //make date cells clickable:
-        selectable={true}
-        select={() => {
-          console.log("date cell clicked");
-          // TODO: store clicked date in state (to be used in add-event form)
-        }}
-        //make events interactable:
-        editable={true}
+        selectable={false}
+        editable={false}
+        eventStartEditable={false}
+        eventDurationEditable={false}
+        droppable={false}
+        dateClick={undefined}
+        // select={() => {
+        //   console.log("date cell clicked");
+        //   // TODO: store clicked date in state (to be used in add-event form)
+        // }}
         eventClick={async (info) => {
           dispatch(changeSelectedEvent(info.event.id));
           await fetchSelectedEvent(parseInt(info.event.id));

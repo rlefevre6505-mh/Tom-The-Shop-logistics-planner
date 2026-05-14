@@ -1,26 +1,24 @@
-import type { JSX } from "react";
-import { useState } from "react";
-import "./AddEvent.css";
+import { type JSX, useState } from "react";
+import type { AddInventoryItemValues } from "../../lib/types.ts";
 import FormInput from "../../components/form-elements/FormInput.tsx";
 import FormNumberInput from "../../components/form-elements/FormNumberInput.tsx";
 import SubmitButton from "../../components/buttons/SubmitButton.tsx";
-import type {} from "../../lib/types.ts";
 import { useAppDispatch } from "../../app/hooks.ts";
 import { changeView } from "../../features/view/viewSlice.ts";
+import "../../views/AddEvent.css";
 
-export default function AddEventView(): JSX.Element {
+export default function AddInventoryItem(): JSX.Element {
   const dispatch = useAppDispatch();
-
-  const [formValues, setFormValues] = useState({
-    // TODO: add type
-    // TODO: add formvalues state default
+  const [formValues, setFormValues] = useState<AddInventoryItemValues>({
+    name: "",
+    amount: 0,
   });
 
   function handleSubmit(
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    fetch("https://tom-the-shop-server.onrender.com/add-event", {
+    fetch("https://tom-the-shop-server.onrender.com/add-inventory-item", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,11 +26,11 @@ export default function AddEventView(): JSX.Element {
       body: JSON.stringify(formValues),
     });
     setFormValues({
-      // TODO: add default formvalues
+      name: "",
+      amount: 0,
     });
-    dispatch(changeView("")); // TODO: set view to reroute to
+    dispatch(changeView("add-inventory-item"));
   }
-  // TODO: check matching endpoint in server
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type } = e.target;
@@ -44,25 +42,25 @@ export default function AddEventView(): JSX.Element {
 
   return (
     <>
-      <h1>Add A New Event</h1>
+      <h1>Add A New Inventory Item</h1>
       <div className="form-div main-div">
         <form className="form" onSubmit={handleSubmit}>
-          <div className="form-row">
+          <div className="form-column">
             <FormInput
-              name="end"
-              type="date"
-              value={formValues.end} // TODO: update to match formvalues
+              name="name"
+              type="text"
+              value={formValues.name}
               onChange={handleInputChange}
-              labelText="End Date"
+              labelText="Item name"
             />
             <FormNumberInput
-              name="" // TODO: add props
+              name="Amount"
               type="number"
-              value={formValues.num_of_shops} // TODO: update to match formvalues
+              value={formValues.amount}
               onChange={handleInputChange}
-              labelText="" // TODO: add props
+              labelText="Amount"
               min={0}
-              maxLength={2}
+              maxLength={3}
             />
           </div>
 
