@@ -10,6 +10,7 @@ import AddNotesView from "./views/AddNotesView.tsx";
 import ClashCheckerView from "./views/ClashCheckerView.tsx";
 import { useAppSelector } from "./app/hooks.ts";
 import ListOfEvents from "./views/ListOfEventsView.tsx";
+import AddInventoryItem from "./components/list-edit-views/AddInventoryItem.tsx";
 
 export default function App(): JSX.Element {
   const view = useAppSelector((state) => state.view.value);
@@ -27,6 +28,7 @@ export default function App(): JSX.Element {
           {view === "event-view" && <EventView />}
           {view === "add-note" && <AddNotesView />}
           {view === "clash-checker" && <ClashCheckerView />}
+          {view === "add-inventory-item" && <AddInventoryItem />}
         </div>
       </div>
     </>
