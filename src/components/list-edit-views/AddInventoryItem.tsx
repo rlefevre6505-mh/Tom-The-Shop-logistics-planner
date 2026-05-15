@@ -11,14 +11,14 @@ export default function AddInventoryItem(): JSX.Element {
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState<AddInventoryItemValues>({
     name: "",
-    amount: 0,
+    amount: "",
   });
 
-  function handleSubmit(
+  async function handleSubmit(
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    fetch("https://tom-the-shop-server.onrender.com/add-inventory-item", {
+    await fetch("https://tom-the-shop-server.onrender.com/add-inventory-item", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export default function AddInventoryItem(): JSX.Element {
     });
     setFormValues({
       name: "",
-      amount: 0,
+      amount: "",
     });
     dispatch(changeView("add-inventory-item"));
   }
@@ -36,7 +36,7 @@ export default function AddInventoryItem(): JSX.Element {
     const { name, value, type } = e.target;
     setFormValues({
       ...formValues,
-      [name]: type === "number" ? Number(value) : value,
+      [name]: type === "number" ? (value === "" ? "" : Number(value)) : value,
     });
   }
 
@@ -54,7 +54,7 @@ export default function AddInventoryItem(): JSX.Element {
               labelText="Item name"
             />
             <FormNumberInput
-              name="Amount"
+              name="amount"
               type="number"
               value={formValues.amount}
               onChange={handleInputChange}

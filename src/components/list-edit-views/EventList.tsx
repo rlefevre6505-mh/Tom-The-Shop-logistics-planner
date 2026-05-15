@@ -20,7 +20,6 @@ export default function EditEventList(): JSX.Element {
   return (
     <>
       <h1>Delete Events From List</h1>
-
       {eventsState.map((e) => {
         return (
           <div>

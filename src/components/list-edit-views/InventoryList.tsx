@@ -10,7 +10,7 @@ export default function EditEquipmentInventory(): JSX.Element {
     equipment_name: "",
     current_amount: 0,
   });
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -55,7 +55,6 @@ export default function EditEquipmentInventory(): JSX.Element {
     );
     if (response.ok) {
       console.log("response OK");
-      // Update UI
       setInventory((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, ...editValues } : item,
