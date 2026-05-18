@@ -63,7 +63,6 @@ export default function AddInventoryItem(): JSX.Element {
               maxLength={3}
             />
           </div>
-
           <SubmitButton containedString="Submit" />
         </form>
       </div>
