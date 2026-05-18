@@ -29,7 +29,7 @@ export default function AddInventoryItem(): JSX.Element {
       name: "",
       amount: "",
     });
-    dispatch(changeView("add-inventory-item"));
+    dispatch(changeView("edit-lists"));
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {

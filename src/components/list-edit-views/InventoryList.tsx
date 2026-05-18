@@ -6,7 +6,7 @@ import ViewButton from "../buttons/ViewButton";
 export default function EditEquipmentInventory(): JSX.Element {
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editValues, setEditValues] = useState({
+  const [editValues, setEditValues] = useState<Omit<EquipmentItem, "id">>({
     equipment_name: "",
     current_amount: 0,
   });
