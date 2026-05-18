@@ -1,18 +1,16 @@
 import { type JSX, useState } from "react";
-import type { AddInventoryItemValues } from "../../lib/types.ts";
+import type { shop } from "../../lib/types.ts";
 import FormInput from "../../components/form-elements/FormInput.tsx";
-import FormNumberInput from "../../components/form-elements/FormNumberInput.tsx";
 import SubmitButton from "../../components/buttons/SubmitButton.tsx";
 import { useAppDispatch } from "../../app/hooks.ts";
-import { changeView } from "../../features/view/viewSlice.ts";
+import { changeEditingView } from "../../features/EditingView/EditingViewSlice.ts";
 import "../../views/AddEvent.css";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
 
-export default function AddInventoryItem(): JSX.Element {
+export default function AddShop(): JSX.Element {
   const dispatch = useAppDispatch();
-  const [formValues, setFormValues] = useState<AddInventoryItemValues>({
-    name: "",
-    amount: "",
+  const [formValues, setFormValues] = useState<Omit<shop, "id">>({
+    shop_name: "",
   });
   const handleInputChange = handleInputChangeFactory(setFormValues);
 
@@ -20,7 +18,7 @@ export default function AddInventoryItem(): JSX.Element {
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    await fetch("https://tom-the-shop-server.onrender.com/add-inventory-item", {
+    await fetch("https://tom-the-shop-server.onrender.com/add-shop", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,33 +26,23 @@ export default function AddInventoryItem(): JSX.Element {
       body: JSON.stringify(formValues),
     });
     setFormValues({
-      name: "",
-      amount: "",
+      shop_name: "",
     });
-    dispatch(changeView("edit-lists"));
+    dispatch(changeEditingView("shops"));
   }
 
   return (
     <>
-      <h1>Add A New Inventory Item</h1>
+      <h1>Add A New Shop</h1>
       <div className="form-div main-div">
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-column">
             <FormInput
-              name="name"
+              name="shop_name"
               type="text"
-              value={formValues.name}
+              value={formValues.shop_name}
               onChange={handleInputChange}
-              labelText="Item name"
-            />
-            <FormNumberInput
-              name="amount"
-              type="number"
-              value={formValues.amount}
-              onChange={handleInputChange}
-              labelText="Amount"
-              min={0}
-              maxLength={3}
+              labelText="Shop name"
             />
           </div>
           <SubmitButton containedString="Submit" />

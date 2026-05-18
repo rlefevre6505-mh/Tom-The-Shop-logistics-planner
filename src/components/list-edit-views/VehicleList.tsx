@@ -1,7 +1,8 @@
 import { type JSX, useState, useEffect } from "react";
 import type { vehicle } from "../../lib/types";
 import ConfirmationModal from "./ConfirmationModal";
-import ViewButton from "../buttons/ViewButton";
+import EditingViewButton from "../buttons/EditingViewButton";
+import { handleEditChangeFactory } from "../../lib/functions";
 
 export default function EditVehicleList(): JSX.Element {
   const [vehicleState, setVehicleState] = useState<vehicle[]>([]);
@@ -10,9 +11,9 @@ export default function EditVehicleList(): JSX.Element {
     vehicle_name: "",
     vehicle_reg: "",
   });
-
   const [showModal, setShowModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const handleEditChange = handleEditChangeFactory(setEditValues);
 
   useEffect(() => {
     async function fetchVehicles() {
@@ -35,14 +36,6 @@ export default function EditVehicleList(): JSX.Element {
 
   function cancelEditing() {
     setEditingId(null);
-  }
-
-  function handleEditChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setEditValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   }
 
   async function saveEdit(id: number) {
@@ -79,7 +72,6 @@ export default function EditVehicleList(): JSX.Element {
   return (
     <>
       <h1>Edit List Of Vehicles</h1>
-
       {vehicleState.map((v) => (
         <div
           key={v.id}
@@ -138,7 +130,7 @@ export default function EditVehicleList(): JSX.Element {
           }}
         />
       )}
-      <ViewButton
+      <EditingViewButton
         containedString="Add a new vehicle"
         stateString="add-vehicle"
       />

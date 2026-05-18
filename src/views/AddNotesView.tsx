@@ -11,7 +11,6 @@ import ViewButton from "../components/buttons/ViewButton";
 export default function AddEventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
   const dispatch = useAppDispatch();
-
   const [formValues, setFormValues] = useState<addNoteFormValues>({
     note: "",
     event_id: EventDetails?.id,
@@ -46,17 +45,14 @@ export default function AddEventView(): JSX.Element {
       dispatch(changeEventDetails(data));
       console.log(data);
     }
-
     if (EventDetails?.id) {
       fetchSelectedEvent(EventDetails.id);
     }
-
     setFormValues({
       note: "",
       event_id: EventDetails?.id,
     });
     console.log("updated");
-
     dispatch(changeView("event-view"));
   }
 

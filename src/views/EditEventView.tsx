@@ -9,13 +9,25 @@ import FormInput from "../components/form-elements/FormInput.tsx";
 import FormNumberInput from "../components/form-elements/FormNumberInput.tsx";
 import SubmitButton from "../components/buttons/SubmitButton.tsx";
 import ViewButton from "../components/buttons/ViewButton.tsx";
+import { handleInputChangeFactory } from "../lib/functions.ts";
 
 export default function EditEventView(): JSX.Element {
   const dispatch = useAppDispatch();
-
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
+  const [formValues, setFormValues] = useState<FormValues>({
+    event_id: EventDetails?.id,
+    title: EventDetails?.title,
+    start: EventDetails?.start,
+    end: EventDetails?.end,
+    location: EventDetails?.location,
+    num_of_shops: EventDetails?.num_of_shops,
+    shops: EventDetails?.shops ?? [],
+    num_of_vehicles: EventDetails?.num_of_vehicles,
+    vehicles: EventDetails?.vehicles ?? [],
+  });
+  const handleInputChange = handleInputChangeFactory(setFormValues);
 
   useEffect(() => {
     async function fetchShops() {
@@ -50,17 +62,6 @@ export default function EditEventView(): JSX.Element {
     num_of_vehicles: number | undefined;
     vehicles: vehicle[];
   };
-  const [formValues, setFormValues] = useState<FormValues>({
-    event_id: EventDetails?.id,
-    title: EventDetails?.title,
-    start: EventDetails?.start,
-    end: EventDetails?.end,
-    location: EventDetails?.location,
-    num_of_shops: EventDetails?.num_of_shops,
-    shops: EventDetails?.shops ?? [],
-    num_of_vehicles: EventDetails?.num_of_vehicles,
-    vehicles: EventDetails?.vehicles ?? [],
-  });
 
   useEffect(() => {
     if (EventDetails) {
@@ -131,12 +132,6 @@ export default function EditEventView(): JSX.Element {
       await fetchSelectedEvent(EventDetails.id);
     }
     dispatch(changeView("event-view"));
-  }
-
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value, type } = e.target;
-    const parsedValue = type === "number" ? Number(value) : value;
-    setFormValues({ ...formValues, [name]: parsedValue });
   }
 
   function handleShopSelect(i: number, id: number) {

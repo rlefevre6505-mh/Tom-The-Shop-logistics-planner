@@ -7,11 +7,24 @@ import SubmitButton from "../components/buttons/SubmitButton.tsx";
 import type { shop, vehicle, addEventFormValues } from "../lib/types.ts";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
+import { handleInputChangeFactory } from "../lib/functions.ts";
 
 export default function AddEventView(): JSX.Element {
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
   const dispatch = useAppDispatch();
+  const [formValues, setFormValues] = useState<addEventFormValues>({
+    title: "",
+    start: "",
+    end: "",
+    date_added: new Date(),
+    location: "",
+    num_of_shops: 0,
+    shops: [],
+    num_of_vehicles: 0,
+    vehicles: [],
+  });
+  const handleInputChange = handleInputChangeFactory(setFormValues);
 
   useEffect(() => {
     async function fetchShops() {
@@ -34,18 +47,6 @@ export default function AddEventView(): JSX.Element {
     }
     fetchVehicles();
   }, []);
-
-  const [formValues, setFormValues] = useState<addEventFormValues>({
-    title: "",
-    start: "",
-    end: "",
-    date_added: new Date(),
-    location: "",
-    num_of_shops: 0,
-    shops: [],
-    num_of_vehicles: 0,
-    vehicles: [],
-  });
 
   function handleSubmit(
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
@@ -70,14 +71,6 @@ export default function AddEventView(): JSX.Element {
       vehicles: [],
     });
     dispatch(changeView("calendar"));
-  }
-
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value, type } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: type === "number" ? Number(value) : value,
-    });
   }
 
   function handleShopSelect(i: number, value: number) {

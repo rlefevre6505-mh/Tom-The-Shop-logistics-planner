@@ -2,6 +2,7 @@ import { type JSX, useState, useEffect } from "react";
 import type { EquipmentItem } from "../../lib/types";
 import ConfirmationModal from "./ConfirmationModal";
 import ViewButton from "../buttons/ViewButton";
+import { handleEditChangeFactory } from "../../lib/functions";
 
 export default function EditEquipmentInventory(): JSX.Element {
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
@@ -12,6 +13,7 @@ export default function EditEquipmentInventory(): JSX.Element {
   });
   const [showModal, setShowModal] = useState<boolean>(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const handleEditChange = handleEditChangeFactory(setEditValues);
 
   useEffect(() => {
     async function fetchInventory() {
@@ -36,13 +38,13 @@ export default function EditEquipmentInventory(): JSX.Element {
     setEditingId(null);
   }
 
-  function handleEditChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setEditValues((prev) => ({
-      ...prev,
-      [name]: name === "current_amount" ? Number(value) : value,
-    }));
-  }
+  // function handleEditChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   const { name, value } = e.target;
+  //   setEditValues((prev) => ({
+  //     ...prev,
+  //     [name]: name === "current_amount" ? Number(value) : value,
+  //   }));
+  // }
 
   async function saveEdit(id: number) {
     const response = await fetch(

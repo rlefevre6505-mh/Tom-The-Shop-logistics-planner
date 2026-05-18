@@ -1,7 +1,8 @@
 import { type JSX, useState, useEffect } from "react";
 import type { shop } from "../../lib/types";
 import ConfirmationModal from "./ConfirmationModal";
-import ViewButton from "../buttons/ViewButton";
+import EditingViewButton from "../buttons/EditingViewButton";
+import { handleEditChangeFactory } from "../../lib/functions";
 
 export default function EditShopList(): JSX.Element {
   const [shopState, setShopState] = useState<shop[]>([]);
@@ -9,9 +10,9 @@ export default function EditShopList(): JSX.Element {
   const [editValues, setEditValues] = useState<Omit<shop, "id">>({
     shop_name: "",
   });
-
   const [showModal, setShowModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const handleEditChange = handleEditChangeFactory(setEditValues);
 
   useEffect(() => {
     async function fetchShops() {
@@ -33,14 +34,6 @@ export default function EditShopList(): JSX.Element {
 
   function cancelEditing() {
     setEditingId(null);
-  }
-
-  function handleEditChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setEditValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   }
 
   async function saveEdit(id: number) {
@@ -131,7 +124,10 @@ export default function EditShopList(): JSX.Element {
         />
       )}
 
-      <ViewButton containedString="Add a new shop" stateString="add-shop" />
+      <EditingViewButton
+        containedString="Add a new shop"
+        stateString="add-shop"
+      />
     </>
   );
 }
