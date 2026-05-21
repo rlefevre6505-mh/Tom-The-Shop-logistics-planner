@@ -6,7 +6,7 @@ export function toUKdate(dateStr: string) {
 export function handleInputChangeFactory<T>(
   setFormValues: React.Dispatch<React.SetStateAction<T>>,
 ) {
-  return function (e: React.ChangeEvent<HTMLInputElement>) {
+  return function (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value, type } = e.target;
     setFormValues((prev) => ({
       ...prev,

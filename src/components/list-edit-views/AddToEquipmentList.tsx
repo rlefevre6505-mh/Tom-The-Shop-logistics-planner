@@ -13,11 +13,11 @@ export default function AddToEquipmentList(): JSX.Element {
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
   const [formValues, setFormValues] = useState<{
     shop_id: number | string;
-    item_name: string;
+    item_id: number | string;
     amount: number | string;
   }>({
     shop_id: "",
-    item_name: "",
+    item_id: "",
     amount: "",
   });
 
@@ -61,9 +61,10 @@ export default function AddToEquipmentList(): JSX.Element {
         body: JSON.stringify(formValues),
       },
     );
+    console.log(formValues);
     setFormValues({
       shop_id: "",
-      item_name: "",
+      item_id: "",
       amount: "",
     });
     dispatch(changeEditingView("equipment-lists"));
@@ -75,17 +76,25 @@ export default function AddToEquipmentList(): JSX.Element {
       <div className="form-div main-div">
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-column">
-            <select>
+            <select
+              name="shop_id"
+              value={formValues.shop_id}
+              onChange={handleInputChange}
+            >
               <option value="">Please select an option</option>
               {shopsState.map((s) => {
-                return <option>{s.shop_name}</option>;
+                return <option value={s.id}>{s.shop_name}</option>;
               })}
             </select>
 
-            <select>
+            <select
+              name="item_id"
+              value={formValues.item_id}
+              onChange={handleInputChange}
+            >
               <option value="">Please select an option</option>
               {inventory.map((i) => {
-                return <option>{i.equipment_name}</option>;
+                return <option value={i.id}>{i.equipment_name}</option>;
               })}
             </select>
 
