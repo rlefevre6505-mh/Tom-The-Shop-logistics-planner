@@ -1,43 +1,3 @@
-// export default function EditEquipmentList(): JSX.Element {
-//   const [equipmentListsState, setEquipmentListsState] = useState<
-//     EquipmentList[]
-//   >([]);
-
-//   useEffect(() => {
-//     async function fetchEquipmentLists() {
-//       const response = await fetch(
-//         "https://tom-the-shop-server.onrender.com/get-equipment-lists",
-//       );
-//       const data: EquipmentList[] = await response.json();
-//       setEquipmentListsState(data);
-//       console.log(data);
-//     }
-//     fetchEquipmentLists();
-//   }, []);
-
-//   return (
-//     <>
-//       <h1>Edit Equipment Lists</h1>
-
-//       {equipmentListsState.map((l) => {
-//         return (
-//           <div>
-//             <h3>{l.shop_name}</h3>
-//             {l.equipment.map((i) => {
-//               return (
-//                 <div>
-//                   <p>{i.equipment_name}</p>
-//                   <p>{i.required_amount}</p>
-//                 </div>
-//               );
-//             })}
-//           </div>
-//         );
-//       })}
-//     </>
-//   );
-// }
-
 import { type JSX, useEffect, useState } from "react";
 import ConfirmationModal from "./ConfirmationModal";
 import type { EquipmentList, EquipmentListItem } from "../../lib/types";
@@ -60,6 +20,7 @@ export default function EditEquipmentList(): JSX.Element {
         "https://tom-the-shop-server.onrender.com/get-equipment-lists",
       );
       const data = await response.json();
+      console.log(data);
       setEquipmentListsState(data);
     }
     fetchEquipmentLists();

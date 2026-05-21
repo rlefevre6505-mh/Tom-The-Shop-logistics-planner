@@ -68,3 +68,16 @@ export type EquipmentItem = {
   equipment_name: string;
   current_amount: number;
 };
+
+export type EquipmentListItem = {
+  equipment_id: number;
+  equipment_list_id: number;
+  equipment_name: string;
+  required_amount: number;
+};
+
+export type EquipmentList = {
+  equipment: EquipmentListItem[];
+  shop_id: number;
+  shop_name: number;
+};
