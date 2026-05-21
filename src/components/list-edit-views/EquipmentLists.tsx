@@ -12,7 +12,10 @@ export default function EditEquipmentList(): JSX.Element {
     required_amount: 0,
   });
   const [showModal, setShowModal] = useState(false);
-  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<{
+    shop_id: number;
+    equipment_id: number;
+  } | null>(null);
 
   useEffect(() => {
     async function fetchEquipmentLists() {
@@ -20,7 +23,6 @@ export default function EditEquipmentList(): JSX.Element {
         "https://tom-the-shop-server.onrender.com/get-equipment-lists",
       );
       const data = await response.json();
-      console.log(data);
       setEquipmentListsState(data);
     }
     fetchEquipmentLists();
@@ -48,14 +50,13 @@ export default function EditEquipmentList(): JSX.Element {
 
   async function saveEdit(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server.onrender.com/update-equipment-list",
+      "https://tom-the-shop-server.onrender.com/update-equipment-list-item",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, ...editValues }),
       },
     );
-
     if (response.ok) {
       setEquipmentListsState((prev) =>
         prev.map((shop) => ({
@@ -69,24 +70,27 @@ export default function EditEquipmentList(): JSX.Element {
     }
   }
 
-  async function handleDelete(id: number) {
+  async function handleDelete(shop_id: number, equipment_id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server.onrender.com/delete-equipment-list",
+      "https://tom-the-shop-server.onrender.com/delete-equipment-list-item",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ shop_id, equipment_id }),
       },
     );
-
     if (response.ok) {
       setEquipmentListsState((prev) =>
-        prev.map((shop) => ({
-          ...shop,
-          equipment: shop.equipment.filter(
-            (item) => item.equipment_list_id !== id,
-          ),
-        })),
+        prev.map((shop) =>
+          shop.shop_id === shop_id
+            ? {
+                ...shop,
+                equipment: shop.equipment.filter(
+                  (item) => item.equipment_id !== equipment_id,
+                ),
+              }
+            : shop,
+        ),
       );
     }
   }
@@ -94,11 +98,9 @@ export default function EditEquipmentList(): JSX.Element {
   return (
     <>
       <h1>Edit Equipment Lists</h1>
-
       {equipmentListsState.map((shop) => (
         <div key={shop.shop_id} style={{ marginBottom: "20px" }}>
           <h2>{shop.shop_name}</h2>
-
           {shop.equipment.map((item) => (
             <div
               key={item.equipment_list_id}
@@ -110,20 +112,13 @@ export default function EditEquipmentList(): JSX.Element {
             >
               {editingId === item.equipment_list_id ? (
                 <>
-                  <input
-                    type="text"
-                    name="equipment_name"
-                    value={editValues.equipment_name}
-                    onChange={handleEditChange}
-                  />
-
+                  <p>{item.equipment_name}</p>
                   <input
                     type="number"
                     name="required_amount"
                     value={editValues.required_amount}
                     onChange={handleEditChange}
                   />
-
                   <button onClick={() => saveEdit(item.equipment_list_id)}>
                     Save
                   </button>
@@ -133,11 +128,13 @@ export default function EditEquipmentList(): JSX.Element {
                 <>
                   <p>{item.equipment_name}</p>
                   <p>Required: {item.required_amount}</p>
-
                   <button onClick={() => startEditing(item)}>Edit</button>
                   <button
                     onClick={() => {
-                      setPendingDeleteId(item.equipment_list_id);
+                      setPendingDelete({
+                        shop_id: shop.shop_id,
+                        equipment_id: item.equipment_id,
+                      });
                       setShowModal(true);
                     }}
                   >
@@ -149,18 +146,20 @@ export default function EditEquipmentList(): JSX.Element {
           ))}
         </div>
       ))}
-
-      {showModal && pendingDeleteId !== null && (
+      {showModal && pendingDelete && (
         <ConfirmationModal
           message="Are you sure you want to permanently delete this equipment requirement?"
           onConfirm={async () => {
-            await handleDelete(pendingDeleteId);
+            await handleDelete(
+              pendingDelete.shop_id,
+              pendingDelete.equipment_id,
+            );
             setShowModal(false);
-            setPendingDeleteId(null);
+            setPendingDelete(null);
           }}
           onCancel={() => {
             setShowModal(false);
-            setPendingDeleteId(null);
+            setPendingDelete(null);
           }}
         />
       )}
