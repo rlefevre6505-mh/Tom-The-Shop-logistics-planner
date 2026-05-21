@@ -7,6 +7,7 @@ import EditEquipmentList from "../components/list-edit-views/EquipmentLists";
 import EditEquipmentInventory from "../components/list-edit-views/InventoryList";
 import AddShop from "../components/list-edit-views/AddShop.tsx";
 import AddVehicle from "../components/list-edit-views/AddVehicle.tsx";
+import AddToEquipmentList from "../components/list-edit-views/AddToEquipmentList.tsx";
 import "./EditListsView.css";
 import { useAppSelector } from "../app/hooks.ts";
 
@@ -42,6 +43,7 @@ export default function EditListsView(): JSX.Element {
         {editingView === "inventory" && <EditEquipmentInventory />}
         {editingView === "add-shop" && <AddShop />}
         {editingView === "add-vehicle" && <AddVehicle />}
+        {editingView === "add-to-equipment-list" && <AddToEquipmentList />}
       </div>
     </>
   );
