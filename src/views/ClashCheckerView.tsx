@@ -1,5 +1,5 @@
 import { useEffect, useState, type JSX } from "react";
-import type { shop, vehicle, note } from "../lib/types";
+import type { shop, vehicle, note, Overlap } from "../lib/types";
 // import EventClash from "../components/EventClash";
 import { toUKdate } from "../lib/functions";
 import "./ClashChecker.css";
@@ -17,11 +17,6 @@ export default function ClashCheckerView(): JSX.Element {
     num_of_vehicles: number;
     shops: shop[];
     vehicles: vehicle[];
-  };
-
-  type Overlap = {
-    event: Event;
-    overlapsWith: Event[];
   };
 
   const [overlaps, setOverlaps] = useState<Overlap[]>([]);

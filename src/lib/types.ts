@@ -81,3 +81,8 @@ export type EquipmentList = {
   shop_id: number;
   shop_name: number;
 };
+
+export type Overlap = {
+  event: Event;
+  overlapsWith: Event[];
+};

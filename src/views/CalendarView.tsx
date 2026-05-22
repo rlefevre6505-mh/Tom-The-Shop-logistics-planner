@@ -64,7 +64,7 @@ export default function CalendarView() {
           interactionPlugin,
         ]}
         initialView="multiMonthYear"
-        multiMonthMaxColumns={1}
+        multiMonthMaxColumns={2}
         headerToolbar={{
           start: "multiMonthYear listYear",
           center: "title",
