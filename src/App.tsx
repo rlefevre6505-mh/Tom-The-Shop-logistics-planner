@@ -1,5 +1,5 @@
 import "./App.css";
-import type { JSX } from "react";
+import { type JSX, useState } from "react";
 import Menu from "./components/Menu.js";
 import CalendarView from "./views/CalendarView.tsx";
 import AddEventView from "./views/AddEventView.tsx";
@@ -11,14 +11,29 @@ import ClashCheckerView from "./views/ClashCheckerView.tsx";
 import { useAppSelector } from "./app/hooks.ts";
 import ListOfEvents from "./views/ListOfEventsView.tsx";
 import AddInventoryItem from "./components/list-edit-views/AddInventoryItem.tsx";
+import Logo from "./components/Logo.tsx";
 
 export default function App(): JSX.Element {
   const view = useAppSelector((state) => state.view.value);
+  const [menuClass, setMenuClass] = useState<string>("menu");
 
   return (
     <>
       <div className="main">
-        <Menu />
+        {window.innerWidth < 800 ? (
+          <header className="header">
+            {" "}
+            <Logo />{" "}
+            <button
+              onClick={() => {
+                setMenuClass("menu");
+              }}
+            >
+              Menu
+            </button>{" "}
+          </header>
+        ) : null}
+        <Menu menuClass={menuClass} setMenuClass={setMenuClass} />
         <div className="view-div">
           {view === "calendar" && <CalendarView />}
           {view === "list-of-events" && <ListOfEvents />}

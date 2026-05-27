@@ -24,8 +24,6 @@ export default function CalendarView() {
         "https://tom-the-shop-server.onrender.com/stored-events",
       );
       const data = await response.json();
-
-      // FIX: make end date inclusive for FullCalendar
       const fixedEvents = data.map((event: calendarEvent) => {
         const end = new Date(String(event.end));
         end.setDate(end.getDate() + 1);
@@ -64,7 +62,7 @@ export default function CalendarView() {
           interactionPlugin,
         ]}
         initialView="multiMonthYear"
-        multiMonthMaxColumns={1}
+        multiMonthMaxColumns={2}
         headerToolbar={{
           start: "multiMonthYear listYear",
           center: "title",

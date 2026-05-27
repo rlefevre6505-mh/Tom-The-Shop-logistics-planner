@@ -1,12 +1,34 @@
-import type { JSX } from "react";
+import { type JSX } from "react";
 import ViewButton from "./buttons/ViewButton.js";
 import Logo from "./Logo.js";
 
-export default function Menu(): JSX.Element {
+type MenuProps = {
+  menuClass: string;
+  setMenuClass: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export default function Menu({
+  menuClass,
+  setMenuClass,
+}: MenuProps): JSX.Element {
+  // const [menuClass, setMenuClass] = useState<string>("menu");
+
   return (
     <>
-      <div className="menu">
-        <Logo />
+      <div className={menuClass}>
+        {window.innerWidth >= 800 ? <Logo /> : null}
+
+        {window.innerWidth < 800 ? (
+          <button
+            onClick={() => {
+              setMenuClass("menu-hidden");
+            }}
+            className="close-button"
+          >
+            close
+          </button>
+        ) : null}
+
         <ViewButton
           containedString={"View Calendar"}
           stateString={"calendar"}
