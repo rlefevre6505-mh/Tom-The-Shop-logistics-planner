@@ -5,7 +5,7 @@ import { changeView } from "../../features/view/viewSlice.ts";
 type viewButtonProps = {
   containedString: string;
   stateString: string;
-  setMenuClass: React.Dispatch<React.SetStateAction<string>>;
+  setMenuClass?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function ViewButton({
@@ -20,7 +20,7 @@ export default function ViewButton({
       className="view-button"
       onClick={() => {
         dispatch(changeView(stateString));
-        setMenuClass("menu-hidden");
+        setMenuClass?.("menu-hidden");
       }}
     >
       {containedString}
