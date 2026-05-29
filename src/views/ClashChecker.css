@@ -1,9 +1,27 @@
 .clash {
   max-width: 80%;
+  padding: 20px;
   border: solid red 2px;
   border-radius: 0.4rem;
   margin: 0.8rem auto;
+
   p {
     margin: 0.8rem;
   }
+}
+
+.clash-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  p,
+  h4 {
+    text-align: center;
+  }
+}
+
+.clash-title {
+  max-width: 70%;
+  font-size: 1.6rem;
 }

@@ -13,7 +13,8 @@ export function handleInputChangeFactory<T>(
       [name]: type === "number" ? Number(value) : value,
     }));
   };
-} //! REPLACES
+}
+//! REPLACES
 // export   const { name, value, type } = e.target;
 //   setFormValues({
 //     ...formValues,
@@ -32,7 +33,8 @@ export function handleEditChangeFactory<T>(
         name === "current_amount" ? (value === "" ? "" : Number(value)) : value,
     }));
   };
-} //! REPLACES
+}
+//! REPLACES
 // function handleEditChange(e: React.ChangeEvent<HTMLInputElement>) {
 //   const { name, value } = e.target;
 //   setEditValues((prev) => ({
