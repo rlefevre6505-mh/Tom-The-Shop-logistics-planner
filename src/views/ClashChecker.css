@@ -4,7 +4,7 @@
   border: solid red 2px;
   border-radius: 0.4rem;
   margin: 0.8rem auto;
-
+  margin-bottom: 80px;
   p {
     margin: 0.8rem;
   }
@@ -15,6 +15,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   p,
   h4 {
     text-align: center;

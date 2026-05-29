@@ -15,7 +15,7 @@ body {
   display: grid;
   grid-template-columns: 18vw 1fr;
   align-content: start;
-  min-height: 100dvh;
+  min-height: auto;
 }
 
 .menu,
@@ -36,7 +36,7 @@ body {
   grid-column: 2;
   margin: 0 auto;
   width: 80vw;
-  height: 99vh;
+  max-height: none;
 }
 
 @media (width < 800px) {
@@ -68,6 +68,7 @@ body {
     padding: 30px 0;
     margin: 0;
     width: 100%;
+    min-height: auto;
   }
   .menu {
     position: fixed;
