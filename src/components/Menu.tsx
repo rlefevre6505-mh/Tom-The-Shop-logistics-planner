@@ -18,6 +18,33 @@ export default function Menu({
       <div className={menuClass}>
         {window.innerWidth >= 800 ? <Logo /> : null}
 
+        {window.innerWidth < 800 ? <h3>Menu</h3> : null}
+
+        <ViewButton
+          containedString={"View Calendar"}
+          stateString={"calendar"}
+          setMenuClass={setMenuClass}
+        />
+        <ViewButton
+          containedString={"List Of Events"}
+          stateString={"list-of-events"}
+          setMenuClass={setMenuClass}
+        />
+        <ViewButton
+          containedString={"Add Event"}
+          stateString={"add-event"}
+          setMenuClass={setMenuClass}
+        />
+        <ViewButton
+          containedString={"Edit Lists"}
+          stateString={"edit-lists"}
+          setMenuClass={setMenuClass}
+        />
+        <ViewButton
+          containedString={"Clash Checker"}
+          stateString={"clash-checker"}
+          setMenuClass={setMenuClass}
+        />
         {window.innerWidth < 800 ? (
           <button
             onClick={() => {
@@ -28,21 +55,6 @@ export default function Menu({
             close
           </button>
         ) : null}
-
-        <ViewButton
-          containedString={"View Calendar"}
-          stateString={"calendar"}
-        />
-        <ViewButton
-          containedString={"List Of Events"}
-          stateString={"list-of-events"}
-        />
-        <ViewButton containedString={"Add Event"} stateString={"add-event"} />
-        <ViewButton containedString={"Edit Lists"} stateString={"edit-lists"} />
-        <ViewButton
-          containedString={"Clash Checker"}
-          stateString={"clash-checker"}
-        />
       </div>
     </>
   );

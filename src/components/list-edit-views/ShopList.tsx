@@ -3,6 +3,7 @@ import type { shop } from "../../lib/types";
 import ConfirmationModal from "./ConfirmationModal";
 import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
+import "./Lists.css";
 
 export default function EditShopList(): JSX.Element {
   const [shopState, setShopState] = useState<shop[]>([]);
@@ -69,65 +70,66 @@ export default function EditShopList(): JSX.Element {
 
   return (
     <>
-      <h1>Edit List Of Shops</h1>
-      {shopState.map((s) => (
-        <div
-          key={s.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginBottom: "10px",
-          }}
-        >
-          {editingId === s.id ? (
-            <>
-              <input
-                type="text"
-                name="shop_name"
-                value={editValues.shop_name}
-                onChange={handleEditChange}
-              />
-
-              <button onClick={() => saveEdit(s.id)}>Save</button>
-              <button onClick={cancelEditing}>Cancel</button>
-            </>
-          ) : (
-            <>
-              <p>{s.shop_name}</p>
-
-              <button onClick={() => startEditing(s)}>Edit</button>
-              <button
-                onClick={() => {
-                  setPendingDeleteId(s.id);
-                  setShowModal(true);
-                }}
-              >
-                Delete
-              </button>
-            </>
-          )}
-        </div>
-      ))}
-
-      {showModal && pendingDeleteId !== null && (
-        <ConfirmationModal
-          message="Are you sure you want to permanently delete this shop?"
-          onConfirm={async () => {
-            await handleDelete(pendingDeleteId);
-            setShowModal(false);
-            setPendingDeleteId(null);
-          }}
-          onCancel={() => {
-            setShowModal(false);
-            setPendingDeleteId(null);
-          }}
+      <div className="list-container">
+        <h1>Edit List Of Shops</h1>
+        <EditingViewButton
+          containedString="Add a new shop"
+          stateString="add-shop"
         />
-      )}
+        {shopState.map((s) => (
+          <div key={s.id}>
+            {editingId === s.id ? (
+              <>
+                <div className="list-block">
+                  <div className="list-input-section">
+                    <input
+                      type="text"
+                      name="shop_name"
+                      value={editValues.shop_name}
+                      onChange={handleEditChange}
+                    />
 
-      <EditingViewButton
-        containedString="Add a new shop"
-        stateString="add-shop"
-      />
+                    <button onClick={() => saveEdit(s.id)}>Save</button>
+                    <button onClick={cancelEditing}>Cancel</button>
+                  </div>{" "}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="list-button-section">
+                  <div className="list-text-section">
+                    <p>{s.shop_name}</p>
+                  </div>
+                  <button onClick={() => startEditing(s)}>Edit</button>
+                  <button
+                    onClick={() => {
+                      setPendingDeleteId(s.id);
+                      setShowModal(true);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+
+        {showModal && pendingDeleteId !== null && (
+          <ConfirmationModal
+            message="Are you sure you want to permanently delete this shop?"
+            onConfirm={async () => {
+              await handleDelete(pendingDeleteId);
+              setShowModal(false);
+              setPendingDeleteId(null);
+            }}
+            onCancel={() => {
+              setShowModal(false);
+              setPendingDeleteId(null);
+            }}
+          />
+        )}
+      </div>
     </>
   );
 }

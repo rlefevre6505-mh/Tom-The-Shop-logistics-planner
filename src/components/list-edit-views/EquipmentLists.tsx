@@ -2,6 +2,7 @@ import { type JSX, useEffect, useState } from "react";
 import ConfirmationModal from "./ConfirmationModal";
 import type { EquipmentList, EquipmentListItem } from "../../lib/types";
 import EditingViewButton from "../buttons/EditingViewButton";
+import "./Lists.css";
 
 export default function EditEquipmentList(): JSX.Element {
   const [equipmentListsState, setEquipmentListsState] = useState<
@@ -98,76 +99,84 @@ export default function EditEquipmentList(): JSX.Element {
 
   return (
     <>
-      <h1>Edit Equipment Lists</h1>
-      {equipmentListsState.map((shop) => (
-        <div key={shop.shop_id} style={{ marginBottom: "20px" }}>
-          <h2>{shop.shop_name}</h2>
-          {shop.equipment.map((item) => (
-            <div
-              key={item.equipment_list_id}
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              {editingId === item.equipment_list_id ? (
-                <>
-                  <p>{item.equipment_name}</p>
-                  <input
-                    type="number"
-                    name="required_amount"
-                    value={editValues.required_amount}
-                    onChange={handleEditChange}
-                  />
-                  <button onClick={() => saveEdit(item.equipment_list_id)}>
-                    Save
-                  </button>
-                  <button onClick={cancelEditing}>Cancel</button>
-                </>
-              ) : (
-                <>
-                  <p>{item.equipment_name}</p>
-                  <p>Required: {item.required_amount}</p>
-                  <button onClick={() => startEditing(item)}>Edit</button>
-                  <button
-                    onClick={() => {
-                      setPendingDelete({
-                        shop_id: shop.shop_id,
-                        equipment_id: item.equipment_id,
-                      });
-                      setShowModal(true);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      ))}
-      {showModal && pendingDelete && (
-        <ConfirmationModal
-          message="Are you sure you want to permanently delete this equipment requirement?"
-          onConfirm={async () => {
-            await handleDelete(
-              pendingDelete.shop_id,
-              pendingDelete.equipment_id,
-            );
-            setShowModal(false);
-            setPendingDelete(null);
-          }}
-          onCancel={() => {
-            setShowModal(false);
-            setPendingDelete(null);
-          }}
+      <div className="list-container">
+        <h1>Edit Equipment Lists</h1>
+        <EditingViewButton
+          containedString="Add an item to an equipment list"
+          stateString="add-to-equipment-list"
         />
-      )}
-      <EditingViewButton
-        containedString="Add an item to an equipment list"
-        stateString="add-to-equipment-list"
-      />
+        {equipmentListsState.map((shop) => (
+          <div className="list-container" key={shop.shop_id}>
+            <h2>{shop.shop_name}</h2>
+            {shop.equipment.map((item) => (
+              <div key={item.equipment_list_id}>
+                {editingId === item.equipment_list_id ? (
+                  <>
+                    <div className="list-block">
+                      <div className="list-input-section">
+                        <p>{item.equipment_name}</p>
+                        <input
+                          className="num-input"
+                          type="number"
+                          name="required_amount"
+                          value={editValues.required_amount}
+                          onChange={handleEditChange}
+                        />
+                        <button
+                          onClick={() => saveEdit(item.equipment_list_id)}
+                        >
+                          Save
+                        </button>
+                        <button onClick={cancelEditing}>Cancel</button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="list-button-section">
+                      <div className="list-text-section">
+                        <p>{item.equipment_name}</p>
+                        <div className="gap" />
+                        <p>{item.required_amount}</p>
+                      </div>
+
+                      <button onClick={() => startEditing(item)}>Edit</button>
+                      <button
+                        onClick={() => {
+                          setPendingDelete({
+                            shop_id: shop.shop_id,
+                            equipment_id: item.equipment_id,
+                          });
+                          setShowModal(true);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+        {showModal && pendingDelete && (
+          <ConfirmationModal
+            message="Are you sure you want to permanently delete this equipment requirement?"
+            onConfirm={async () => {
+              await handleDelete(
+                pendingDelete.shop_id,
+                pendingDelete.equipment_id,
+              );
+              setShowModal(false);
+              setPendingDelete(null);
+            }}
+            onCancel={() => {
+              setShowModal(false);
+              setPendingDelete(null);
+            }}
+          />
+        )}
+      </div>
     </>
   );
 }

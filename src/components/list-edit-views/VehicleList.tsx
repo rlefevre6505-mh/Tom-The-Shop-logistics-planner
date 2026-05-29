@@ -3,6 +3,7 @@ import type { vehicle } from "../../lib/types";
 import ConfirmationModal from "./ConfirmationModal";
 import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
+import "./Lists.css";
 
 export default function EditVehicleList(): JSX.Element {
   const [vehicleState, setVehicleState] = useState<vehicle[]>([]);
@@ -71,50 +72,59 @@ export default function EditVehicleList(): JSX.Element {
 
   return (
     <>
-      <h1>Edit List Of Vehicles</h1>
-      {vehicleState.map((v) => (
-        <div
-          key={v.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginBottom: "10px",
-          }}
-        >
-          {editingId === v.id ? (
-            <>
-              <input
-                type="text"
-                name="vehicle_name"
-                value={editValues.vehicle_name}
-                onChange={handleEditChange}
-              />
-              <input
-                type="text"
-                name="vehicle_reg"
-                value={editValues.vehicle_reg}
-                onChange={handleEditChange}
-              />
-              <button onClick={() => saveEdit(v.id)}>Save</button>
-              <button onClick={cancelEditing}>Cancel</button>
-            </>
-          ) : (
-            <>
-              <p>{v.vehicle_name}</p>
-              <p>{v.vehicle_reg}</p>
-              <button onClick={() => startEditing(v)}>Edit</button>
-              <button
-                onClick={() => {
-                  setPendingDeleteId(v.id);
-                  setShowModal(true);
-                }}
-              >
-                Delete
-              </button>
-            </>
-          )}
-        </div>
-      ))}
+      <div className="list-container">
+        <h1>Edit List Of Vehicles</h1>
+        <EditingViewButton
+          containedString="Add a new vehicle"
+          stateString="add-vehicle"
+        />
+        {vehicleState.map((v) => (
+          <div key={v.id}>
+            {editingId === v.id ? (
+              <>
+                <div className="list-block">
+                  <div className="list-input-section">
+                    <input
+                      className="text-input"
+                      type="text"
+                      name="vehicle_name"
+                      value={editValues.vehicle_name}
+                      onChange={handleEditChange}
+                    />
+                    <input
+                      className="num-input"
+                      type="text"
+                      name="vehicle_reg"
+                      value={editValues.vehicle_reg}
+                      onChange={handleEditChange}
+                    />
+                    <button onClick={() => saveEdit(v.id)}>Save</button>
+                    <button onClick={cancelEditing}>Cancel</button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="list-button-section">
+                  <div className="list-text-section">
+                    <p>{v.vehicle_name}</p>
+                    {/* <p>{v.vehicle_reg}</p> */}
+                  </div>
+                  <button onClick={() => startEditing(v)}>Edit</button>
+                  <button
+                    onClick={() => {
+                      setPendingDeleteId(v.id);
+                      setShowModal(true);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
 
       {showModal && pendingDeleteId !== null && (
         <ConfirmationModal
@@ -130,10 +140,6 @@ export default function EditVehicleList(): JSX.Element {
           }}
         />
       )}
-      <EditingViewButton
-        containedString="Add a new vehicle"
-        stateString="add-vehicle"
-      />
     </>
   );
 }

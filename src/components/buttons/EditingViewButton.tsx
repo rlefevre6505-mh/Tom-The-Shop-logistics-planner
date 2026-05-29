@@ -14,7 +14,10 @@ export default function EditingViewButton({
   const dispatch = useAppDispatch();
 
   return (
-    <button onClick={() => dispatch(changeEditingView(stateString))}>
+    <button
+      className="editing-view-button"
+      onClick={() => dispatch(changeEditingView(stateString))}
+    >
       {containedString}
     </button>
   );

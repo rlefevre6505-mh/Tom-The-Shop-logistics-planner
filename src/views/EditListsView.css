@@ -10,6 +10,19 @@ h1 {
   justify-content: space-between;
 }
 
+.button-container {
+  width: 90vw;
+  display: flex;
+  flex-direction: row;
+  juatify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.editing-view-button {
+  padding: 0.4rem 1.2rem;
+}
+
 .list-button {
   padding: 0.4rem 0.8rem;
 }
