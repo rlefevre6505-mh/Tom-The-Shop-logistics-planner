@@ -7,6 +7,8 @@ import { useAppDispatch } from "../../app/hooks.ts";
 import { changeView } from "../../features/view/viewSlice.ts";
 import "../../views/AddEvent.css";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
+import ViewButton from "../buttons/ViewButton.tsx";
+import "./AddForm.css";
 
 export default function AddInventoryItem(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -57,8 +59,9 @@ export default function AddInventoryItem(): JSX.Element {
               maxLength={3}
             />
           </div>
-          <SubmitButton containedString="Submit" />
+          <SubmitButton containedString="Submit" />{" "}
         </form>
+        <ViewButton stateString={"edit-lists"} containedString={"Back"} />
       </div>
     </>
   );

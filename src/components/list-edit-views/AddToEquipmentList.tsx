@@ -6,6 +6,8 @@ import "../../views/AddEvent.css";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
 import FormNumberInput from "../form-elements/FormNumberInput.tsx";
 import type { shop, EquipmentItem } from "../../lib/types.ts";
+import ViewButton from "../buttons/ViewButton.tsx";
+import "./AddForm.css";
 
 export default function AddToEquipmentList(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -77,6 +79,7 @@ export default function AddToEquipmentList(): JSX.Element {
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-column">
             <select
+              className="select"
               name="shop_id"
               value={formValues.shop_id}
               onChange={handleInputChange}
@@ -88,6 +91,7 @@ export default function AddToEquipmentList(): JSX.Element {
             </select>
 
             <select
+              className="select"
               name="item_id"
               value={formValues.item_id}
               onChange={handleInputChange}
@@ -110,6 +114,7 @@ export default function AddToEquipmentList(): JSX.Element {
           </div>
           <SubmitButton containedString="Submit" />
         </form>
+        <ViewButton stateString={"edit-lists"} containedString={"Back"} />
       </div>
     </>
   );

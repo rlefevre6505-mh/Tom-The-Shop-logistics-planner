@@ -3,6 +3,7 @@ import type { EquipmentItem } from "../../lib/types";
 import ConfirmationModal from "./ConfirmationModal";
 import ViewButton from "../buttons/ViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
+import "./Lists.css";
 
 export default function EditEquipmentInventory(): JSX.Element {
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
@@ -83,74 +84,74 @@ export default function EditEquipmentInventory(): JSX.Element {
 
   return (
     <>
-      <h1>Edit Equipment Inventory</h1>
-      {inventory.map((item) => (
-        <div
-          key={item.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginBottom: "10px",
-          }}
-        >
-          {editingId === item.id ? (
-            <>
-              {/* INLINE EDIT FORM */}
-              <input
-                type="text"
-                name="equipment_name"
-                value={editValues.equipment_name}
-                onChange={handleEditChange}
-              />
-
-              <input
-                type="number"
-                name="current_amount"
-                value={editValues.current_amount}
-                onChange={handleEditChange}
-              />
-
-              <button onClick={() => saveEdit(item.id)}>Save</button>
-              <button onClick={cancelEditing}>Cancel</button>
-            </>
-          ) : (
-            <>
-              {/* NORMAL VIEW */}
-              <p>{item.equipment_name}</p>
-              <p>{item.current_amount}</p>
-
-              <button onClick={() => startEditing(item)}>Edit</button>
-              <button
-                onClick={() => {
-                  setPendingDeleteId(item.id);
-                  setShowModal(true);
-                }}
-              >
-                Delete
-              </button>
-            </>
-          )}
-        </div>
-      ))}
-
-      {showModal && pendingDeleteId !== null && (
-        <ConfirmationModal
-          message={`Are you sure you want to permanently delete this item?`}
-          onConfirm={async () => {
-            await handleDelete(pendingDeleteId);
-            setShowModal(false);
-            setPendingDeleteId(null);
-          }}
-          onCancel={() => {
-            setShowModal(false);
-            setPendingDeleteId(null);
-          }}
+      <div className="list-container">
+        <h1>Edit Equipment Inventory</h1>
+        <ViewButton
+          containedString={`Add a new item`}
+          stateString={`add-inventory-item`}
         />
-      )}
-      <ViewButton
-        containedString={`Add a new item`}
-        stateString={`add-inventory-item`}
-      />
+        {inventory.map((item) => (
+          <div key={item.id} className="list-row">
+            {editingId === item.id ? (
+              <>
+                <div className="list-block">
+                  <div className="list-input-section">
+                    <input
+                      className="text-input"
+                      type="text"
+                      name="equipment_name"
+                      value={editValues.equipment_name}
+                      onChange={handleEditChange}
+                    />
+                    <input
+                      className="num-input"
+                      type="number"
+                      name="current_amount"
+                      value={editValues.current_amount}
+                      onChange={handleEditChange}
+                    />
+
+                    <button onClick={() => saveEdit(item.id)}>Save</button>
+                    <button onClick={cancelEditing}>Cancel</button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="edit-text-section">
+                  <p>{`${item.current_amount}x  ${item.equipment_name}  `}</p>
+                </div>
+                <div className="list-button-section">
+                  <button onClick={() => startEditing(item)}>Edit</button>
+                  <button
+                    onClick={() => {
+                      setPendingDeleteId(item.id);
+                      setShowModal(true);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+
+        {showModal && pendingDeleteId !== null && (
+          <ConfirmationModal
+            message={`Are you sure you want to permanently delete this item from the inventory?`}
+            onConfirm={async () => {
+              await handleDelete(pendingDeleteId);
+              setShowModal(false);
+              setPendingDeleteId(null);
+            }}
+            onCancel={() => {
+              setShowModal(false);
+              setPendingDeleteId(null);
+            }}
+          />
+        )}
+      </div>
     </>
   );
 }

@@ -2,6 +2,7 @@ import { type JSX, useState, useEffect } from "react";
 import type { Event } from "../../lib/types";
 import { toUKdate } from "../../lib/functions";
 import ConfirmationModal from "./ConfirmationModal";
+import "./Lists.css";
 
 export default function EditEventList(): JSX.Element {
   const [eventsState, setEventsState] = useState<Event[]>([]);
@@ -36,38 +37,42 @@ export default function EditEventList(): JSX.Element {
 
   return (
     <>
-      <h1>Delete Events From List</h1>
-      {eventsState.map((e) => {
-        return (
-          <div>
-            <p>{`${e.title} at ${e.location}`}</p>
-            <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
-            <button
-              onClick={() => {
-                setPendingDeleteId(e.id);
-                setShowModal(true);
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        );
-      })}
+      <div className="list-container">
+        <h1>Delete Events From List</h1>
+        {eventsState.map((e) => {
+          return (
+            <div className="list-event-section">
+              <div className="event-text">
+                <p>{`${e.title} at ${e.location}`}</p>
+                <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
+              </div>
+              <button
+                onClick={() => {
+                  setPendingDeleteId(e.id);
+                  setShowModal(true);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          );
+        })}
 
-      {showModal && pendingDeleteId !== null && (
-        <ConfirmationModal
-          message="Are you sure you want to permanently delete this shop?"
-          onConfirm={async () => {
-            await handleDelete(pendingDeleteId);
-            setShowModal(false);
-            setPendingDeleteId(null);
-          }}
-          onCancel={() => {
-            setShowModal(false);
-            setPendingDeleteId(null);
-          }}
-        />
-      )}
+        {showModal && pendingDeleteId !== null && (
+          <ConfirmationModal
+            message="Are you sure you want to permanently delete this event?"
+            onConfirm={async () => {
+              await handleDelete(pendingDeleteId);
+              setShowModal(false);
+              setPendingDeleteId(null);
+            }}
+            onCancel={() => {
+              setShowModal(false);
+              setPendingDeleteId(null);
+            }}
+          />
+        )}
+      </div>
     </>
   );
 }

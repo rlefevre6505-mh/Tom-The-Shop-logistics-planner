@@ -18,6 +18,7 @@ export default function FormInput({
     <div className="form-input">
       <label htmlFor={name}>{labelText}</label>
       <input
+        className="form-input"
         type={type}
         id={name}
         name={name}

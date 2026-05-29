@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import "./Modal.css";
 
 interface ConfirmModalProps {
   message: string;
@@ -13,34 +14,20 @@ export default function ConfirmationModal({
 }: ConfirmModalProps): JSX.Element {
   return (
     <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999,
-      }}
+      className="backdrop"
+      // style={{
+      //   position: "fixed",
+      //   inset: 0,
+      //   background: "rgba(0,0,0,0.6)",
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      //   zIndex: 9999,
+      // }}
     >
-      <div
-        style={{
-          background: "white",
-          padding: "20px",
-          borderRadius: "8px",
-          minWidth: "300px",
-          textAlign: "center",
-        }}
-      >
+      <div className="modal">
         <p>{message}</p>
-
-        <button
-          onClick={onConfirm}
-          style={{ marginRight: "10px", background: "red", color: "white" }}
-        >
-          Yes, delete
-        </button>
-
+        <button onClick={onConfirm}>Yes, delete</button>
         <button onClick={onCancel}>Cancel</button>
       </div>
     </div>

@@ -6,6 +6,8 @@ import { useAppDispatch } from "../../app/hooks.ts";
 import { changeEditingView } from "../../features/EditingView/EditingViewSlice.ts";
 import "../../views/AddEvent.css";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
+import ViewButton from "../buttons/ViewButton.tsx";
+import "./AddForm.css";
 
 export default function AddShop(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -45,8 +47,9 @@ export default function AddShop(): JSX.Element {
               labelText="Shop name"
             />
           </div>
-          <SubmitButton containedString="Submit" />
+          <SubmitButton containedString="Submit" />{" "}
         </form>
+        <ViewButton stateString={"edit-lists"} containedString={"Back"} />
       </div>
     </>
   );
