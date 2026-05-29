@@ -184,47 +184,40 @@ export default function ClashCheckerView(): JSX.Element {
                   <p className="clash-title">
                     {toUKdate(e2.start)} to {toUKdate(e1.event.end)}.
                   </p>
-
                   {/* Shared shops */}
-                  <div className="clash-section shops">
-                    <h4>Shared Shops</h4>
-                    {sharedShops.length > 0 ? (
-                      sharedShops.map((shop) => (
+                  {sharedShops.length > 0 && (
+                    <div className="clash-section shops">
+                      <h4>Shared Shops</h4>
+                      {sharedShops.map((shop) => (
                         <p key={shop.id} className="warning">
                           {shop.shop_name} is allocated to both events.
                         </p>
-                      ))
-                    ) : (
-                      <p className="ok">No shared shops</p>
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                   {/* Shared vehicles */}
-                  <div className="clash-section vehicles">
-                    <h4>Shared Vehicles</h4>
-                    {sharedVehicles.length > 0 ? (
-                      sharedVehicles.map((vehicle) => (
+                  {sharedVehicles.length > 0 && (
+                    <div className="clash-section vehicles">
+                      <h4>Shared Vehicles</h4>
+                      {sharedVehicles.map((vehicle) => (
                         <p key={vehicle.id} className="warning">
                           {vehicle.vehicle_name} is allocated to both events.
                         </p>
-                      ))
-                    ) : (
-                      <p className="ok">No shared vehicles</p>
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}{" "}
                   {/* Equipment shortages */}
-                  <div className="clash-section equipment">
-                    <h4>Equipment Shortages</h4>
-                    {shortages.length > 0 ? (
-                      shortages.map((s) => (
+                  {shortages.length > 0 && (
+                    <div className="clash-section equipment">
+                      <h4>Equipment Shortages</h4>
+                      {shortages.map((s) => (
                         <p key={s.equipment_name} className="warning">
                           {s.equipment_name} — required {s.required}, available{" "}
                           {s.available}, short by {s.shortage}.
                         </p>
-                      ))
-                    ) : (
-                      <p className="ok">No equipment shortages</p>
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}
