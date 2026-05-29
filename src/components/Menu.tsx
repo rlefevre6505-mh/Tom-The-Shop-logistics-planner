@@ -18,7 +18,7 @@ export default function Menu({
       <div className={menuClass}>
         {window.innerWidth >= 800 ? <Logo /> : null}
 
-        {window.innerWidth < 800 ? <h3>Menu</h3> : null}
+        {window.innerWidth < 800 ? <h1>Menu</h1> : null}
 
         <ViewButton
           containedString={"View Calendar"}

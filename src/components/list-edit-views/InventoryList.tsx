@@ -39,14 +39,6 @@ export default function EditEquipmentInventory(): JSX.Element {
     setEditingId(null);
   }
 
-  // function handleEditChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = e.target;
-  //   setEditValues((prev) => ({
-  //     ...prev,
-  //     [name]: name === "current_amount" ? Number(value) : value,
-  //   }));
-  // }
-
   async function saveEdit(id: number) {
     const response = await fetch(
       "https://tom-the-shop-server.onrender.com/update-inventory",

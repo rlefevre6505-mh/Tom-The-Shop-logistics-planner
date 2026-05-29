@@ -40,22 +40,33 @@ export default function ListOfEvents(): JSX.Element {
 
   return (
     <>
-      {eventsList.map((e, i) => {
-        return (
-          <div
-            className="event-div"
-            key={`event${i}`}
-            onClick={async () => {
-              dispatch(changeSelectedEvent(e.id));
-              await fetchSelectedEvent(e.id);
-              dispatch(changeView("event-view"));
-            }}
-          >
-            <p>{`${e.title} at ${e.location}`}</p>
-            <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
-          </div>
-        );
-      })}
+      {/* {eventsList.map((e, i) => { */}
+
+      {eventsList
+        .filter((e) => {
+          const endDate = new Date(e.end);
+          const today = new Date();
+          const yesterday = new Date(today);
+          yesterday.setDate(today.getDate() - 2);
+
+          return endDate >= yesterday;
+        })
+        .map((e, i) => {
+          return (
+            <div
+              className="event-div"
+              key={`event${i}`}
+              onClick={async () => {
+                dispatch(changeSelectedEvent(e.id));
+                await fetchSelectedEvent(e.id);
+                dispatch(changeView("event-view"));
+              }}
+            >
+              <p>{`${e.title} at ${e.location}`}</p>
+              <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
+            </div>
+          );
+        })}
     </>
   );
 }

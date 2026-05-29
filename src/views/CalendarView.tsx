@@ -16,6 +16,7 @@ export default function CalendarView() {
   const [events, setEvents] = useState<calendarEvent[]>([]);
   // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
   const dispatch = useAppDispatch();
+  const aspect = window.innerWidth < 800 ? 0.65 : 1;
 
   // fetch request for events
   useEffect(() => {
@@ -75,10 +76,7 @@ export default function CalendarView() {
         eventDurationEditable={false}
         droppable={false}
         dateClick={undefined}
-        // select={() => {
-        //   console.log("date cell clicked");
-        //   // TODO: store clicked date in state (to be used in add-event form)
-        // }}
+        aspectRatio={aspect}
         eventClick={async (info) => {
           dispatch(changeSelectedEvent(info.event.id));
           await fetchSelectedEvent(parseInt(info.event.id));

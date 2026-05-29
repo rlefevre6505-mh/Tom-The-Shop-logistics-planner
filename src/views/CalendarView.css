@@ -3,8 +3,12 @@
 }
 
 .calendar {
-  background-color: #92d4c9;
+  background-color: var(--brand-color);
   padding: 20px;
+}
+
+.fc-daygrid-day-frame {
+  height: 95px;
 }
 
 .fc-list-event-time,
@@ -23,5 +27,8 @@
 @media (width < 800px) {
   .calendar {
     padding: 12px 10px;
+  }
+  .fc-daygrid-day-frame {
+    height: 120px;
   }
 }
