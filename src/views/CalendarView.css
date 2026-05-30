@@ -24,11 +24,42 @@
   border-top-right-radius: 4px;
 }
 
+.fc-day-today{
+  background-color:5px solid red ;
+}
+
+.fc-multimonth-day.fc-day-today,
+.fc-multimonth-day .fc-day-today,
+.fc-timegrid-col .fc-day-today,
+.fc-day-today{
+  border: 2px solid #ff001185 !important;
+  }
+
+
 @media (width < 800px) {
   .calendar {
     padding: 12px 10px;
   }
   .fc-daygrid-day-frame {
     height: 120px;
+  }
+  .fc-toolbar-chunk{
+    .fc-button{
+      font-size:.8rem;
+    padding:4px 8px;
+    }
+  }
+  #fc-dom-1{
+    font-size: 1.2rem;
+  }
+  .fc-header-toolbar{
+    gap: .4rem;
+    flex-wrap: wrap;
+  }
+}
+
+@media (width < 500px) {
+    .fc-header-toolbar{
+    flex-direction:column;
   }
 }

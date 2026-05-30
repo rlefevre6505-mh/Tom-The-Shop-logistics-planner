@@ -12,6 +12,7 @@ import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlic
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import "./CalendarView.css";
 
+
 export default function CalendarView() {
   const [events, setEvents] = useState<calendarEvent[]>([]);
   // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
@@ -65,7 +66,7 @@ export default function CalendarView() {
         initialView="multiMonthYear"
         multiMonthMaxColumns={2}
         headerToolbar={{
-          start: "multiMonthYear listYear",
+          start: "multiMonthYear dayGridMonth listYear",
           center: "title",
           end: "today prev,next",
         }}
