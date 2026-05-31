@@ -17,8 +17,6 @@ export default function ClashCheckerView(): JSX.Element {
   >([]);
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
 
-  // 1. FIND OVERLAPPING EVENTS
-
   function findOverlappingEvents(events: Event[]): Overlap[] {
     const results: Overlap[] = [];
     for (let i = 0; i < events.length; i++) {
@@ -36,6 +34,7 @@ export default function ClashCheckerView(): JSX.Element {
     return results;
   }
 
+  // Display only events that end after 2 days ago
   function isCurrent(dateStr: string): boolean {
     const endDate = new Date(dateStr);
     const today = new Date();
@@ -43,8 +42,6 @@ export default function ClashCheckerView(): JSX.Element {
     dayBeforeYesterday.setDate(today.getDate() - 2);
     return endDate >= dayBeforeYesterday;
   }
-
-  // 2. SHARED SHOPS / VEHICLES
 
   function getSharedShops(e1: Event, e2: Event): shop[] {
     return e1.shops.filter((s1) => e2.shops.some((s2) => s2.id === s1.id));
@@ -55,14 +52,11 @@ export default function ClashCheckerView(): JSX.Element {
     );
   }
 
-  // 3. EQUIPMENT SHORTAGE LOGIC
-
-  // Build totals for a single event
+  // Equipment shortages
   function getEventEquipmentTotals(event: Event) {
     if (!equipmentListsState) return {};
     const totals: Record<number, { name: string; amount: number }> = {};
     event.shops.forEach((shop) => {
-      // Find the equipment list entry for this shop
       const list = equipmentListsState.find((el) => el.shop_id === shop.id);
       if (!list) return;
       list.equipment.forEach((item) => {
@@ -78,35 +72,25 @@ export default function ClashCheckerView(): JSX.Element {
     return totals;
   }
 
-  // Compare two events + inventory
-  function getEquipmentShortages(e1: Event, e2: Event) {
+  // Combined shortages for events in the overlap group
+  function getGroupEquipmentShortages(events: Event[]) {
     if (!equipmentListsState) return [];
-
-    const totals1 = getEventEquipmentTotals(e1);
-    const totals2 = getEventEquipmentTotals(e2);
-
     const combined: Record<number, { name: string; amount: number }> = {};
+    events.forEach((ev) => {
+      const totals = getEventEquipmentTotals(ev);
+      for (const id in totals) {
+        if (!combined[id]) {
+          combined[id] = { ...totals[id] };
+        } else {
+          combined[id].amount += totals[id].amount;
+        }
+      }
+    });
 
-    // merge event 1
-    for (const id in totals1) {
-      combined[id] = { ...totals1[id] };
-    }
-
-    // merge event 2
-    for (const id in totals2) {
-      if (!combined[id]) combined[id] = { ...totals2[id] };
-      else combined[id].amount += totals2[id].amount;
-    }
-
-    // compare against inventory
     const shortages = [];
-
     for (const id in combined) {
       const req = combined[id];
-
-      // find matching inventory item
       const inv = inventory.find((i) => i.id === Number(id));
-
       if (inv && req.amount > inv.current_amount) {
         shortages.push({
           equipment_name: req.name,
@@ -116,12 +100,10 @@ export default function ClashCheckerView(): JSX.Element {
         });
       }
     }
-
     return shortages;
   }
 
-  // 4. FETCH DATA
-
+  // Fetch data
   useEffect(() => {
     async function fetchEventData() {
       const response = await fetch(
@@ -129,7 +111,6 @@ export default function ClashCheckerView(): JSX.Element {
       );
       const data: Event[] = await response.json();
       setOverlaps(findOverlappingEvents(data));
-      console.log("events:", data);
     }
     fetchEventData();
   }, []);
@@ -141,7 +122,6 @@ export default function ClashCheckerView(): JSX.Element {
       );
       const data = await response.json();
       setEquipmentListsState(data);
-      console.log("equipment lists:", data);
     }
     fetchEquipmentLists();
   }, []);
@@ -153,7 +133,6 @@ export default function ClashCheckerView(): JSX.Element {
       );
       const data: EquipmentItem[] = await response.json();
       setInventory(data);
-      console.log("inventory:", data);
     }
     fetchInventory();
   }, []);
@@ -161,68 +140,80 @@ export default function ClashCheckerView(): JSX.Element {
   return (
     <>
       <h3>Clashes (ordered by Start Date of first event)</h3>
+
       {overlaps
         .filter((o) => {
           const e1Recent = isCurrent(o.event.end);
           const anyE2Recent = o.overlapsWith.some((ev) => isCurrent(ev.end));
           return e1Recent || anyE2Recent;
         })
-        .map((e1) => (
-          <div className="clash" key={`overlap${e1.event.id}`}>
-            {e1.overlapsWith.map((e2) => {
-              const sharedShops = getSharedShops(e1.event, e2);
-              const sharedVehicles = getSharedVehicles(e1.event, e2);
-              const shortages = getEquipmentShortages(e1.event, e2);
-              return (
-                <div
-                  key={`pair-${e1.event.id}-${e2.id}`}
-                  className="clash-block"
-                >
-                  <p className="clash-title">
-                    {e1.event.title} overlaps {e2.title} from
-                  </p>
-                  <p className="clash-title">
-                    {toUKdate(e2.start)} to {toUKdate(e1.event.end)}.
-                  </p>
-                  {/* Shared shops */}
-                  {sharedShops.length > 0 && (
-                    <div className="clash-section shops">
-                      <h4>Shared Shops</h4>
-                      {sharedShops.map((shop) => (
-                        <p key={shop.id} className="warning">
-                          {shop.shop_name} is allocated to both events.
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {/* Shared vehicles */}
-                  {sharedVehicles.length > 0 && (
-                    <div className="clash-section vehicles">
-                      <h4>Shared Vehicles</h4>
-                      {sharedVehicles.map((vehicle) => (
-                        <p key={vehicle.id} className="warning">
-                          {vehicle.vehicle_name} is allocated to both events.
-                        </p>
-                      ))}
-                    </div>
-                  )}{" "}
-                  {/* Equipment shortages */}
-                  {shortages.length > 0 && (
-                    <div className="clash-section equipment">
-                      <h4>Equipment Shortages</h4>
-                      {shortages.map((s) => (
-                        <p key={s.equipment_name} className="warning">
-                          {s.equipment_name} — required {s.required}, available{" "}
-                          {s.available}, short by {s.shortage}.
-                        </p>
-                      ))}
-                    </div>
-                  )}
+        .map((e1) => {
+          // NEW: build group once
+          const groupEvents = [e1.event, ...e1.overlapsWith];
+          const groupShortages = getGroupEquipmentShortages(groupEvents);
+
+          return (
+            <div className="clash" key={`overlap${e1.event.id}`}>
+              {e1.overlapsWith.map((e2) => {
+                const sharedShops = getSharedShops(e1.event, e2);
+                const sharedVehicles = getSharedVehicles(e1.event, e2);
+
+                return (
+                  <div
+                    key={`pair-${e1.event.id}-${e2.id}`}
+                    className="clash-block"
+                  >
+                    <p className="clash-title">
+                      {e1.event.title} overlaps {e2.title} from
+                    </p>
+                    <p className="clash-title">
+                      {toUKdate(e2.start)} to {toUKdate(e1.event.end)}.
+                    </p>
+
+                    {/* Shared shops */}
+                    {sharedShops.length > 0 && (
+                      <div className="clash-section shops">
+                        <h4>Shared Shops</h4>
+                        {sharedShops.map((shop) => (
+                          <p key={shop.id} className="warning">
+                            {shop.shop_name} is allocated to both events.
+                          </p>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Shared vehicles */}
+                    {sharedVehicles.length > 0 && (
+                      <div className="clash-section vehicles">
+                        <h4>Shared Vehicles</h4>
+                        {sharedVehicles.map((vehicle) => (
+                          <p key={vehicle.id} className="warning">
+                            {vehicle.vehicle_name} is allocated to both events.
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* NEW: ONE combined equipment shortage block */}
+              {groupShortages.length > 0 && (
+                <div className="clash-block">
+                  <div className="clash-section equipment">
+                    <h4>Equipment Shortages (Combined)</h4>
+                    {groupShortages.map((s) => (
+                      <p key={s.equipment_name} className="warning">
+                        {s.equipment_name} — required {s.required}, available{" "}
+                        {s.available}, short by {s.shortage}.
+                      </p>
+                    ))}
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-        ))}
+              )}
+            </div>
+          );
+        })}
     </>
   );
 }
