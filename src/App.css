@@ -39,7 +39,6 @@ body {
   max-height: none;
 }
 
-
 @media (width < 800px) {
   .main {
     box-sizing: border-box;
