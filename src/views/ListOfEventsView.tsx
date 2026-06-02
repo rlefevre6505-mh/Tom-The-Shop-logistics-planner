@@ -40,8 +40,7 @@ export default function ListOfEvents(): JSX.Element {
 
   return (
     <>
-      {/* {eventsList.map((e, i) => { */}
-
+      <h1>Current & Upcoming Events</h1>
       {eventsList
         .filter((e) => {
           const endDate = new Date(e.end);

@@ -34,17 +34,16 @@ h1 {
   padding-left: 20px;
 }
 
-input {
-  padding: 8px;
-  border-radius: 4px;
-}
-
 .list-input-section {
   width: 96vw;
   display: flex;
+  flex-direction: row;
   justify-content: space-evenly;
-  button {
-    padding: 2px 12px;
+  input {
+    padding: 8px 12px;
+  }
+  p {
+    margin-left: 0;
   }
 }
 
@@ -54,7 +53,7 @@ input {
 
 .num-input {
   width: 20%;
-  padding: 0.4rem 0.8rem;
+  /* padding: 0.4rem 0.8rem; */
 }
 
 .list-button-section {
@@ -73,9 +72,17 @@ h2 {
 }
 
 .list-block {
+  display: flex;
+  flex-direction: column;
   padding: 10px 0;
   border: 2px solid red;
   border-radius: 4px;
+}
+
+.save-button-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .gap {
@@ -89,13 +96,36 @@ h2 {
   width: 80%;
   button {
     padding: 8px 16px;
-    /* border: red solid 2px; */
     border-radius: 4px;
   }
+}
+
+.list-text-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-button-section,
+.edit-text-section {
+  display: flex;
+  align-items: center;
 }
 
 @media (width >= 800px) {
   .button-container {
     max-width: 70vw;
+  }
+}
+
+@media (width > 600px) {
+  .list-button-section,
+  .list-container,
+  .list-input-section {
+    margin: 0 auto;
+    max-width: 600px;
+  }
+  .required-amount {
+    padding-right: 60px;
   }
 }

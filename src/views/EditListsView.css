@@ -1,20 +1,13 @@
 h1 {
-  margin: 2rem auto;
+  margin: 40px auto 1rem auto;
+  text-align: center;
 }
-
-/* .button-container {
-  width: 80%;
-  margin: auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-} */
 
 .button-container {
   width: 90vw;
   display: flex;
   flex-direction: row;
-  juatify-content: space-between;
+  justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.8rem;
 }

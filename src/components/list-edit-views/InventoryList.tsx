@@ -101,8 +101,9 @@ export default function EditEquipmentInventory(): JSX.Element {
                       name="current_amount"
                       value={editValues.current_amount}
                       onChange={handleEditChange}
-                    />
-
+                    />{" "}
+                  </div>{" "}
+                  <div className="save-button-section">
                     <button onClick={() => saveEdit(item.id)}>Save</button>
                     <button onClick={cancelEditing}>Cancel</button>
                   </div>

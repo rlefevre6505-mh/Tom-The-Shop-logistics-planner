@@ -3,6 +3,7 @@ import viewReducer from "../features/view/viewSlice.ts";
 import SelectedEventReducer from "../features/selectedEvent/SelectedEventSlice.ts";
 import EventDetailsReducer from "../features/eventDetails/EventDetailsSlice.ts";
 import editingViewReducer from "../features/EditingView/EditingViewSlice.ts";
+import clashReducer from "../features/ClashChecker/ClashCheckerSlice.ts";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     editingView: editingViewReducer,
     selectedEvent: SelectedEventReducer,
     EventDetails: EventDetailsReducer,
+    clash: clashReducer,
   },
 });
 
