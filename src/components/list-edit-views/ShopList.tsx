@@ -88,7 +88,8 @@ export default function EditShopList(): JSX.Element {
                       value={editValues.shop_name}
                       onChange={handleEditChange}
                     />
-
+                  </div>{" "}
+                  <div className="save-button-section">
                     <button onClick={() => saveEdit(s.id)}>Save</button>
                     <button onClick={cancelEditing}>Cancel</button>
                   </div>{" "}

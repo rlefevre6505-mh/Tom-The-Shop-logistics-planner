@@ -98,6 +98,8 @@ export default function EditVehicleList(): JSX.Element {
                       value={editValues.vehicle_reg}
                       onChange={handleEditChange}
                     />
+                  </div>
+                  <div className="save-button-section">
                     <button onClick={() => saveEdit(v.id)}>Save</button>
                     <button onClick={cancelEditing}>Cancel</button>
                   </div>

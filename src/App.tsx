@@ -15,7 +15,7 @@ import Logo from "./components/Logo.tsx";
 
 export default function App(): JSX.Element {
   const view = useAppSelector((state) => state.view.value);
-  const [menuClass, setMenuClass] = useState<string>("menu");
+  const [menuClass, setMenuClass] = useState<string>("menu-hidden");
 
   return (
     <>

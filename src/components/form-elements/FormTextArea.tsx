@@ -14,7 +14,9 @@ export default function FormTextArea({
 }: FormTextAreaProps): JSX.Element {
   return (
     <div className="form-textarea">
-      <label htmlFor={name}>{labelText}</label>
+      <label className="textarea-label" htmlFor={name}>
+        {labelText}
+      </label>
       <textarea
         id={name}
         name={name}

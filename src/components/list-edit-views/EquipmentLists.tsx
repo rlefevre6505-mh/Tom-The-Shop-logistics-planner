@@ -122,6 +122,8 @@ export default function EditEquipmentList(): JSX.Element {
                           value={editValues.required_amount}
                           onChange={handleEditChange}
                         />
+                      </div>
+                      <div className="save-button-section">
                         <button
                           onClick={() => saveEdit(item.equipment_list_id)}
                         >
@@ -137,7 +139,9 @@ export default function EditEquipmentList(): JSX.Element {
                       <div className="list-text-section">
                         <p>{item.equipment_name}</p>
                         <div className="gap" />
-                        <p>{item.required_amount}</p>
+                        <p className="required-amount">
+                          {item.required_amount}
+                        </p>
                       </div>
 
                       <button onClick={() => startEditing(item)}>Edit</button>

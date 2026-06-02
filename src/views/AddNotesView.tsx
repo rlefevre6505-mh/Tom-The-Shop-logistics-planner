@@ -7,6 +7,7 @@ import { changeView } from "../features/view/viewSlice.ts";
 import SubmitButton from "../components/buttons/SubmitButton.tsx";
 import FormTextArea from "../components/form-elements/FormTextArea.tsx";
 import ViewButton from "../components/buttons/ViewButton";
+import "./AddNotes.css";
 
 export default function AddEventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
@@ -66,8 +67,8 @@ export default function AddEventView(): JSX.Element {
           labelText="Add A Note"
         />
         <SubmitButton containedString="Submit" />
+        <ViewButton containedString={"Cancel"} stateString={"event-view"} />
       </form>
-      <ViewButton containedString={"Cancel"} stateString={"event-view"} />
     </>
   );
 }

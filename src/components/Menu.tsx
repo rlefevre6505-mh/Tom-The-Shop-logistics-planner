@@ -1,6 +1,13 @@
 import { type JSX } from "react";
 import ViewButton from "./buttons/ViewButton.js";
 import Logo from "./Logo.js";
+import { useAppSelector } from "../app/hooks";
+import {
+  selectHasClashes,
+  selectOverlaps,
+} from "../features/ClashChecker/ClashCheckerSlice";
+import { useAppDispatch } from "../app/hooks";
+import { changeView } from "../features/view/viewSlice.js";
 
 type MenuProps = {
   menuClass: string;
@@ -11,7 +18,9 @@ export default function Menu({
   menuClass,
   setMenuClass,
 }: MenuProps): JSX.Element {
-  // const [menuClass, setMenuClass] = useState<string>("menu");
+  const dispatch = useAppDispatch();
+  const hasClashes = useAppSelector(selectHasClashes);
+  const clashCount = useAppSelector(selectOverlaps).length;
 
   return (
     <>
@@ -40,11 +49,23 @@ export default function Menu({
           stateString={"edit-lists"}
           setMenuClass={setMenuClass}
         />
-        <ViewButton
+        {/* <ViewButton
           containedString={"Clash Checker"}
           stateString={"clash-checker"}
           setMenuClass={setMenuClass}
-        />
+        /> */}
+        {clashCount !== 0 && (
+          <button
+            className={hasClashes ? "view-button-red" : "view-button"}
+            onClick={() => {
+              dispatch(changeView("clash-checker"));
+              setMenuClass("menu-hidden");
+            }}
+          >
+            Clashes ({clashCount})
+          </button>
+        )}
+
         {window.innerWidth < 800 ? (
           <button
             onClick={() => {
