@@ -30,6 +30,7 @@
 
 .warning {
   color: red;
+  margin: 0.8rem 4rem;
 }
 
 .warning::before {

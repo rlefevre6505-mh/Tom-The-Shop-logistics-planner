@@ -38,6 +38,10 @@
   border-top: 2px solid #ff001185 !important;
 }
 
+.fc-event-title-container:hover {
+  cursor: pointer;
+}
+
 @media (width < 800px) {
   .calendar {
     padding: 12px 10px;
