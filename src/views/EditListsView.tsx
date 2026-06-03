@@ -8,8 +8,10 @@ import EditEquipmentInventory from "../components/list-edit-views/InventoryList"
 import AddShop from "../components/list-edit-views/AddShop.tsx";
 import AddVehicle from "../components/list-edit-views/AddVehicle.tsx";
 import AddToEquipmentList from "../components/list-edit-views/AddToEquipmentList.tsx";
-import "./EditListsView.css";
+import RequiredVehicles from "../components/list-edit-views/RequiredVehicles.tsx";
+import AddRequiredVehicle from "../components/list-edit-views/AddRequiredVehicle.tsx";
 import { useAppSelector } from "../app/hooks.ts";
+import "./EditListsView.css";
 
 export default function EditListsView(): JSX.Element {
   const editingView = useAppSelector((state) => state.editingView.value);
@@ -44,6 +46,8 @@ export default function EditListsView(): JSX.Element {
         {editingView === "add-shop" && <AddShop />}
         {editingView === "add-vehicle" && <AddVehicle />}
         {editingView === "add-to-equipment-list" && <AddToEquipmentList />}
+        {editingView === "required-vehicles" && <RequiredVehicles />}
+        {editingView === "add-required-vehicle" && <AddRequiredVehicle />}
       </div>
     </>
   );

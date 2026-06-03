@@ -78,6 +78,10 @@ export default function EditVehicleList(): JSX.Element {
           containedString="Add a new vehicle"
           stateString="add-vehicle"
         />
+        <EditingViewButton
+          containedString={"View required vehicles"}
+          stateString={"required-vehicles"}
+        />
         {vehicleState.map((v) => (
           <div key={v.id}>
             {editingId === v.id ? (

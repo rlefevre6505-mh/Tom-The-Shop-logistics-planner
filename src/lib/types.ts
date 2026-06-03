@@ -86,3 +86,11 @@ export type Overlap = {
   event: Event;
   overlapsWith: Event[];
 };
+
+export type requirement = {
+  required_vehicle_id: number;
+  shop_id: number;
+  shop_name: string;
+  vehicle_id: number;
+  vehicle_name: string;
+};
