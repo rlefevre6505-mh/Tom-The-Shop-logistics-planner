@@ -4,7 +4,7 @@ import Logo from "./Logo.js";
 import { useAppSelector } from "../app/hooks";
 import {
   selectHasClashes,
-  selectOverlaps,
+  selectClashCount,
 } from "../features/ClashChecker/ClashCheckerSlice";
 import { useAppDispatch } from "../app/hooks";
 import { changeView } from "../features/view/viewSlice.js";
@@ -20,7 +20,7 @@ export default function Menu({
 }: MenuProps): JSX.Element {
   const dispatch = useAppDispatch();
   const hasClashes = useAppSelector(selectHasClashes);
-  const clashCount = useAppSelector(selectOverlaps).length;
+  const clashCount = useAppSelector(selectClashCount);
 
   return (
     <>

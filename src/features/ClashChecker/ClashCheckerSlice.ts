@@ -5,6 +5,7 @@ import type {
   EquipmentList,
   EquipmentItem,
   Overlap,
+  requirement,
   shop,
   vehicle,
 } from "../../lib/types";
@@ -14,6 +15,7 @@ type ClashState = {
   equipmentLists: EquipmentList[];
   inventory: EquipmentItem[];
   overlaps: Overlap[];
+  requiredVehicles: requirement[];
   hasClashes: boolean;
   loading: boolean;
   error?: string;
@@ -24,22 +26,25 @@ const initialState: ClashState = {
   equipmentLists: [],
   inventory: [],
   overlaps: [],
+  requiredVehicles: [],
   hasClashes: false,
   loading: false,
 };
 
 export const fetchClashData = createAsyncThunk("clash/fetchAll", async () => {
-  const [eventsRes, listsRes, invRes] = await Promise.all([
+  const [eventsRes, listsRes, invRes, reqRes] = await Promise.all([
     fetch("https://tom-the-shop-server.onrender.com/all-event-details"),
     fetch("https://tom-the-shop-server.onrender.com/get-equipment-lists"),
     fetch("https://tom-the-shop-server.onrender.com/get-inventory"),
+    fetch("https://tom-the-shop-server.onrender.com/get-required-vehicles"),
   ]);
 
   const events: Event[] = await eventsRes.json();
   const equipmentLists: EquipmentList[] = await listsRes.json();
   const inventory: EquipmentItem[] = await invRes.json();
+  const requiredVehicles: requirement[] = await reqRes.json();
 
-  return { events, equipmentLists, inventory };
+  return { events, equipmentLists, inventory, requiredVehicles };
 });
 
 function findOverlappingEvents(events: Event[]): Overlap[] {
@@ -73,6 +78,50 @@ export function getSharedShops(e1: Event, e2: Event): shop[] {
 
 export function getSharedVehicles(e1: Event, e2: Event): vehicle[] {
   return e1.vehicles.filter((v1) => e2.vehicles.some((v2) => v2.id === v1.id));
+}
+
+export function getEventAllocationWarnings(
+  event: Event,
+  requirements: requirement[],
+) {
+  const warnings: string[] = [];
+
+  if (event.shops.length !== event.num_of_shops) {
+    warnings.push(
+      `Event "${event.title}" has ${event.shops.length} shops assigned but requires ${event.num_of_shops}.`,
+    );
+  }
+
+  if (event.vehicles.length !== event.num_of_vehicles) {
+    warnings.push(
+      `Event "${event.title}" has ${event.vehicles.length} vehicles assigned but requires ${event.num_of_vehicles}.`,
+    );
+  }
+
+  const unmetRequirements = requirements.filter((req) => {
+    const shopAssigned = event.shops.some((shop) => shop.id === req.shop_id);
+    if (!shopAssigned) return false;
+    const vehicleAssigned = event.vehicles.some((v) => v.id === req.vehicle_id);
+    return !vehicleAssigned;
+  });
+
+  unmetRequirements.forEach((req) => {
+    warnings.push(
+      `Shop "${req.shop_name}" requires vehicle "${req.vehicle_name}" but it is not assigned to "${event.title}".`,
+    );
+  });
+
+  return warnings;
+}
+
+export function getAllocationWarningCount(
+  events: Event[],
+  requirements: requirement[],
+) {
+  return events.reduce(
+    (count, event) => count + getEventAllocationWarnings(event, requirements).length,
+    0,
+  );
 }
 
 export function getEventEquipmentTotals(
@@ -162,6 +211,7 @@ const slice = createSlice({
         state.events = filtered;
         state.equipmentLists = action.payload.equipmentLists;
         state.inventory = action.payload.inventory;
+        state.requiredVehicles = action.payload.requiredVehicles;
         state.overlaps = findOverlappingEvents(state.events);
         state.hasClashes = state.overlaps.length > 0;
       })
@@ -180,6 +230,11 @@ export const selectEvents = (s: { clash: ClashState }) => s.clash.events;
 export const selectEquipmentLists = (s: { clash: ClashState }) =>
   s.clash.equipmentLists;
 export const selectInventory = (s: { clash: ClashState }) => s.clash.inventory;
+export const selectRequiredVehicles = (s: { clash: ClashState }) =>
+  s.clash.requiredVehicles;
 export const selectOverlaps = (s: { clash: ClashState }) => s.clash.overlaps;
 export const selectHasClashes = (s: { clash: ClashState }) =>
   s.clash.hasClashes;
+export const selectClashCount = (s: { clash: ClashState }) =>
+  s.clash.overlaps.length +
+  getAllocationWarningCount(s.clash.events, s.clash.requiredVehicles);
