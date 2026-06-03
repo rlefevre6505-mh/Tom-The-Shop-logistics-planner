@@ -1,14 +1,40 @@
-import { useEffect, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { useAppSelector } from "../app/hooks.ts";
+import type { requirement } from "../lib/types.ts";
 import ViewButton from "../components/buttons/ViewButton.tsx";
 import Note from "../components/Note.tsx";
 import "./EventView.css";
 
 export default function EventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
+  const [requirementState, setRequirementState] = useState<requirement[]>([]);
 
   useEffect(() => {
     console.log(EventDetails);
+  });
+
+  useEffect(() => {
+    async function fetchRequiredVehicles() {
+      const response = await fetch(
+        "https://tom-the-shop-server.onrender.com/get-required-vehicles",
+      );
+      const data: requirement[] = await response.json();
+      console.log(data);
+      setRequirementState(data);
+    }
+    fetchRequiredVehicles();
+  }, []);
+
+  // Find requirements where the shop is assigned but the vehicle is not
+  const unmetRequirements = requirementState.filter((req) => {
+    const shopAssigned = EventDetails?.shops?.some(
+      (shop) => shop.id === req.shop_id,
+    );
+    if (!shopAssigned) return false;
+    const vehicleAssigned = EventDetails?.vehicles?.some(
+      (v) => v.id === req.vehicle_id,
+    );
+    return !vehicleAssigned;
   });
 
   return (
@@ -53,6 +79,16 @@ export default function EventView(): JSX.Element {
             </p>
           )}
         </ul>
+        {unmetRequirements.length > 0 && (
+          <div className="warning-section">
+            {unmetRequirements.map((req, i) => (
+              <p key={`unmet-req-${i}`} className="warning">
+                Shop "{req.shop_name}"" requires vehicle "{req.vehicle_name}",
+                but it is not yet assigned to this event.
+              </p>
+            ))}
+          </div>
+        )}
         <ViewButton containedString={"Edit Event"} stateString={"edit-event"} />
       </div>
       <div className="notes-section">

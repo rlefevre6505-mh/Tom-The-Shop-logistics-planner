@@ -12,7 +12,6 @@ export default function RequiredVehicles(): JSX.Element {
   const [showModal, setShowModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
   // const dispatch = useAppDispatch();
-  // const handleInputChange = handleInputChangeFactory(setFormValues);
 
   async function handleDelete(id: number) {
     const response = await fetch(
