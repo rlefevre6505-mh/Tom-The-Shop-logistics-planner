@@ -6,6 +6,9 @@
 
 button {
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 html,
@@ -17,7 +20,7 @@ body {
 .main {
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 18vw 1fr;
+  grid-template-columns: 22vw 1fr;
   align-content: start;
   min-height: auto;
 }
@@ -132,7 +135,7 @@ body {
   }
   .menu .close-button {
     margin-top: 10%;
-    background-color: red;
+    /* background-color: red; */
     padding: 8px;
     border: none;
     border-radius: 4px;

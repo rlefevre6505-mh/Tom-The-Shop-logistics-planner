@@ -12,6 +12,7 @@ import { useAppSelector } from "./app/hooks.ts";
 import ListOfEvents from "./views/ListOfEventsView.tsx";
 import AddInventoryItem from "./components/list-edit-views/AddInventoryItem.tsx";
 import Logo from "./components/Logo.tsx";
+import { Icons } from "./components/Icons.tsx";
 
 export default function App(): JSX.Element {
   const view = useAppSelector((state) => state.view.value);
@@ -29,7 +30,7 @@ export default function App(): JSX.Element {
                 setMenuClass("menu");
               }}
             >
-              Menu
+              {Icons.menu}Menu
             </button>{" "}
           </header>
         ) : null}

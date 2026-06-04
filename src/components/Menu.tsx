@@ -33,7 +33,7 @@ export default function Menu({
           containedString={"View Calendar"}
           stateString={"calendar"}
           setMenuClass={setMenuClass}
-        />
+        ></ViewButton>
         <ViewButton
           containedString={"List Of Events"}
           stateString={"list-of-events"}
@@ -45,7 +45,7 @@ export default function Menu({
           setMenuClass={setMenuClass}
         />
         <ViewButton
-          containedString={"Edit Lists"}
+          containedString={"Edit Database"}
           stateString={"edit-lists"}
           setMenuClass={setMenuClass}
         />
@@ -58,7 +58,7 @@ export default function Menu({
               setMenuClass("menu-hidden");
             }}
           >
-            Clashes ({clashCount})
+            Warnings ({clashCount})
           </button>
         )}
 
