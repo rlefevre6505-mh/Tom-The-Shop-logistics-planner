@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.clash-heading {
+  margin-top: 4rem;
+}
+
 .clash {
   width: 90%;
   max-width: 700px;
@@ -55,9 +59,9 @@
   line-height: 1;
 }
 
-@media (width > 1000px) {
+/* @media (width > 1000px) {
   .clash-view {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-}
+} */
