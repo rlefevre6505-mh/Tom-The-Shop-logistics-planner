@@ -49,14 +49,10 @@ export default function Menu({
           stateString={"edit-lists"}
           setMenuClass={setMenuClass}
         />
-        {/* <ViewButton
-          containedString={"Clash Checker"}
-          stateString={"clash-checker"}
-          setMenuClass={setMenuClass}
-        /> */}
+
         {clashCount !== 0 && (
           <button
-            className={hasClashes ? "view-button-red" : "view-button"}
+            className={clashCount > 0 ? "view-button-red" : "view-button"}
             onClick={() => {
               dispatch(changeView("clash-checker"));
               setMenuClass("menu-hidden");
