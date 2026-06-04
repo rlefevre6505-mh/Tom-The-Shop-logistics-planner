@@ -3,7 +3,7 @@ import ViewButton from "./buttons/ViewButton.js";
 import Logo from "./Logo.js";
 import { useAppSelector } from "../app/hooks";
 import {
-  selectHasClashes,
+  // selectHasClashes,
   selectClashCount,
 } from "../features/ClashChecker/ClashCheckerSlice";
 import { useAppDispatch } from "../app/hooks";
@@ -19,7 +19,7 @@ export default function Menu({
   setMenuClass,
 }: MenuProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const hasClashes = useAppSelector(selectHasClashes);
+  // const hasClashes = useAppSelector(selectHasClashes);
   const clashCount = useAppSelector(selectClashCount);
 
   return (
