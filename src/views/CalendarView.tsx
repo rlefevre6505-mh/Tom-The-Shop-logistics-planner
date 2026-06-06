@@ -12,6 +12,16 @@ import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlic
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import "./CalendarView.css";
 
+const eventColorClasses = [
+  "event-color-1",
+  "event-color-2",
+  "event-color-3",
+  "event-color-4",
+  "event-color-5",
+  "event-color-6",
+  "event-color-7",
+  "event-color-8",
+];
 
 export default function CalendarView() {
   const [events, setEvents] = useState<calendarEvent[]>([]);
@@ -26,13 +36,14 @@ export default function CalendarView() {
         "https://tom-the-shop-server.onrender.com/stored-events",
       );
       const data = await response.json();
-      const fixedEvents = data.map((event: calendarEvent) => {
+      const fixedEvents = data.map((event: calendarEvent, index: number) => {
         const end = new Date(String(event.end));
         end.setDate(end.getDate() + 1);
         return {
           ...event,
           end: end.toISOString().slice(0, 10),
-        };
+          classNames: [eventColorClasses[index % eventColorClasses.length]],
+        } as EventInput;
       });
       setEvents(fixedEvents);
     }

@@ -42,6 +42,54 @@
   cursor: pointer;
 }
 
+.event-color-1 .fc-event-main-frame,
+.event-color-1 .fc-event-title-container,
+.event-color-1 .fc-list-event-title {
+  background-color: #132f54;
+}
+
+.event-color-2 .fc-event-main-frame,
+.event-color-2 .fc-event-title-container,
+.event-color-2 .fc-list-event-title {
+  background-color: #269d8d;
+}
+
+.event-color-3 .fc-event-main-frame,
+.event-color-3 .fc-event-title-container,
+.event-color-3 .fc-list-event-title {
+  background-color: #8e44ad;
+}
+
+.event-color-4 .fc-event-main-frame,
+.event-color-4 .fc-event-title-container,
+.event-color-4 .fc-list-event-title {
+  background-color: #ff6b6b;
+}
+
+.event-color-5 .fc-event-main-frame,
+.event-color-5 .fc-event-title-container,
+.event-color-5 .fc-list-event-title {
+  background-color: #6cc644;
+}
+
+.event-color-6 .fc-event-main-frame,
+.event-color-6 .fc-event-title-container,
+.event-color-6 .fc-list-event-title {
+  background-color: #00b8d9;
+}
+
+.event-color-7 .fc-event-main-frame,
+.event-color-7 .fc-event-title-container,
+.event-color-7 .fc-list-event-title {
+  background-color: #945990;
+}
+
+.event-color-8 .fc-event-main-frame,
+.event-color-8 .fc-event-title-container,
+.event-color-8 .fc-list-event-title {
+  background-color: #f9a825;
+}
+
 @media (width < 800px) {
   .calendar {
     padding: 12px 10px;

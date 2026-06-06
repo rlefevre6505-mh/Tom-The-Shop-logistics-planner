@@ -19,6 +19,6 @@ if (!window.__clashPollingStarted) {
   void store.dispatch(fetchClashData());
   setInterval(() => {
     void store.dispatch(fetchClashData());
-  }, 2000);
+  }, 500);
   window.__clashPollingStarted = true;
 }

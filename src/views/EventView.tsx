@@ -3,6 +3,7 @@ import { useAppSelector } from "../app/hooks.ts";
 import type { requirement } from "../lib/types.ts";
 import ViewButton from "../components/buttons/ViewButton.tsx";
 import Note from "../components/Note.tsx";
+import { Icons } from "../components/Icons.tsx";
 import "./EventView.css";
 
 export default function EventView(): JSX.Element {
@@ -89,7 +90,11 @@ export default function EventView(): JSX.Element {
             ))}
           </div>
         )}
-        <ViewButton containedString={"Edit Event"} stateString={"edit-event"} />
+        <ViewButton
+          containedString={"Edit Event"}
+          stateString={"edit-event"}
+          icon={Icons.edit}
+        />
       </div>
       <div className="notes-section">
         {EventDetails?.notes && <h3>Notes</h3>}
@@ -99,7 +104,11 @@ export default function EventView(): JSX.Element {
               return <Note text={n.note} i={i} />;
             })}
         </div>
-        <ViewButton containedString={"Add A Note"} stateString={"add-note"} />
+        <ViewButton
+          containedString={"Add A Note"}
+          stateString={"add-note"}
+          icon={Icons.add}
+        />
       </div>
     </div>
   );

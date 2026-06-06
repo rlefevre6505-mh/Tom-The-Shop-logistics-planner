@@ -12,6 +12,7 @@ import RequiredVehicles from "../components/list-edit-views/RequiredVehicles.tsx
 import AddRequiredVehicle from "../components/list-edit-views/AddRequiredVehicle.tsx";
 import { useAppSelector } from "../app/hooks.ts";
 import "./EditListsView.css";
+import { Icons } from "../components/Icons.tsx";
 
 export default function EditListsView(): JSX.Element {
   const editingView = useAppSelector((state) => state.editingView.value);
@@ -20,17 +21,28 @@ export default function EditListsView(): JSX.Element {
     <>
       <h1>Edit Lists</h1>
       <div className="button-container">
-        <EditingViewButton containedString={"Events"} stateString={"events"} />
-        <EditingViewButton containedString={"Shops"} stateString={"shops"} />
         <EditingViewButton
+          icon={Icons.events}
+          containedString={"Events"}
+          stateString={"events"}
+        />
+        <EditingViewButton
+          icon={Icons.shop}
+          containedString={"Shops"}
+          stateString={"shops"}
+        />
+        <EditingViewButton
+          icon={Icons.vehicle}
           containedString={"Vehicles"}
           stateString={"vehicles"}
         />
         <EditingViewButton
+          icon={Icons.equipment}
           containedString={"Equipment Lists"}
           stateString={"equipment-lists"}
         />
         <EditingViewButton
+          icon={Icons.lists}
           containedString={"Equipment Inventory"}
           stateString={"inventory"}
         />

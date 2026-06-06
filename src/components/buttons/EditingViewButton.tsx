@@ -5,11 +5,13 @@ import { changeEditingView } from "../../features/EditingView/EditingViewSlice.t
 type editingViewButtonProps = {
   containedString: string;
   stateString: string;
+  icon?: JSX.Element;
 };
 
 export default function EditingViewButton({
   containedString,
   stateString,
+  icon,
 }: editingViewButtonProps): JSX.Element {
   const dispatch = useAppDispatch();
 
@@ -18,6 +20,7 @@ export default function EditingViewButton({
       className="editing-view-button"
       onClick={() => dispatch(changeEditingView(stateString))}
     >
+      {icon}
       {containedString}
     </button>
   );

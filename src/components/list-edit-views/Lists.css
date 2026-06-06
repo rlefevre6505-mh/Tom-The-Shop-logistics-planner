@@ -15,6 +15,10 @@ h1 {
   padding: 0.4rem 1.2rem;
 }
 
+.list-container .editing-view-button {
+  width: 60%;
+}
+
 .list-row {
   width: 100%;
   display: flex;

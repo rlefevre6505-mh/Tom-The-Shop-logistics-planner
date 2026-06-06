@@ -8,6 +8,7 @@ import {
 } from "../features/ClashChecker/ClashCheckerSlice";
 import { useAppDispatch } from "../app/hooks";
 import { changeView } from "../features/view/viewSlice.js";
+import { Icons } from "./Icons.js";
 
 type MenuProps = {
   menuClass: string;
@@ -27,27 +28,31 @@ export default function Menu({
       <div className={menuClass}>
         {window.innerWidth >= 800 ? <Logo /> : null}
 
-        {window.innerWidth < 800 ? <h1>Menu</h1> : null}
+        {/* {window.innerWidth < 800 ? <h1>Menu</h1> : null} */}
 
         <ViewButton
           containedString={"View Calendar"}
           stateString={"calendar"}
           setMenuClass={setMenuClass}
+          icon={Icons.calendar}
         ></ViewButton>
         <ViewButton
           containedString={"List Of Events"}
           stateString={"list-of-events"}
           setMenuClass={setMenuClass}
+          icon={Icons.events}
         />
         <ViewButton
           containedString={"Add Event"}
           stateString={"add-event"}
           setMenuClass={setMenuClass}
+          icon={Icons.add}
         />
         <ViewButton
           containedString={"Edit Database"}
           stateString={"edit-lists"}
           setMenuClass={setMenuClass}
+          icon={Icons.edit}
         />
 
         {clashCount !== 0 && (
@@ -58,7 +63,7 @@ export default function Menu({
               setMenuClass("menu-hidden");
             }}
           >
-            Warnings ({clashCount})
+            {Icons.warning}Warnings ({clashCount})
           </button>
         )}
 
