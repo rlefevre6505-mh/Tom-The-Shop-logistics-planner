@@ -75,16 +75,18 @@ export default function EditVehicleList(): JSX.Element {
     <>
       <div className="list-container">
         <h1>Edit List Of Vehicles</h1>
-        <EditingViewButton
-          icon={Icons.add}
-          containedString="Add a new vehicle"
-          stateString="add-vehicle"
-        />
-        <EditingViewButton
-          icon={Icons.inspect}
-          containedString={"View required vehicles"}
-          stateString={"required-vehicles"}
-        />
+        <div className="button-container-small">
+          <EditingViewButton
+            icon={Icons.add}
+            containedString="Add a new vehicle"
+            stateString="add-vehicle"
+          />
+          <EditingViewButton
+            icon={Icons.inspect}
+            containedString={"View required vehicles"}
+            stateString={"required-vehicles"}
+          />
+        </div>
         {vehicleState.map((v) => (
           <div key={v.id}>
             {editingId === v.id ? (
@@ -107,8 +109,12 @@ export default function EditVehicleList(): JSX.Element {
                     />
                   </div>
                   <div className="save-button-section">
-                    <button onClick={() => saveEdit(v.id)}>Save</button>
-                    <button onClick={cancelEditing}>Cancel</button>
+                    <button onClick={() => saveEdit(v.id)}>
+                      {Icons.tick}Save
+                    </button>
+                    <button onClick={cancelEditing}>
+                      {Icons.cancel}Cancel
+                    </button>
                   </div>
                 </div>
               </>
@@ -119,13 +125,17 @@ export default function EditVehicleList(): JSX.Element {
                     <p>{v.vehicle_name}</p>
                     {/* <p>{v.vehicle_reg}</p> */}
                   </div>
-                  <button onClick={() => startEditing(v)}>Edit</button>
+                  <button onClick={() => startEditing(v)}>
+                    {" "}
+                    {Icons.edit} Edit
+                  </button>
                   <button
                     onClick={() => {
                       setPendingDeleteId(v.id);
                       setShowModal(true);
                     }}
                   >
+                    {Icons.delete}
                     Delete
                   </button>
                 </div>

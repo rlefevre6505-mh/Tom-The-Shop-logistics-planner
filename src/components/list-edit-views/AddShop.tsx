@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../app/hooks.ts";
 import { changeEditingView } from "../../features/EditingView/EditingViewSlice.ts";
 import "../../views/AddEvent.css";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
-import ViewButton from "../buttons/ViewButton.tsx";
+import EditingViewButton from "../buttons/EditingViewButton.tsx";
 import "./AddForm.css";
 import { Icons } from "../Icons.tsx";
 
@@ -50,9 +50,9 @@ export default function AddShop(): JSX.Element {
           </div>
           <SubmitButton containedString="Submit" />{" "}
         </form>
-        <ViewButton
-          icon={Icons.add}
-          stateString={"edit-lists"}
+        <EditingViewButton
+          icon={Icons.back}
+          stateString={"shops"}
           containedString={"Back"}
         />
       </div>

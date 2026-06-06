@@ -13,6 +13,13 @@ h1 {
   margin: 0 auto;
 }
 
+.button-container-small {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
 .editing-view-button {
   padding: 0.4rem 1.2rem;
 }

@@ -3,6 +3,7 @@ import type { Event } from "../../lib/types";
 import { toUKdate } from "../../lib/functions";
 import ConfirmationModal from "./ConfirmationModal";
 import "./Lists.css";
+import { Icons } from "../Icons";
 
 export default function EditEventList(): JSX.Element {
   const [eventsState, setEventsState] = useState<Event[]>([]);
@@ -52,7 +53,7 @@ export default function EditEventList(): JSX.Element {
                   setShowModal(true);
                 }}
               >
-                Delete
+                {Icons.delete}Delete
               </button>
             </div>
           );

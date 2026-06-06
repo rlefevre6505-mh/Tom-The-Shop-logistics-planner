@@ -6,6 +6,7 @@ import EditingViewButton from "../buttons/EditingViewButton";
 // import { changeEditingView } from "../../features/EditingView/EditingViewSlice.ts";
 import ConfirmationModal from "./ConfirmationModal.tsx";
 import "./AddForm.css";
+import { Icons } from "../Icons.tsx";
 
 export default function RequiredVehicles(): JSX.Element {
   const [requirementState, setRequirementState] = useState<requirement[]>([]);
@@ -42,13 +43,22 @@ export default function RequiredVehicles(): JSX.Element {
   }, []);
 
   return (
-    <div>
-      <EditingViewButton
-        containedString={"Add a new requirement"}
-        stateString={"add-required-vehicle"}
-      />
-      <EditingViewButton containedString={"Back"} stateString={"vehicles"} />
+    <div className="list-container">
       <h1>Vehicle Requirements</h1>
+
+      <div className="button-container-small">
+        <EditingViewButton
+          icon={Icons.back}
+          containedString={"Back"}
+          stateString={"vehicles"}
+        />
+        <EditingViewButton
+          icon={Icons.add}
+          containedString={"Add a new requirement"}
+          stateString={"add-required-vehicle"}
+        />
+      </div>
+
       {requirementState.map((r) => {
         return (
           <div className="list-event-section">
@@ -60,7 +70,7 @@ export default function RequiredVehicles(): JSX.Element {
                 setShowModal(true);
               }}
             >
-              Delete
+              {Icons.delete}Delete
             </button>
           </div>
         );

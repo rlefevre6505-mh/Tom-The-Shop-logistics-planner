@@ -45,9 +45,10 @@ h1 {
   justify-content: space-evenly;
   input {
     padding: 8px 12px;
+    max-width: 40%;
   }
   p {
-    margin-left: 0;
+    margin: 0 0.8rem;
   }
 }
 

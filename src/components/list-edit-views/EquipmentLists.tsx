@@ -129,9 +129,11 @@ export default function EditEquipmentList(): JSX.Element {
                         <button
                           onClick={() => saveEdit(item.equipment_list_id)}
                         >
-                          Save
+                          {Icons.tick}Save
                         </button>
-                        <button onClick={cancelEditing}>Cancel</button>
+                        <button onClick={cancelEditing}>
+                          {Icons.cancel}Cancel
+                        </button>
                       </div>
                     </div>
                   </>
@@ -146,7 +148,9 @@ export default function EditEquipmentList(): JSX.Element {
                         </p>
                       </div>
 
-                      <button onClick={() => startEditing(item)}>Edit</button>
+                      <button onClick={() => startEditing(item)}>
+                        {Icons.edit}Edit
+                      </button>
                       <button
                         onClick={() => {
                           setPendingDelete({
@@ -156,7 +160,7 @@ export default function EditEquipmentList(): JSX.Element {
                           setShowModal(true);
                         }}
                       >
-                        Delete
+                        {Icons.delete}Delete
                       </button>
                     </div>
                   </>

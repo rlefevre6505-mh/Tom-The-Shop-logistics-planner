@@ -6,7 +6,7 @@ import "../../views/AddEvent.css";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
 import FormNumberInput from "../form-elements/FormNumberInput.tsx";
 import type { shop, EquipmentItem } from "../../lib/types.ts";
-import ViewButton from "../buttons/ViewButton.tsx";
+import EditingViewButton from "../buttons/EditingViewButton.tsx";
 import "./AddForm.css";
 import { Icons } from "../Icons.tsx";
 
@@ -115,9 +115,9 @@ export default function AddToEquipmentList(): JSX.Element {
           </div>
           <SubmitButton containedString="Submit" />
         </form>
-        <ViewButton
-          icon={Icons.add}
-          stateString={"edit-lists"}
+        <EditingViewButton
+          icon={Icons.back}
+          stateString={"equipment-lists"}
           containedString={"Back"}
         />
       </div>
