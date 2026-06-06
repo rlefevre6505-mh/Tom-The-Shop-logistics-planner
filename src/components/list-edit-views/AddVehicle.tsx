@@ -8,6 +8,7 @@ import "../../views/AddEvent.css";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
 import ViewButton from "../buttons/ViewButton.tsx";
 import "./AddForm.css";
+import { Icons } from "../Icons.tsx";
 
 export default function AddVehicle(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -58,7 +59,11 @@ export default function AddVehicle(): JSX.Element {
           </div>
           <SubmitButton containedString="Submit" />
         </form>
-        <ViewButton stateString={"edit-lists"} containedString={"Back"} />
+        <ViewButton
+          icon={Icons.add}
+          stateString={"edit-lists"}
+          containedString={"Back"}
+        />
       </div>
     </>
   );
