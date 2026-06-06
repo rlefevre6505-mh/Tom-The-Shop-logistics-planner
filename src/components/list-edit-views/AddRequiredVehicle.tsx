@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../app/hooks.ts";
 import { changeEditingView } from "../../features/EditingView/EditingViewSlice.ts";
 import { handleInputChangeFactory } from "../../lib/functions.ts";
 import "./AddForm.css";
+import { Icons } from "../Icons.tsx";
 
 export default function AddRequiredVehicle(): JSX.Element {
   const [formValues, setFormValues] = useState<{
@@ -97,7 +98,11 @@ export default function AddRequiredVehicle(): JSX.Element {
 
         <SubmitButton containedString="Submit" />
       </form>
-      <EditingViewButton containedString={"Back"} stateString={"vehicles"} />
+      <EditingViewButton
+        icon={Icons.add}
+        containedString={"Back"}
+        stateString={"vehicles"}
+      />
     </div>
   );
 }
