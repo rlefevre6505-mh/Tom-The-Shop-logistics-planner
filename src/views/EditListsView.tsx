@@ -10,6 +10,7 @@ import AddVehicle from "../components/list-edit-views/AddVehicle.tsx";
 import AddToEquipmentList from "../components/list-edit-views/AddToEquipmentList.tsx";
 import RequiredVehicles from "../components/list-edit-views/RequiredVehicles.tsx";
 import AddRequiredVehicle from "../components/list-edit-views/AddRequiredVehicle.tsx";
+import AddInventoryItem from "../components/list-edit-views/AddInventoryItem.tsx";
 import { useAppSelector } from "../app/hooks.ts";
 import "./EditListsView.css";
 import { Icons } from "../components/Icons.tsx";
@@ -19,7 +20,7 @@ export default function EditListsView(): JSX.Element {
 
   return (
     <>
-      <h1>Edit Lists</h1>
+      <h1>Editable Lists:</h1>
       <div className="button-container">
         <EditingViewButton
           icon={Icons.events}
@@ -49,7 +50,11 @@ export default function EditListsView(): JSX.Element {
       </div>
 
       <div>
-        {editingView === "" && <p>no list selected</p>}
+        {editingView === "" && (
+          <h2>
+            <i>No list selected</i>
+          </h2>
+        )}
         {editingView === "events" && <EditEventList />}
         {editingView === "shops" && <EditShopList />}
         {editingView === "vehicles" && <EditVehicleList />}
@@ -60,6 +65,7 @@ export default function EditListsView(): JSX.Element {
         {editingView === "add-to-equipment-list" && <AddToEquipmentList />}
         {editingView === "required-vehicles" && <RequiredVehicles />}
         {editingView === "add-required-vehicle" && <AddRequiredVehicle />}
+        {editingView === "add-inventory-item" && <AddInventoryItem />}
       </div>
     </>
   );

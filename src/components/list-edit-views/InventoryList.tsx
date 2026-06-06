@@ -81,8 +81,8 @@ export default function EditEquipmentInventory(): JSX.Element {
         <h1>Edit Equipment Inventory</h1>
         <EditingViewButton
           icon={Icons.add}
-          containedString={`Add a new item`}
-          stateString={`add-inventory-item`}
+          containedString={"Add a new item"}
+          stateString={"add-inventory-item"}
         />
         {inventory.map((item) => (
           <div key={item.id} className="list-row">
@@ -106,8 +106,12 @@ export default function EditEquipmentInventory(): JSX.Element {
                     />{" "}
                   </div>{" "}
                   <div className="save-button-section">
-                    <button onClick={() => saveEdit(item.id)}>Save</button>
-                    <button onClick={cancelEditing}>Cancel</button>
+                    <button onClick={() => saveEdit(item.id)}>
+                      {Icons.tick}Save
+                    </button>
+                    <button onClick={cancelEditing}>
+                      {Icons.cancel}Cancel
+                    </button>
                   </div>
                 </div>
               </>
@@ -117,14 +121,16 @@ export default function EditEquipmentInventory(): JSX.Element {
                   <p>{`${item.current_amount}x  ${item.equipment_name}  `}</p>
                 </div>
                 <div className="list-button-section">
-                  <button onClick={() => startEditing(item)}>Edit</button>
+                  <button onClick={() => startEditing(item)}>
+                    {Icons.edit}Edit
+                  </button>
                   <button
                     onClick={() => {
                       setPendingDeleteId(item.id);
                       setShowModal(true);
                     }}
                   >
-                    Delete
+                    {Icons.delete}Delete
                   </button>
                 </div>
               </>

@@ -92,8 +92,12 @@ export default function EditShopList(): JSX.Element {
                     />
                   </div>{" "}
                   <div className="save-button-section">
-                    <button onClick={() => saveEdit(s.id)}>Save</button>
-                    <button onClick={cancelEditing}>Cancel</button>
+                    <button onClick={() => saveEdit(s.id)}>
+                      {Icons.tick}Save
+                    </button>
+                    <button onClick={cancelEditing}>
+                      {Icons.cancel}Cancel
+                    </button>
                   </div>{" "}
                 </div>
               </>
@@ -103,13 +107,16 @@ export default function EditShopList(): JSX.Element {
                   <div className="list-text-section">
                     <p>{s.shop_name}</p>
                   </div>
-                  <button onClick={() => startEditing(s)}>Edit</button>
+                  <button onClick={() => startEditing(s)}>
+                    {Icons.edit}Edit
+                  </button>
                   <button
                     onClick={() => {
                       setPendingDeleteId(s.id);
                       setShowModal(true);
                     }}
                   >
+                    {Icons.delete}
                     Delete
                   </button>
                 </div>

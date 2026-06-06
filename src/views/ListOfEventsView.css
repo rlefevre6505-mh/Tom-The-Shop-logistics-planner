@@ -5,3 +5,7 @@
   border: 2px grey solid;
   border-radius: 0.4rem;
 }
+
+.clickable:hover {
+  cursor: pointer;
+}
