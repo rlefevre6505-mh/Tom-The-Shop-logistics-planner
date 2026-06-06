@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import "./Modal.css";
+import { Icons } from "../Icons";
 
 interface ConfirmModalProps {
   message: string;
@@ -13,22 +14,13 @@ export default function ConfirmationModal({
   onCancel,
 }: ConfirmModalProps): JSX.Element {
   return (
-    <div
-      className="backdrop"
-      // style={{
-      //   position: "fixed",
-      //   inset: 0,
-      //   background: "rgba(0,0,0,0.6)",
-      //   display: "flex",
-      //   justifyContent: "center",
-      //   alignItems: "center",
-      //   zIndex: 9999,
-      // }}
-    >
+    <div className="backdrop">
       <div className="modal">
         <p>{message}</p>
-        <button onClick={onConfirm}>Yes, delete</button>
-        <button onClick={onCancel}>Cancel</button>
+        <div className="button-container">
+          <button onClick={onConfirm}>{Icons.delete}Yes, delete</button>
+          <button onClick={onCancel}>{Icons.cancel}Cancel</button>
+        </div>{" "}
       </div>
     </div>
   );

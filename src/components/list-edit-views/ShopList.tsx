@@ -4,6 +4,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
 import "./Lists.css";
+import { Icons } from "../Icons";
 
 export default function EditShopList(): JSX.Element {
   const [shopState, setShopState] = useState<shop[]>([]);
@@ -73,6 +74,7 @@ export default function EditShopList(): JSX.Element {
       <div className="list-container">
         <h1>Edit List Of Shops</h1>
         <EditingViewButton
+          icon={Icons.add}
           containedString="Add a new shop"
           stateString="add-shop"
         />

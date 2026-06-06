@@ -4,6 +4,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
 import "./Lists.css";
+import { Icons } from "../Icons";
 
 export default function EditEquipmentInventory(): JSX.Element {
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
@@ -79,6 +80,7 @@ export default function EditEquipmentInventory(): JSX.Element {
       <div className="list-container">
         <h1>Edit Equipment Inventory</h1>
         <EditingViewButton
+          icon={Icons.add}
           containedString={`Add a new item`}
           stateString={`add-inventory-item`}
         />

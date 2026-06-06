@@ -57,37 +57,43 @@
 .event-color-3 .fc-event-main-frame,
 .event-color-3 .fc-event-title-container,
 .event-color-3 .fc-list-event-title {
-  background-color: #8e44ad;
+  background-color: #6cc644;
 }
 
 .event-color-4 .fc-event-main-frame,
 .event-color-4 .fc-event-title-container,
 .event-color-4 .fc-list-event-title {
-  background-color: #ff6b6b;
+  background-color: #ffcc00;
 }
 
 .event-color-5 .fc-event-main-frame,
 .event-color-5 .fc-event-title-container,
 .event-color-5 .fc-list-event-title {
-  background-color: #6cc644;
+  background-color: #e96839;
 }
 
 .event-color-6 .fc-event-main-frame,
 .event-color-6 .fc-event-title-container,
 .event-color-6 .fc-list-event-title {
-  background-color: #00b8d9;
+  background-color: #e04a7e;
 }
 
 .event-color-7 .fc-event-main-frame,
 .event-color-7 .fc-event-title-container,
 .event-color-7 .fc-list-event-title {
-  background-color: #945990;
+  background-color: #8e44ad;
 }
 
 .event-color-8 .fc-event-main-frame,
 .event-color-8 .fc-event-title-container,
 .event-color-8 .fc-list-event-title {
-  background-color: #f9a825;
+  background-color: #00b8d9;
+}
+
+.fc-list-event-title {
+  background-color: white !important;
+  color: black !important;
+  border-color: transparent !important;
 }
 
 @media (width < 800px) {

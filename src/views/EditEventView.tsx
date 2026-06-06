@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import { changeView } from "../features/view/viewSlice.ts";
-import "./AddEvent.css";
 import type { shop, vehicle } from "../lib/types.ts";
 import FormInput from "../components/form-elements/FormInput.tsx";
 import FormNumberInput from "../components/form-elements/FormNumberInput.tsx";
 import SubmitButton from "../components/buttons/SubmitButton.tsx";
 import ViewButton from "../components/buttons/ViewButton.tsx";
 import { handleInputChangeFactory } from "../lib/functions.ts";
+import "./AddEvent.css";
+import { Icons } from "../components/Icons.tsx";
 
 export default function EditEventView(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -308,7 +309,11 @@ export default function EditEventView(): JSX.Element {
 
           <SubmitButton containedString="Submit" />
         </form>
-        <ViewButton containedString={"Cancel"} stateString={"event-view"} />
+        <ViewButton
+          icon={Icons.back}
+          containedString={"Cancel"}
+          stateString={"event-view"}
+        />
       </div>
     </>
   );
