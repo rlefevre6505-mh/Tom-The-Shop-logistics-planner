@@ -4,6 +4,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
 import "./Lists.css";
+import { Icons } from "../Icons";
 
 export default function EditVehicleList(): JSX.Element {
   const [vehicleState, setVehicleState] = useState<vehicle[]>([]);
@@ -75,10 +76,12 @@ export default function EditVehicleList(): JSX.Element {
       <div className="list-container">
         <h1>Edit List Of Vehicles</h1>
         <EditingViewButton
+          icon={Icons.add}
           containedString="Add a new vehicle"
           stateString="add-vehicle"
         />
         <EditingViewButton
+          icon={Icons.inspect}
           containedString={"View required vehicles"}
           stateString={"required-vehicles"}
         />

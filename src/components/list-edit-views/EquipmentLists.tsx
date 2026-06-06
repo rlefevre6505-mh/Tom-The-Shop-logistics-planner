@@ -3,6 +3,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import type { EquipmentList, EquipmentListItem } from "../../lib/types";
 import EditingViewButton from "../buttons/EditingViewButton";
 import "./Lists.css";
+import { Icons } from "../Icons";
 
 export default function EditEquipmentList(): JSX.Element {
   const [equipmentListsState, setEquipmentListsState] = useState<
@@ -102,6 +103,7 @@ export default function EditEquipmentList(): JSX.Element {
       <div className="list-container">
         <h1>Edit Equipment Lists</h1>
         <EditingViewButton
+          icon={Icons.add}
           containedString="Add an item to an equipment list"
           stateString="add-to-equipment-list"
         />

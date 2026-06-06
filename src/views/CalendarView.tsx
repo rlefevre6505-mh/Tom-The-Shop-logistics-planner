@@ -24,27 +24,36 @@ const eventColorClasses = [
 ];
 
 export default function CalendarView() {
-  const [events, setEvents] = useState<calendarEvent[]>([]);
+  const [events, setEvents] = useState<EventInput[]>([]);
   // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
   const dispatch = useAppDispatch();
   const aspect = window.innerWidth < 800 ? 0.65 : 1;
 
-  // fetch request for events
+  // fetch request for events (adding class for selected colors)
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(
         "https://tom-the-shop-server.onrender.com/stored-events",
       );
       const data = await response.json();
-      const fixedEvents = data.map((event: calendarEvent, index: number) => {
-        const end = new Date(String(event.end));
-        end.setDate(end.getDate() + 1);
-        return {
-          ...event,
-          end: end.toISOString().slice(0, 10),
-          classNames: [eventColorClasses[index % eventColorClasses.length]],
-        } as EventInput;
-      });
+      const sortedEvents = (data as calendarEvent[])
+        .slice()
+        .sort(
+          (first, second) =>
+            new Date(String(first.start)).getTime() -
+            new Date(String(second.start)).getTime(),
+        );
+      const fixedEvents = sortedEvents.map(
+        (event: calendarEvent, index: number) => {
+          const end = new Date(String(event.end));
+          end.setDate(end.getDate() + 1);
+          return {
+            ...event,
+            end: end.toISOString().slice(0, 10),
+            classNames: [eventColorClasses[index % eventColorClasses.length]],
+          } as EventInput;
+        },
+      );
       setEvents(fixedEvents);
     }
     fetchData();
@@ -81,7 +90,7 @@ export default function CalendarView() {
           center: "title",
           end: "today prev,next",
         }}
-        events={events as EventInput[]}
+        events={events}
         selectable={false}
         editable={false}
         eventStartEditable={false}
