@@ -1,7 +1,7 @@
 import { type JSX, useState, useEffect } from "react";
 import type { EquipmentItem } from "../../lib/types";
 import ConfirmationModal from "./ConfirmationModal";
-import ViewButton from "../buttons/ViewButton";
+import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
 import "./Lists.css";
 
@@ -78,7 +78,7 @@ export default function EditEquipmentInventory(): JSX.Element {
     <>
       <div className="list-container">
         <h1>Edit Equipment Inventory</h1>
-        <ViewButton
+        <EditingViewButton
           containedString={`Add a new item`}
           stateString={`add-inventory-item`}
         />

@@ -6,12 +6,14 @@ type viewButtonProps = {
   containedString: string;
   stateString: string;
   setMenuClass?: React.Dispatch<React.SetStateAction<string>>;
+  icon: JSX.Element;
 };
 
 export default function ViewButton({
   containedString,
   stateString,
   setMenuClass,
+  icon,
 }: viewButtonProps): JSX.Element {
   const dispatch = useAppDispatch();
 
@@ -23,7 +25,8 @@ export default function ViewButton({
         setMenuClass?.("menu-hidden");
       }}
     >
-      {containedString}
+      {icon}
+      <p className="contained-string">{containedString}</p>
     </button>
   );
 }
