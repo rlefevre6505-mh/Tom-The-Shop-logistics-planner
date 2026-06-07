@@ -234,5 +234,25 @@ export const selectOverlaps = (s: { clash: ClashState }) => s.clash.overlaps;
 export const selectHasClashes = (s: { clash: ClashState }) =>
   s.clash.hasClashes;
 export const selectClashCount = (s: { clash: ClashState }) =>
-  s.clash.overlaps.length +
-  getAllocationWarningCount(s.clash.events, s.clash.requiredVehicles);
+  // Count only overlaps that have shared shops, shared vehicles or equipment shortages
+  s.clash.overlaps.reduce((count, ov) => {
+    const groupEvents = [ov.event, ...ov.overlapsWith];
+    const groupShortages = getGroupEquipmentShortages(
+      groupEvents,
+      s.clash.equipmentLists,
+      s.clash.inventory,
+    );
+
+    if (groupShortages.length > 0) return count + 1;
+
+    for (const other of ov.overlapsWith) {
+      if (
+        getSharedShops(ov.event, other).length > 0 ||
+        getSharedVehicles(ov.event, other).length > 0
+      ) {
+        return count + 1;
+      }
+    }
+
+    return count;
+  }, 0) + getAllocationWarningCount(s.clash.events, s.clash.requiredVehicles);
