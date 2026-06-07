@@ -47,7 +47,6 @@ export default function ListOfEvents(): JSX.Element {
           const today = new Date();
           const yesterday = new Date(today);
           yesterday.setDate(today.getDate() - 2);
-
           return endDate >= yesterday;
         })
         .map((e, i) => {

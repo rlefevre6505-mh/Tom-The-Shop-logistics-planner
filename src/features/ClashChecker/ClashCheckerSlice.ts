@@ -38,12 +38,10 @@ export const fetchClashData = createAsyncThunk("clash/fetchAll", async () => {
     fetch("https://tom-the-shop-server.onrender.com/get-inventory"),
     fetch("https://tom-the-shop-server.onrender.com/get-required-vehicles"),
   ]);
-
   const events: Event[] = await eventsRes.json();
   const equipmentLists: EquipmentList[] = await listsRes.json();
   const inventory: EquipmentItem[] = await invRes.json();
   const requiredVehicles: requirement[] = await reqRes.json();
-
   return { events, equipmentLists, inventory, requiredVehicles };
 });
 
@@ -110,7 +108,6 @@ export function getEventAllocationWarnings(
       `Shop "${req.shop_name}" requires vehicle "${req.vehicle_name}" but it is not assigned to "${event.title}".`,
     );
   });
-
   return warnings;
 }
 
@@ -119,7 +116,8 @@ export function getAllocationWarningCount(
   requirements: requirement[],
 ) {
   return events.reduce(
-    (count, event) => count + getEventAllocationWarnings(event, requirements).length,
+    (count, event) =>
+      count + getEventAllocationWarnings(event, requirements).length,
     0,
   );
 }
