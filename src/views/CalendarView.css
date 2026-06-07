@@ -31,11 +31,15 @@
 .fc-multimonth-day .fc-day-today,
 .fc-timegrid-col .fc-day-today,
 .fc-day-today {
-  border: 2px solid #ff001185 !important;
+  /* border: 2px solid #ff001185 !important; */
+  /* border: 3px solid #00d0ff !important; */
+  border-style: solid !important;
+  border-color: #00d0ff !important;
+  border-width: 0 3px 3px 3px !important;
 }
 
 .fc-day-today .fc-daygrid-day-top {
-  border-top: 2px solid #ff001185 !important;
+  border-top: 3px solid #00d0ff !important;
 }
 
 .fc-event-title-container:hover {
