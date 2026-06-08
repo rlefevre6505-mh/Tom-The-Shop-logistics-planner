@@ -6,6 +6,7 @@ import { handleInputChangeFactory } from "../lib/functions";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice";
 import type { Email } from "../lib/types";
+import "./HelpView.css";
 
 export default function HelpView(): JSX.Element {
   const [formValues, setFormValues] = useState<Email>({
