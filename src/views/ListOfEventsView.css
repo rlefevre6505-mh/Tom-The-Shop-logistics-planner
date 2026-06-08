@@ -1,0 +1,17 @@
+.event-div {
+  padding: 0.4rem 1.2rem;
+  max-width: 50%;
+  margin: 0.8rem auto auto auto;
+  border: 2px grey solid;
+  border-radius: 0.4rem;
+}
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+@media (width < 800px) {
+  .event-div {
+    max-width: 80%;
+  }
+}

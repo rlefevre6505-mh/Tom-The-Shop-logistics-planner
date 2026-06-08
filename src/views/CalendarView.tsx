@@ -1,0 +1,121 @@
+import FullCalendar from "@fullcalendar/react";
+import multiMonthPlugin from "@fullcalendar/multimonth";
+import listPlugin from "@fullcalendar/list";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { useState, useEffect } from "react";
+import type { EventInput } from "@fullcalendar/core";
+import type { calendarEvent } from "../lib/types.ts";
+import { useAppDispatch } from "../app/hooks.ts";
+import { changeView } from "../features/view/viewSlice.ts";
+import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
+import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
+import "./CalendarView.css";
+import Spinner from "../components/Spinner.tsx";
+
+const eventColorClasses = [
+  "event-color-1",
+  "event-color-2",
+  "event-color-3",
+  "event-color-4",
+  "event-color-5",
+  "event-color-6",
+  "event-color-7",
+  "event-color-8",
+];
+
+export default function CalendarView() {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [events, setEvents] = useState<EventInput[]>([]);
+  // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
+  const dispatch = useAppDispatch();
+  const aspect = window.innerWidth < 800 ? 0.65 : 1;
+
+  // fetch request for events (adding class for selected colors)
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server-7h2n.onrender.com/stored-events",
+        );
+        const data = await response.json();
+        const sortedEvents = (data as calendarEvent[])
+          .slice()
+          .sort(
+            (first, second) =>
+              new Date(String(first.start)).getTime() -
+              new Date(String(second.start)).getTime(),
+          );
+        const fixedEvents = sortedEvents.map(
+          (event: calendarEvent, index: number) => {
+            const end = new Date(String(event.end));
+            end.setDate(end.getDate() + 1);
+            return {
+              ...event,
+              end: end.toISOString().slice(0, 10),
+              classNames: [eventColorClasses[index % eventColorClasses.length]],
+            } as EventInput;
+          },
+        );
+        setEvents(fixedEvents);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  async function fetchSelectedEvent(id: number) {
+    const response = await fetch(
+      "https://tom-the-shop-server-7h2n.onrender.com/selected-event",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      },
+    );
+    const data = await response.json();
+    dispatch(changeEventDetails(data));
+  }
+
+  return (
+    <div className="calendar">
+      {loading && (
+        <div className="calendar-loading-overlay">
+          <Spinner />
+        </div>
+      )}
+
+      <FullCalendar
+        plugins={[
+          multiMonthPlugin,
+          listPlugin,
+          dayGridPlugin,
+          interactionPlugin,
+        ]}
+        initialView="multiMonthYear"
+        multiMonthMaxColumns={2}
+        headerToolbar={{
+          start: "multiMonthYear dayGridMonth listYear",
+          center: "title",
+          end: "today prev,next",
+        }}
+        events={events}
+        selectable={false}
+        editable={false}
+        eventStartEditable={false}
+        eventDurationEditable={false}
+        droppable={false}
+        dateClick={undefined}
+        aspectRatio={aspect}
+        eventClick={async (info) => {
+          dispatch(changeSelectedEvent(info.event.id));
+          await fetchSelectedEvent(parseInt(info.event.id));
+          dispatch(changeView("event-view"));
+        }}
+      />
+    </div>
+  );
+}

@@ -1,0 +1,29 @@
+h1 {
+  margin: 40px auto 1rem auto;
+  text-align: center;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 0 auto;
+}
+
+.button-container-small {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.editing-view-button {
+  padding: 0.4rem 0.8rem;
+}
+
+.list-button {
+  padding: 0.4rem 0.8rem;
+}

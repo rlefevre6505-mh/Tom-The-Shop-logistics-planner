@@ -1,0 +1,136 @@
+h1 {
+  text-align: center;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.view-button {
+  max-width: 70vw;
+  padding: 0.4rem 1.2rem;
+}
+
+.list-container .editing-view-button {
+  width: 60%;
+}
+
+.list-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  min-height: 30px;
+}
+
+.list-text-section {
+  width: 40vw;
+  display: flex;
+  padding-left: 20px;
+}
+
+.edit-text-section {
+  width: 80vw;
+  display: flex;
+  padding-left: 20px;
+}
+
+.list-input-section {
+  width: 96vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  input {
+    padding: 8px 12px;
+    max-width: 40%;
+  }
+  p {
+    margin: 0 0.8rem;
+  }
+}
+
+.text-input {
+  width: 40%;
+}
+
+.num-input {
+  width: 20%;
+  /* padding: 0.4rem 0.8rem; */
+}
+
+.list-button-section {
+  width: 95vw;
+  display: flex;
+  justify-content: space-around;
+  padding-right: 20px;
+  button {
+    padding: 0.2rem 0.8rem;
+  }
+}
+
+h2 {
+  text-align: center;
+  margin: 1.2rem auto;
+}
+
+.list-block {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  border: 2px solid red;
+  border-radius: 4px;
+}
+
+.save-button-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.gap {
+  width: 1.2rem;
+}
+
+.list-event-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  button {
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+}
+
+.list-text-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-button-section,
+.edit-text-section {
+  display: flex;
+  align-items: center;
+}
+
+@media (width >= 800px) {
+  .button-container {
+    max-width: 70vw;
+  }
+}
+
+@media (width > 600px) {
+  .list-button-section,
+  .list-container,
+  .list-input-section {
+    margin: 0 auto;
+    max-width: 600px;
+  }
+  .required-amount {
+    padding-right: 60px;
+  }
+}
