@@ -6,19 +6,24 @@ import { useAppDispatch } from "../app/hooks.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
+import Spinner from "../components/Spinner.tsx";
 
 export default function ListOfEvents(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const [eventsList, setEventsList] = useState<Event[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/all-event-details",
-      );
-      const data: Event[] = await response.json();
-      setEventsList(data);
-      console.log(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/all-event-details",
+        );
+        const data: Event[] = await response.json();
+        setEventsList(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, []);
@@ -41,30 +46,34 @@ export default function ListOfEvents(): JSX.Element {
   return (
     <>
       <h1>Current & Upcoming Events</h1>
-      {eventsList
-        .filter((e) => {
-          const endDate = new Date(e.end);
-          const today = new Date();
-          const yesterday = new Date(today);
-          yesterday.setDate(today.getDate() - 2);
-          return endDate >= yesterday;
-        })
-        .map((e, i) => {
-          return (
-            <div
-              className="event-div"
-              key={`event${i}`}
-              onClick={async () => {
-                dispatch(changeSelectedEvent(e.id));
-                await fetchSelectedEvent(e.id);
-                dispatch(changeView("event-view"));
-              }}
-            >
-              <p>{`${e.title} at ${e.location}`}</p>
-              <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
-            </div>
-          );
-        })}
+      {loading ? (
+        <Spinner />
+      ) : (
+        eventsList
+          .filter((e) => {
+            const endDate = new Date(e.end);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 2);
+            return endDate >= yesterday;
+          })
+          .map((e, i) => {
+            return (
+              <div
+                className="event-div"
+                key={`event${i}`}
+                onClick={async () => {
+                  dispatch(changeSelectedEvent(e.id));
+                  await fetchSelectedEvent(e.id);
+                  dispatch(changeView("event-view"));
+                }}
+              >
+                <p>{`${e.title} at ${e.location}`}</p>
+                <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
+              </div>
+            );
+          })
+      )}
     </>
   );
 }

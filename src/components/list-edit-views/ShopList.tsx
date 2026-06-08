@@ -5,8 +5,10 @@ import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
 import "./Lists.css";
 import { Icons } from "../Icons";
+import Spinner from "../Spinner";
 
 export default function EditShopList(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const [shopState, setShopState] = useState<shop[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValues, setEditValues] = useState<Omit<shop, "id">>({
@@ -18,11 +20,15 @@ export default function EditShopList(): JSX.Element {
 
   useEffect(() => {
     async function fetchShops() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/get-shops",
-      );
-      const data: shop[] = await response.json();
-      setShopState(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/get-shops",
+        );
+        const data: shop[] = await response.json();
+        setShopState(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchShops();
   }, []);
@@ -78,52 +84,56 @@ export default function EditShopList(): JSX.Element {
           containedString="Add a new shop"
           stateString="add-shop"
         />
-        {shopState.map((s) => (
-          <div key={s.id}>
-            {editingId === s.id ? (
-              <>
-                <div className="list-block">
-                  <div className="list-input-section">
-                    <input
-                      type="text"
-                      name="shop_name"
-                      value={editValues.shop_name}
-                      onChange={handleEditChange}
-                    />
-                  </div>{" "}
-                  <div className="save-button-section">
-                    <button onClick={() => saveEdit(s.id)}>
-                      {Icons.tick}Save
-                    </button>
-                    <button onClick={cancelEditing}>
-                      {Icons.cancel}Cancel
-                    </button>
-                  </div>{" "}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="list-button-section">
-                  <div className="list-text-section">
-                    <p>{s.shop_name}</p>
+        {loading ? (
+          <Spinner />
+        ) : (
+          shopState.map((s) => (
+            <div key={s.id}>
+              {editingId === s.id ? (
+                <>
+                  <div className="list-block">
+                    <div className="list-input-section">
+                      <input
+                        type="text"
+                        name="shop_name"
+                        value={editValues.shop_name}
+                        onChange={handleEditChange}
+                      />
+                    </div>{" "}
+                    <div className="save-button-section">
+                      <button onClick={() => saveEdit(s.id)}>
+                        {Icons.tick}Save
+                      </button>
+                      <button onClick={cancelEditing}>
+                        {Icons.cancel}Cancel
+                      </button>
+                    </div>{" "}
                   </div>
-                  <button onClick={() => startEditing(s)}>
-                    {Icons.edit}Edit
-                  </button>
-                  <button
-                    onClick={() => {
-                      setPendingDeleteId(s.id);
-                      setShowModal(true);
-                    }}
-                  >
-                    {Icons.delete}
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                </>
+              ) : (
+                <>
+                  <div className="list-button-section">
+                    <div className="list-text-section">
+                      <p>{s.shop_name}</p>
+                    </div>
+                    <button onClick={() => startEditing(s)}>
+                      {Icons.edit}Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        setPendingDeleteId(s.id);
+                        setShowModal(true);
+                      }}
+                    >
+                      {Icons.delete}
+                      Delete
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ))
+        )}
 
         {showModal && pendingDeleteId !== null && (
           <ConfirmationModal

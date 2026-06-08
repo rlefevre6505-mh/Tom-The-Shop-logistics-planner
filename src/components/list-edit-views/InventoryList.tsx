@@ -5,8 +5,10 @@ import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
 import "./Lists.css";
 import { Icons } from "../Icons";
+import Spinner from "../Spinner";
 
 export default function EditEquipmentInventory(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const [inventory, setInventory] = useState<EquipmentItem[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValues, setEditValues] = useState<Omit<EquipmentItem, "id">>({
@@ -19,11 +21,15 @@ export default function EditEquipmentInventory(): JSX.Element {
 
   useEffect(() => {
     async function fetchInventory() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/get-inventory",
-      );
-      const data: EquipmentItem[] = await response.json();
-      setInventory(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/get-inventory",
+        );
+        const data: EquipmentItem[] = await response.json();
+        setInventory(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchInventory();
   }, []);
@@ -84,59 +90,64 @@ export default function EditEquipmentInventory(): JSX.Element {
           containedString={"Add a new item"}
           stateString={"add-inventory-item"}
         />
-        {inventory.map((item) => (
-          <div key={item.id} className="list-row">
-            {editingId === item.id ? (
-              <>
-                <div className="list-block">
-                  <div className="list-input-section">
-                    <input
-                      className="text-input"
-                      type="text"
-                      name="equipment_name"
-                      value={editValues.equipment_name}
-                      onChange={handleEditChange}
-                    />
-                    <input
-                      className="num-input"
-                      type="number"
-                      name="current_amount"
-                      value={editValues.current_amount}
-                      onChange={handleEditChange}
-                    />{" "}
-                  </div>{" "}
-                  <div className="save-button-section">
-                    <button onClick={() => saveEdit(item.id)}>
-                      {Icons.tick}Save
+
+        {loading ? (
+          <Spinner />
+        ) : (
+          inventory.map((item) => (
+            <div key={item.id} className="list-row">
+              {editingId === item.id ? (
+                <>
+                  <div className="list-block">
+                    <div className="list-input-section">
+                      <input
+                        className="text-input"
+                        type="text"
+                        name="equipment_name"
+                        value={editValues.equipment_name}
+                        onChange={handleEditChange}
+                      />
+                      <input
+                        className="num-input"
+                        type="number"
+                        name="current_amount"
+                        value={editValues.current_amount}
+                        onChange={handleEditChange}
+                      />{" "}
+                    </div>{" "}
+                    <div className="save-button-section">
+                      <button onClick={() => saveEdit(item.id)}>
+                        {Icons.tick}Save
+                      </button>
+                      <button onClick={cancelEditing}>
+                        {Icons.cancel}Cancel
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="edit-text-section">
+                    <p>{`${item.current_amount}x  ${item.equipment_name}  `}</p>
+                  </div>
+                  <div className="list-button-section">
+                    <button onClick={() => startEditing(item)}>
+                      {Icons.edit}Edit
                     </button>
-                    <button onClick={cancelEditing}>
-                      {Icons.cancel}Cancel
+                    <button
+                      onClick={() => {
+                        setPendingDeleteId(item.id);
+                        setShowModal(true);
+                      }}
+                    >
+                      {Icons.delete}Delete
                     </button>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="edit-text-section">
-                  <p>{`${item.current_amount}x  ${item.equipment_name}  `}</p>
-                </div>
-                <div className="list-button-section">
-                  <button onClick={() => startEditing(item)}>
-                    {Icons.edit}Edit
-                  </button>
-                  <button
-                    onClick={() => {
-                      setPendingDeleteId(item.id);
-                      setShowModal(true);
-                    }}
-                  >
-                    {Icons.delete}Delete
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                </>
+              )}
+            </div>
+          ))
+        )}
 
         {showModal && pendingDeleteId !== null && (
           <ConfirmationModal

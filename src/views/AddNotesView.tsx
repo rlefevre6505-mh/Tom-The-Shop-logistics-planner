@@ -45,7 +45,7 @@ export default function AddEventView(): JSX.Element {
       );
       const data = await response.json();
       dispatch(changeEventDetails(data));
-      console.log(data);
+      // console.log(data);
     }
     if (EventDetails?.id) {
       fetchSelectedEvent(EventDetails.id);
@@ -54,7 +54,7 @@ export default function AddEventView(): JSX.Element {
       note: "",
       event_id: EventDetails?.id,
     });
-    console.log("updated");
+    // console.log("updated");
     dispatch(changeView("event-view"));
   }
 

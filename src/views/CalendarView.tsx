@@ -11,6 +11,7 @@ import { changeView } from "../features/view/viewSlice.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import "./CalendarView.css";
+import Spinner from "../components/Spinner.tsx";
 
 const eventColorClasses = [
   "event-color-1",
@@ -24,6 +25,7 @@ const eventColorClasses = [
 ];
 
 export default function CalendarView() {
+  const [loading, setLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<EventInput[]>([]);
   // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
   const dispatch = useAppDispatch();
@@ -32,29 +34,33 @@ export default function CalendarView() {
   // fetch request for events (adding class for selected colors)
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/stored-events",
-      );
-      const data = await response.json();
-      const sortedEvents = (data as calendarEvent[])
-        .slice()
-        .sort(
-          (first, second) =>
-            new Date(String(first.start)).getTime() -
-            new Date(String(second.start)).getTime(),
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/stored-events",
         );
-      const fixedEvents = sortedEvents.map(
-        (event: calendarEvent, index: number) => {
-          const end = new Date(String(event.end));
-          end.setDate(end.getDate() + 1);
-          return {
-            ...event,
-            end: end.toISOString().slice(0, 10),
-            classNames: [eventColorClasses[index % eventColorClasses.length]],
-          } as EventInput;
-        },
-      );
-      setEvents(fixedEvents);
+        const data = await response.json();
+        const sortedEvents = (data as calendarEvent[])
+          .slice()
+          .sort(
+            (first, second) =>
+              new Date(String(first.start)).getTime() -
+              new Date(String(second.start)).getTime(),
+          );
+        const fixedEvents = sortedEvents.map(
+          (event: calendarEvent, index: number) => {
+            const end = new Date(String(event.end));
+            end.setDate(end.getDate() + 1);
+            return {
+              ...event,
+              end: end.toISOString().slice(0, 10),
+              classNames: [eventColorClasses[index % eventColorClasses.length]],
+            } as EventInput;
+          },
+        );
+        setEvents(fixedEvents);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, []);
@@ -76,6 +82,12 @@ export default function CalendarView() {
 
   return (
     <div className="calendar">
+      {loading && (
+        <div className="calendar-loading-overlay">
+          <Spinner />
+        </div>
+      )}
+
       <FullCalendar
         plugins={[
           multiMonthPlugin,

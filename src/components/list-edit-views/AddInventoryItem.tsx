@@ -1,8 +1,8 @@
 import { type JSX, useState } from "react";
 import type { AddInventoryItemValues } from "../../lib/types.ts";
-import FormInput from "../../components/form-elements/FormInput.tsx";
-import FormNumberInput from "../../components/form-elements/FormNumberInput.tsx";
-import SubmitButton from "../../components/buttons/SubmitButton.tsx";
+import FormInput from "../form-elements/FormInput.tsx";
+import FormNumberInput from "../form-elements/FormNumberInput.tsx";
+import SubmitButton from "../buttons/SubmitButton.tsx";
 import { useAppDispatch } from "../../app/hooks.ts";
 import { changeView } from "../../features/view/viewSlice.ts";
 import "../../views/AddEvent.css";

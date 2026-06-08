@@ -4,20 +4,25 @@ import { toUKdate } from "../../lib/functions";
 import ConfirmationModal from "./ConfirmationModal";
 import "./Lists.css";
 import { Icons } from "../Icons";
+import Spinner from "../Spinner";
 
 export default function EditEventList(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const [eventsState, setEventsState] = useState<Event[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/all-event-details",
-      );
-      const data: Event[] = await response.json();
-      setEventsState(data);
-      console.log(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/all-event-details",
+        );
+        const data: Event[] = await response.json();
+        setEventsState(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, []);
@@ -40,24 +45,28 @@ export default function EditEventList(): JSX.Element {
     <>
       <div className="list-container">
         <h1>Delete Events From List</h1>
-        {eventsState.map((e) => {
-          return (
-            <div className="list-event-section">
-              <div className="event-text">
-                <p>{`${e.title} at ${e.location}`}</p>
-                <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
+        {loading ? (
+          <Spinner />
+        ) : (
+          eventsState.map((e) => {
+            return (
+              <div className="list-event-section">
+                <div className="event-text">
+                  <p>{`${e.title} at ${e.location}`}</p>
+                  <p>{`${toUKdate(e.start)} to ${toUKdate(e.end)}`}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setPendingDeleteId(e.id);
+                    setShowModal(true);
+                  }}
+                >
+                  {Icons.delete}Delete
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setPendingDeleteId(e.id);
-                  setShowModal(true);
-                }}
-              >
-                {Icons.delete}Delete
-              </button>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
 
         {showModal && pendingDeleteId !== null && (
           <ConfirmationModal

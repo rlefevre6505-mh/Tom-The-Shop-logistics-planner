@@ -3,25 +3,31 @@ import { useAppSelector } from "../app/hooks.ts";
 import type { requirement } from "../lib/types.ts";
 import ViewButton from "../components/buttons/ViewButton.tsx";
 import Note from "../components/Note.tsx";
+import Spinner from "../components/Spinner.tsx";
 import { Icons } from "../components/Icons.tsx";
 import "./EventView.css";
 
 export default function EventView(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
   const [requirementState, setRequirementState] = useState<requirement[]>([]);
 
   useEffect(() => {
-    console.log(EventDetails);
+    // console.log(EventDetails);
   });
 
   useEffect(() => {
     async function fetchRequiredVehicles() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/get-required-vehicles",
-      );
-      const data: requirement[] = await response.json();
-      console.log(data);
-      setRequirementState(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/get-required-vehicles",
+        );
+        const data: requirement[] = await response.json();
+        // console.log(data);
+        setRequirementState(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchRequiredVehicles();
   }, []);
@@ -37,6 +43,8 @@ export default function EventView(): JSX.Element {
     );
     return !vehicleAssigned;
   });
+
+  if (loading) return <Spinner />;
 
   return (
     <div className="event-container">
@@ -101,7 +109,7 @@ export default function EventView(): JSX.Element {
         <div className="notes-container">
           {EventDetails?.notes &&
             EventDetails?.notes?.map((n, i) => {
-              return <Note text={n.note} i={i} />;
+              return <Note key={`note${i}`} text={n.note} i={i} />;
             })}
         </div>
         <ViewButton

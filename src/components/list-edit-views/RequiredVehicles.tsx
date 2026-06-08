@@ -7,8 +7,10 @@ import EditingViewButton from "../buttons/EditingViewButton";
 import ConfirmationModal from "./ConfirmationModal.tsx";
 import "./AddForm.css";
 import { Icons } from "../Icons.tsx";
+import Spinner from "../Spinner.tsx";
 
 export default function RequiredVehicles(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const [requirementState, setRequirementState] = useState<requirement[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
@@ -32,12 +34,16 @@ export default function RequiredVehicles(): JSX.Element {
 
   useEffect(() => {
     async function fetchRequiredVehicles() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/get-required-vehicles",
-      );
-      const data: requirement[] = await response.json();
-      console.log(data);
-      setRequirementState(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/get-required-vehicles",
+        );
+        const data: requirement[] = await response.json();
+        // console.log(data);
+        setRequirementState(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchRequiredVehicles();
   }, []);
@@ -45,7 +51,6 @@ export default function RequiredVehicles(): JSX.Element {
   return (
     <div className="list-container">
       <h1>Vehicle Requirements</h1>
-
       <div className="button-container-small">
         <EditingViewButton
           icon={Icons.back}
@@ -59,22 +64,26 @@ export default function RequiredVehicles(): JSX.Element {
         />
       </div>
 
-      {requirementState.map((r) => {
-        return (
-          <div className="list-event-section">
-            <p className="requirement">{`Shop "${r.shop_name}" requires vehicle "${r.vehicle_name}"`}</p>
+      {loading ? (
+        <Spinner />
+      ) : (
+        requirementState.map((r) => {
+          return (
+            <div className="list-event-section">
+              <p className="requirement">{`Shop "${r.shop_name}" requires vehicle "${r.vehicle_name}"`}</p>
 
-            <button
-              onClick={() => {
-                setPendingDeleteId(r.required_vehicle_id);
-                setShowModal(true);
-              }}
-            >
-              {Icons.delete}Delete
-            </button>
-          </div>
-        );
-      })}
+              <button
+                onClick={() => {
+                  setPendingDeleteId(r.required_vehicle_id);
+                  setShowModal(true);
+                }}
+              >
+                {Icons.delete}Delete
+              </button>
+            </div>
+          );
+        })
+      )}
 
       {showModal && pendingDeleteId !== null && (
         <ConfirmationModal

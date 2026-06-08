@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import { changeView } from "../features/view/viewSlice.ts";
@@ -8,12 +8,15 @@ import FormInput from "../components/form-elements/FormInput.tsx";
 import FormNumberInput from "../components/form-elements/FormNumberInput.tsx";
 import SubmitButton from "../components/buttons/SubmitButton.tsx";
 import ViewButton from "../components/buttons/ViewButton.tsx";
+import Spinner from "../components/Spinner.tsx";
 import { handleInputChangeFactory } from "../lib/functions.ts";
 import "./AddEvent.css";
 import { Icons } from "../components/Icons.tsx";
 
 export default function EditEventView(): JSX.Element {
   const dispatch = useAppDispatch();
+  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState<boolean>(false);
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
@@ -65,19 +68,20 @@ export default function EditEventView(): JSX.Element {
   };
 
   useEffect(() => {
-    if (EventDetails) {
+    if (!EventDetails) return;
+    startTransition(() => {
       setFormValues({
-        event_id: EventDetails.id,
-        title: EventDetails.title,
-        start: EventDetails.start,
-        end: EventDetails.end,
-        location: EventDetails.location,
-        num_of_shops: EventDetails.num_of_shops,
+        event_id: EventDetails.id ?? 0,
+        title: EventDetails.title ?? "",
+        start: EventDetails.start ?? "",
+        end: EventDetails.end ?? "",
+        location: EventDetails.location ?? "",
+        num_of_shops: EventDetails.num_of_shops ?? 0,
         shops: EventDetails.shops ?? [],
-        num_of_vehicles: EventDetails.num_of_vehicles,
+        num_of_vehicles: EventDetails.num_of_vehicles ?? 0,
         vehicles: EventDetails.vehicles ?? [],
       });
-    }
+    });
   }, [EventDetails]);
 
   async function fetchSelectedEvent(id: number) {
@@ -96,8 +100,9 @@ export default function EditEventView(): JSX.Element {
   }
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+    setLoading(true);
     e.preventDefault();
-    console.log("Form values being submitted:", formValues);
+    // console.log("Form values being submitted:", formValues);
     try {
       const response = await fetch(
         "https://tom-the-shop-server.onrender.com/edit-event",
@@ -114,7 +119,6 @@ export default function EditEventView(): JSX.Element {
         console.error("Server error:", response.status, errorData);
         return;
       }
-
       setFormValues({
         event_id: EventDetails?.id,
         title: "",
@@ -172,6 +176,8 @@ export default function EditEventView(): JSX.Element {
       num_of_vehicles: updated.length,
     });
   }
+
+  if (loading || isPending) return <Spinner />;
 
   return (
     <>

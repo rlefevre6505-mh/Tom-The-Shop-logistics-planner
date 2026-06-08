@@ -1,7 +1,7 @@
 import { type JSX, useState } from "react";
 import type { shop } from "../../lib/types.ts";
-import FormInput from "../../components/form-elements/FormInput.tsx";
-import SubmitButton from "../../components/buttons/SubmitButton.tsx";
+import FormInput from "../form-elements/FormInput.tsx";
+import SubmitButton from "../buttons/SubmitButton.tsx";
 import { useAppDispatch } from "../../app/hooks.ts";
 import { changeEditingView } from "../../features/EditingView/EditingViewSlice.ts";
 import "../../views/AddEvent.css";

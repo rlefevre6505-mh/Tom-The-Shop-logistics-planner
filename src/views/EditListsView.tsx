@@ -1,10 +1,10 @@
 import { type JSX } from "react";
 import EditingViewButton from "../components/buttons/EditingViewButton";
-import EditEventList from "../components/list-edit-views/EventList";
-import EditShopList from "../components/list-edit-views/ShopList";
-import EditVehicleList from "../components/list-edit-views/VehicleList";
-import EditEquipmentList from "../components/list-edit-views/EquipmentLists";
-import EditEquipmentInventory from "../components/list-edit-views/InventoryList";
+import EditEventList from "../components/list-edit-views/EventList.tsx";
+import EditShopList from "../components/list-edit-views/ShopList.tsx";
+import EditVehicleList from "../components/list-edit-views/VehicleList.tsx";
+import EditEquipmentList from "../components/list-edit-views/EquipmentLists.tsx";
+import EditEquipmentInventory from "../components/list-edit-views/InventoryList.tsx";
 import AddShop from "../components/list-edit-views/AddShop.tsx";
 import AddVehicle from "../components/list-edit-views/AddVehicle.tsx";
 import AddToEquipmentList from "../components/list-edit-views/AddToEquipmentList.tsx";

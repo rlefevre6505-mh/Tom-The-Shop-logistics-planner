@@ -2,9 +2,25 @@
   margin: auto;
 }
 
+.calendar-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  backdrop-filter: blur(1px);
+}
+
 .calendar {
   background-color: var(--brand-color);
   padding: 20px;
+  position: relative;
+  min-height: 50vh;
 }
 
 .fc-daygrid-day-frame {
@@ -31,8 +47,6 @@
 .fc-multimonth-day .fc-day-today,
 .fc-timegrid-col .fc-day-today,
 .fc-day-today {
-  /* border: 2px solid #ff001185 !important; */
-  /* border: 3px solid #00d0ff !important; */
   border-style: solid !important;
   border-color: #00d0ff !important;
   border-width: 0 3px 3px 3px !important;

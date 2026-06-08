@@ -5,8 +5,10 @@ import EditingViewButton from "../buttons/EditingViewButton";
 import { handleEditChangeFactory } from "../../lib/functions";
 import "./Lists.css";
 import { Icons } from "../Icons";
+import Spinner from "../Spinner";
 
 export default function EditVehicleList(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const [vehicleState, setVehicleState] = useState<vehicle[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValues, setEditValues] = useState<Omit<vehicle, "id">>({
@@ -19,11 +21,15 @@ export default function EditVehicleList(): JSX.Element {
 
   useEffect(() => {
     async function fetchVehicles() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/get-vehicles",
-      );
-      const data: vehicle[] = await response.json();
-      setVehicleState(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/get-vehicles",
+        );
+        const data: vehicle[] = await response.json();
+        setVehicleState(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchVehicles();
   }, []);
@@ -87,62 +93,66 @@ export default function EditVehicleList(): JSX.Element {
             stateString={"required-vehicles"}
           />
         </div>
-        {vehicleState.map((v) => (
-          <div key={v.id}>
-            {editingId === v.id ? (
-              <>
-                <div className="list-block">
-                  <div className="list-input-section">
-                    <input
-                      className="text-input"
-                      type="text"
-                      name="vehicle_name"
-                      value={editValues.vehicle_name}
-                      onChange={handleEditChange}
-                    />
-                    <input
-                      className="num-input"
-                      type="text"
-                      name="vehicle_reg"
-                      value={editValues.vehicle_reg}
-                      onChange={handleEditChange}
-                    />
+        {loading ? (
+          <Spinner />
+        ) : (
+          vehicleState.map((v) => (
+            <div key={v.id}>
+              {editingId === v.id ? (
+                <>
+                  <div className="list-block">
+                    <div className="list-input-section">
+                      <input
+                        className="text-input"
+                        type="text"
+                        name="vehicle_name"
+                        value={editValues.vehicle_name}
+                        onChange={handleEditChange}
+                      />
+                      <input
+                        className="num-input"
+                        type="text"
+                        name="vehicle_reg"
+                        value={editValues.vehicle_reg}
+                        onChange={handleEditChange}
+                      />
+                    </div>
+                    <div className="save-button-section">
+                      <button onClick={() => saveEdit(v.id)}>
+                        {Icons.tick}Save
+                      </button>
+                      <button onClick={cancelEditing}>
+                        {Icons.cancel}Cancel
+                      </button>
+                    </div>
                   </div>
-                  <div className="save-button-section">
-                    <button onClick={() => saveEdit(v.id)}>
-                      {Icons.tick}Save
+                </>
+              ) : (
+                <>
+                  <div className="list-button-section">
+                    <div className="list-text-section">
+                      <p>{v.vehicle_name}</p>
+                      {/* <p>{v.vehicle_reg}</p> */}
+                    </div>
+                    <button onClick={() => startEditing(v)}>
+                      {" "}
+                      {Icons.edit} Edit
                     </button>
-                    <button onClick={cancelEditing}>
-                      {Icons.cancel}Cancel
+                    <button
+                      onClick={() => {
+                        setPendingDeleteId(v.id);
+                        setShowModal(true);
+                      }}
+                    >
+                      {Icons.delete}
+                      Delete
                     </button>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="list-button-section">
-                  <div className="list-text-section">
-                    <p>{v.vehicle_name}</p>
-                    {/* <p>{v.vehicle_reg}</p> */}
-                  </div>
-                  <button onClick={() => startEditing(v)}>
-                    {" "}
-                    {Icons.edit} Edit
-                  </button>
-                  <button
-                    onClick={() => {
-                      setPendingDeleteId(v.id);
-                      setShowModal(true);
-                    }}
-                  >
-                    {Icons.delete}
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                </>
+              )}
+            </div>
+          ))
+        )}
       </div>
 
       {showModal && pendingDeleteId !== null && (

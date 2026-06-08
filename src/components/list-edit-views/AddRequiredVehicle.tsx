@@ -7,8 +7,10 @@ import { changeEditingView } from "../../features/EditingView/EditingViewSlice.t
 import { handleInputChangeFactory } from "../../lib/functions.ts";
 import "./AddForm.css";
 import { Icons } from "../Icons.tsx";
+import Spinner from "../Spinner.tsx";
 
 export default function AddRequiredVehicle(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
   const [formValues, setFormValues] = useState<{
     shop_id: number | string;
     vehicle_id: number | string;
@@ -20,7 +22,7 @@ export default function AddRequiredVehicle(): JSX.Element {
   async function handleSubmit(
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
-    console.log(formValues);
+    // console.log(formValues);
     e.preventDefault();
     await fetch(
       "https://tom-the-shop-server.onrender.com/add-required-vehicle",
@@ -37,19 +39,23 @@ export default function AddRequiredVehicle(): JSX.Element {
       vehicle_id: "",
     });
     dispatch(changeEditingView("vehicles"));
-  } // TODO: Update formvalues and create endpoint =========================================
+  }
 
   useEffect(() => {
     async function fetchVehicles() {
-      const response = await fetch(
-        "https://tom-the-shop-server.onrender.com/get-vehicles",
-      );
-      const data: vehicle[] = await response.json();
-      console.log(data);
-      setVehiclesState(data);
+      try {
+        const response = await fetch(
+          "https://tom-the-shop-server.onrender.com/get-vehicles",
+        );
+        const data: vehicle[] = await response.json();
+        // console.log(data);
+        setVehiclesState(data);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchVehicles();
-    console.log(vehiclesState);
+    // console.log(vehiclesState);
   }, []);
 
   useEffect(() => {
@@ -68,38 +74,43 @@ export default function AddRequiredVehicle(): JSX.Element {
   return (
     <div className="form-div main-div">
       <h2>Add a new vehicle requirement</h2>
-      <form className="form" onSubmit={handleSubmit}>
-        <div className="form-column"></div>
-        <p>This shop:</p>
-        <select
-          className="select"
-          name="shop_id"
-          value={formValues.shop_id}
-          onChange={handleInputChange}
-        >
-          <option value="">Please select an option</option>
-          {shopsState.map((s) => {
-            return <option value={s.id}>{s.shop_name}</option>;
-          })}
-        </select>
 
-        <p>requires this vehicle:</p>
-        <select
-          className="select"
-          name="vehicle_id"
-          value={formValues.vehicle_id}
-          onChange={handleInputChange}
-        >
-          <option value="">Please select an option</option>
-          {vehiclesState.map((v) => {
-            return <option value={v.id}>{v.vehicle_name}</option>;
-          })}
-        </select>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="form-column"></div>
+          <p>This shop:</p>
+          <select
+            className="select"
+            name="shop_id"
+            value={formValues.shop_id}
+            onChange={handleInputChange}
+          >
+            <option value="">Please select an option</option>
+            {shopsState.map((s) => {
+              return <option value={s.id}>{s.shop_name}</option>;
+            })}
+          </select>
 
-        <SubmitButton containedString="Submit" />
-      </form>
+          <p>requires this vehicle:</p>
+          <select
+            className="select"
+            name="vehicle_id"
+            value={formValues.vehicle_id}
+            onChange={handleInputChange}
+          >
+            <option value="">Please select an option</option>
+            {vehiclesState.map((v) => {
+              return <option value={v.id}>{v.vehicle_name}</option>;
+            })}
+          </select>
+
+          <SubmitButton containedString="Submit" />
+        </form>
+      )}
       <EditingViewButton
-        icon={Icons.add}
+        icon={Icons.back}
         containedString={"Back"}
         stateString={"vehicles"}
       />
