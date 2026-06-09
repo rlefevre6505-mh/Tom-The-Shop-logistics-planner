@@ -25,7 +25,7 @@ export default function HelpView(): JSX.Element {
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    await fetch("https://tom-the-shop-server-7h2n.onrender.com/email/email", {
+    await fetch("https://tom-the-shop-server-7h2n.onrender.com/email/support", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
