@@ -1,20 +1,46 @@
-.textarea-label {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 2rem 0 1.2rem 0;
-}
-
 form {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   justify-content: center;
+
+  #message {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    height: 40vh;
+    resize: vertical;
+  }
+
+  .textarea-label {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin: 0 0 0.4rem 0;
+  }
 }
 
-.form-textarea {
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-  max-width: 500px;
+.help-div {
   margin: auto;
+  max-width: 80%;
+  p,
+  h2,
+  h4,
+  ul,
+  li {
+    text-align: start;
+  }
+  ul {
+    margin: 1.2rem 0;
+  }
+  h2 {
+    margin-top: 4rem;
+  }
+  h3 {
+    margin-top: 2rem;
+  }
+  h4 {
+    margin: 0.8rem 0;
+  }
 }
