@@ -16,7 +16,7 @@ export default function EditEventList(): JSX.Element {
     async function fetchData() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/all-event-details",
+          "https://tom-the-shop-server-7h2n.onrender.com/event/all-event-details",
         );
         const data: Event[] = await response.json();
         setEventsState(data);
@@ -29,7 +29,7 @@ export default function EditEventList(): JSX.Element {
 
   async function handleDelete(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/delete-event",
+      "https://tom-the-shop-server-7h2n.onrender.com/event/delete-event",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -22,7 +22,7 @@ export default function EditShopList(): JSX.Element {
     async function fetchShops() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/get-shops",
+          "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
         );
         const data: shop[] = await response.json();
         setShopState(data);
@@ -46,7 +46,7 @@ export default function EditShopList(): JSX.Element {
 
   async function saveEdit(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/update-shop",
+      "https://tom-the-shop-server-7h2n.onrender.com/shop/update-shop",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,7 +63,7 @@ export default function EditShopList(): JSX.Element {
 
   async function handleDelete(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/delete-shop",
+      "https://tom-the-shop-server-7h2n.onrender.com/shop/delete-shop",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -25,7 +25,7 @@ export default function AddRequiredVehicle(): JSX.Element {
     // console.log(formValues);
     e.preventDefault();
     await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/add-required-vehicle",
+      "https://tom-the-shop-server-7h2n.onrender.com/vehicle/add-required-vehicle",
       {
         method: "POST",
         headers: {
@@ -45,7 +45,7 @@ export default function AddRequiredVehicle(): JSX.Element {
     async function fetchVehicles() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/get-vehicles",
+          "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
         );
         const data: vehicle[] = await response.json();
         // console.log(data);
@@ -61,7 +61,7 @@ export default function AddRequiredVehicle(): JSX.Element {
   useEffect(() => {
     async function fetchShops() {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/get-shops",
+        "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
       );
       const data: shop[] = await response.json();
       setShopsState(data);

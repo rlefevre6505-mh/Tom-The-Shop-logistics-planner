@@ -23,7 +23,7 @@ export default function EditEquipmentInventory(): JSX.Element {
     async function fetchInventory() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/get-inventory",
+          "https://tom-the-shop-server-7h2n.onrender.com/equipment/get-inventory",
         );
         const data: EquipmentItem[] = await response.json();
         setInventory(data);
@@ -48,7 +48,7 @@ export default function EditEquipmentInventory(): JSX.Element {
 
   async function saveEdit(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/update-inventory",
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/update-inventory",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,7 +68,7 @@ export default function EditEquipmentInventory(): JSX.Element {
 
   async function handleDelete(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/delete-inventory",
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/delete-inventory",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

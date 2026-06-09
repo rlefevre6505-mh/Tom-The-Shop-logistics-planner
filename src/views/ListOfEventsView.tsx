@@ -17,7 +17,7 @@ export default function ListOfEvents(): JSX.Element {
     async function fetchData() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/all-event-details",
+          "https://tom-the-shop-server-7h2n.onrender.com/event/all-event-details",
         );
         const data: Event[] = await response.json();
         setEventsList(data);
@@ -30,7 +30,7 @@ export default function ListOfEvents(): JSX.Element {
 
   async function fetchSelectedEvent(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/selected-event",
+      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
       {
         method: "POST",
         headers: {

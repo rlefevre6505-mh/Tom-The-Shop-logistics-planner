@@ -24,17 +24,20 @@ export default function AddEventView(): JSX.Element {
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    await fetch("https://tom-the-shop-server-7h2n.onrender.com/add-note", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    await fetch(
+      "https://tom-the-shop-server-7h2n.onrender.com/event/add-note",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
       },
-      body: JSON.stringify(formValues),
-    });
+    );
 
     async function fetchSelectedEvent(id: number) {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/selected-event",
+        "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
         {
           method: "POST",
           headers: {

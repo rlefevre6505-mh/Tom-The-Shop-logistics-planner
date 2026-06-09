@@ -21,7 +21,7 @@ export default function AddShop(): JSX.Element {
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    await fetch("https://tom-the-shop-server-7h2n.onrender.com/add-shop", {
+    await fetch("https://tom-the-shop-server-7h2n.onrender.com/shop/add-shop", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -23,7 +23,7 @@ export default function EditVehicleList(): JSX.Element {
     async function fetchVehicles() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/get-vehicles",
+          "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
         );
         const data: vehicle[] = await response.json();
         setVehicleState(data);
@@ -48,7 +48,7 @@ export default function EditVehicleList(): JSX.Element {
 
   async function saveEdit(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/update-vehicle",
+      "https://tom-the-shop-server-7h2n.onrender.com/vehicle/update-vehicle",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,7 +65,7 @@ export default function EditVehicleList(): JSX.Element {
 
   async function handleDelete(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/delete-vehicle",
+      "https://tom-the-shop-server-7h2n.onrender.com/vehicle/delete-vehicle",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -22,13 +22,16 @@ export default function AddVehicle(): JSX.Element {
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    await fetch("https://tom-the-shop-server-7h2n.onrender.com/add-vehicle", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    await fetch(
+      "https://tom-the-shop-server-7h2n.onrender.com/vehicle/add-vehicle",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
       },
-      body: JSON.stringify(formValues),
-    });
+    );
     setFormValues({
       vehicle_name: "",
       vehicle_reg: "",

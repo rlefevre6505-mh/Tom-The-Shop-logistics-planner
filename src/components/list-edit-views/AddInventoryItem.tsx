@@ -24,7 +24,7 @@ export default function AddInventoryItem(): JSX.Element {
   ) {
     e.preventDefault();
     await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/add-inventory-item",
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/add-inventory-item",
       {
         method: "POST",
         headers: {

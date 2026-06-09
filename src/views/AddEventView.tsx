@@ -29,7 +29,7 @@ export default function AddEventView(): JSX.Element {
   useEffect(() => {
     async function fetchShops() {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/get-shops",
+        "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
       );
       const data: shop[] = await response.json();
       setShopsState(data);
@@ -40,7 +40,7 @@ export default function AddEventView(): JSX.Element {
   useEffect(() => {
     async function fetchVehicles() {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/get-vehicles",
+        "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
       );
       const data: vehicle[] = await response.json();
       setVehiclesState(data);
@@ -52,13 +52,16 @@ export default function AddEventView(): JSX.Element {
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    await fetch("https://tom-the-shop-server-7h2n.onrender.com/add-event", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    await fetch(
+      "https://tom-the-shop-server-7h2n.onrender.com/event/add-event",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
       },
-      body: JSON.stringify(formValues),
-    });
+    );
     setFormValues({
       title: "",
       start: "",

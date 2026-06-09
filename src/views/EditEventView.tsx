@@ -36,7 +36,7 @@ export default function EditEventView(): JSX.Element {
   useEffect(() => {
     async function fetchShops() {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/get-shops",
+        "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
       );
       const data: shop[] = await response.json();
       setShopsState(data);
@@ -47,7 +47,7 @@ export default function EditEventView(): JSX.Element {
   useEffect(() => {
     async function fetchVehicles() {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/get-vehicles",
+        "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
       );
       const data: vehicle[] = await response.json();
       setVehiclesState(data);
@@ -86,7 +86,7 @@ export default function EditEventView(): JSX.Element {
 
   async function fetchSelectedEvent(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/selected-event",
+      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
       {
         method: "POST",
         headers: {
@@ -105,7 +105,7 @@ export default function EditEventView(): JSX.Element {
     // console.log("Form values being submitted:", formValues);
     try {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/edit-event",
+        "https://tom-the-shop-server-7h2n.onrender.com/event/edit-event",
         {
           method: "PUT",
           headers: {

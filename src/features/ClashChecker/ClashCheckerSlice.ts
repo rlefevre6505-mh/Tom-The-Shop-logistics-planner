@@ -33,11 +33,17 @@ const initialState: ClashState = {
 
 export const fetchClashData = createAsyncThunk("clash/fetchAll", async () => {
   const [eventsRes, listsRes, invRes, reqRes] = await Promise.all([
-    fetch("https://tom-the-shop-server-7h2n.onrender.com/all-event-details"),
-    fetch("https://tom-the-shop-server-7h2n.onrender.com/get-equipment-lists"),
-    fetch("https://tom-the-shop-server-7h2n.onrender.com/get-inventory"),
     fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/get-required-vehicles",
+      "https://tom-the-shop-server-7h2n.onrender.com/event/all-event-details",
+    ),
+    fetch(
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/get-equipment-lists",
+    ),
+    fetch(
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/get-inventory",
+    ),
+    fetch(
+      "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-required-vehicles",
     ),
   ]);
   const events: Event[] = await eventsRes.json();

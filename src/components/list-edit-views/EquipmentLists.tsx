@@ -26,7 +26,7 @@ export default function EditEquipmentList(): JSX.Element {
     async function fetchEquipmentLists() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/get-equipment-lists",
+          "https://tom-the-shop-server-7h2n.onrender.com/equipment/get-equipment-lists",
         );
         const data = await response.json();
         setEquipmentListsState(data);
@@ -59,7 +59,7 @@ export default function EditEquipmentList(): JSX.Element {
 
   async function saveEdit(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/update-equipment-list-item",
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/update-equipment-list-item",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -81,7 +81,7 @@ export default function EditEquipmentList(): JSX.Element {
 
   async function handleDelete(shop_id: number, equipment_id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/delete-equipment-list-item",
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/delete-equipment-list-item",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

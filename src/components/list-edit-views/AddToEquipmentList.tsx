@@ -30,7 +30,7 @@ export default function AddToEquipmentList(): JSX.Element {
     async function fetchShops() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/get-shops",
+          "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
         );
         const data: shop[] = await response.json();
         // console.log(data);
@@ -45,7 +45,7 @@ export default function AddToEquipmentList(): JSX.Element {
   useEffect(() => {
     async function fetchInventory() {
       const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/get-inventory",
+        "https://tom-the-shop-server-7h2n.onrender.com/equipment/get-inventory",
       );
       const data: EquipmentItem[] = await response.json();
       // console.log(data);
@@ -61,7 +61,7 @@ export default function AddToEquipmentList(): JSX.Element {
   ) {
     e.preventDefault();
     await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/add-to-equipment-list",
+      "https://tom-the-shop-server-7h2n.onrender.com/equipment/add-to-equipment-list",
       {
         method: "POST",
         headers: {

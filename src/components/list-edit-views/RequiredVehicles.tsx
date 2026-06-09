@@ -18,7 +18,7 @@ export default function RequiredVehicles(): JSX.Element {
 
   async function handleDelete(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/delete-requirement",
+      "https://tom-the-shop-server-7h2n.onrender.com/vehicle/delete-requirement",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,7 +36,7 @@ export default function RequiredVehicles(): JSX.Element {
     async function fetchRequiredVehicles() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/get-required-vehicles",
+          "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-required-vehicles",
         );
         const data: requirement[] = await response.json();
         // console.log(data);

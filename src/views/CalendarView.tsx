@@ -36,7 +36,7 @@ export default function CalendarView() {
     async function fetchData() {
       try {
         const response = await fetch(
-          "https://tom-the-shop-server-7h2n.onrender.com/stored-events",
+          "https://tom-the-shop-server-7h2n.onrender.com/event/stored-events",
         );
         const data = await response.json();
         const sortedEvents = (data as calendarEvent[])
@@ -67,7 +67,7 @@ export default function CalendarView() {
 
   async function fetchSelectedEvent(id: number) {
     const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/selected-event",
+      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
       {
         method: "POST",
         headers: {
