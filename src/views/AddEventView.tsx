@@ -160,8 +160,12 @@ export default function AddEventView(): JSX.Element {
                           !selectedShopIds.includes(s.id) ||
                           s.id === formValues.shops[i],
                       )
-                      .map((s) => {
-                        return <option value={s.id}>{s.shop_name}</option>;
+                      .map((s, i) => {
+                        return (
+                          <option key={`shop_option${i}`} value={s.id}>
+                            {s.shop_name}
+                          </option>
+                        );
                       })}
                   </select>
                 ),
@@ -197,8 +201,12 @@ export default function AddEventView(): JSX.Element {
                           !selectedVehicleIds.includes(v.id) ||
                           v.id === formValues.vehicles[i],
                       )
-                      .map((v) => {
-                        return <option value={v.id}>{v.vehicle_name}</option>;
+                      .map((v, i) => {
+                        return (
+                          <option key={`vehicle_option${i}`} value={v.id}>
+                            {v.vehicle_name}
+                          </option>
+                        );
                       })}
                   </select>
                 ),

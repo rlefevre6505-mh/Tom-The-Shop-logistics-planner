@@ -18,6 +18,15 @@ form,
 .form-input {
   display: flex;
   flex-direction: column;
+  label {
+    font-size: 1.2rem;
+    margin: 0.4rem 0;
+  }
+  input {
+    padding: 0.8rem 0.4rem;
+    border-radius: 0.4rem;
+    font-size: 1.2rem;
+  }
 }
 
 button {
@@ -25,4 +34,12 @@ button {
   font-size: 1rem;
   padding: 0.4rem 0.8rem;
   border-radius: 0.4rem;
+}
+
+@media (width < 800px) {
+  input {
+    padding: 0.8rem 0.4rem;
+    border-radius: 0.4rem;
+    font-size: 1.2rem;
+  }
 }

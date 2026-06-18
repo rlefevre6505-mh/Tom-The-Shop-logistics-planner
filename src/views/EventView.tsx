@@ -49,13 +49,15 @@ export default function EventView(): JSX.Element {
   return (
     <div className="event-container">
       <div>
-        <h1>Event: {EventDetails?.title}</h1>
-        <p>Event added on {EventDetails?.date_added.toString()}</p>
-        <p>
+        <h1>
+          {EventDetails?.title} at{" "}
+          {EventDetails?.location && <p>{EventDetails?.location}</p>}
+        </h1>
+        <h2>Event added on {EventDetails?.date_added.toString()}</h2>
+        <h2>
           Start: {EventDetails?.start.toLocaleString()} ~ End:{" "}
           {EventDetails?.end.toLocaleString()}
-        </p>
-        {EventDetails?.location && <p>Location: {EventDetails?.location}</p>}
+        </h2>
         <h3>Shops Required: {EventDetails?.num_of_shops}</h3>
         <p>Currently Allocated:</p>
         <ul>

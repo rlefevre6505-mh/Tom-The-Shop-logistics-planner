@@ -76,7 +76,7 @@ export default function Menu({
             }}
             className="close-button"
           >
-            close
+            {Icons.cancel}close
           </button>
         ) : null}
       </div>
