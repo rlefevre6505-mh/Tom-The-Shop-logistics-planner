@@ -54,10 +54,13 @@ export default function EventView(): JSX.Element {
           {EventDetails?.title} at{" "}
           {EventDetails?.location && <h1>{EventDetails?.location}</h1>}
         </h1>
-        <h2>Event added on {EventDetails?.date_added.toString()}</h2>
         <h2>
-          Start: {EventDetails?.start.toLocaleString()} ~ End:{" "}
-          {EventDetails?.end.toLocaleString()}
+          Event added on{" "}
+          {EventDetails && toUKdate(EventDetails?.date_added.toString())}
+        </h2>
+        <h2>
+          Start: {EventDetails && toUKdate(EventDetails.start.toLocaleString())}{" "}
+          ~ End: {EventDetails && toUKdate(EventDetails?.end.toLocaleString())}
         </h2>
         <h3>Shops Required: {EventDetails?.num_of_shops}</h3>
         <p>Currently Allocated:</p>

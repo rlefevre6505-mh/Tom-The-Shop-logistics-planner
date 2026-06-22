@@ -112,7 +112,7 @@
 .fc-daygrid-day-frame {
   background-color: white !important;
   color: black !important;
-  border-color: transparent !important;
+  /* border-color: transparent !important; */
 }
 
 @media (width < 800px) {
