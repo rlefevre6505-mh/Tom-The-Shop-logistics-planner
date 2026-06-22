@@ -30,7 +30,7 @@
 .fc-list-event-time,
 .fc-list-event-graphic,
 .fc-list-event-title,
-.fc-scrollgrid-sync-inner {
+.fc-scrollgrid-sync- {
   background-color: white;
 }
 
@@ -40,9 +40,9 @@
   border-top-right-radius: 4px;
 }
 
-.fc-day-today {
+/* .fc-day-today {
   background-color: 5px solid red;
-}
+} */
 
 .fc-multimonth-day .fc-day-today,
 .fc-timegrid-col .fc-day-today,
@@ -108,7 +108,8 @@
   background-color: #00a7c4;
 }
 
-.fc-list-event-title {
+.fc-list-event-title,
+.fc-daygrid-day-frame {
   background-color: white !important;
   color: black !important;
   border-color: transparent !important;

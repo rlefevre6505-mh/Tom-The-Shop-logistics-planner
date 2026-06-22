@@ -2,14 +2,19 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   li {
     text-align: center;
   }
 }
 
+.event-details-container {
+  margin-top: 2rem;
+}
+
 h1 {
   font-size: 1.6rem;
+  margin-top: 0.8rem;
 }
 
 h2 {
@@ -56,9 +61,24 @@ button {
   margin-bottom: 0.8rem;
 }
 
+/* @media (width > 800px) {
+  .event-details-container {
+    h1,
+    h2,
+    h3,
+    p,
+    ul {
+      text-align: start;
+    }
+  }
+} */
+
 @media (width > 1000px) {
   .event-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+  .notes-section {
+    margin-top: 1.6rem;
   }
 }

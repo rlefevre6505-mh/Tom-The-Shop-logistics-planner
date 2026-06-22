@@ -5,6 +5,7 @@ import ViewButton from "../components/buttons/ViewButton.tsx";
 import Note from "../components/Note.tsx";
 import Spinner from "../components/Spinner.tsx";
 import { Icons } from "../components/Icons.tsx";
+import { toUKdate } from "../lib/functions.ts";
 import "./EventView.css";
 
 export default function EventView(): JSX.Element {
@@ -48,10 +49,10 @@ export default function EventView(): JSX.Element {
 
   return (
     <div className="event-container">
-      <div>
+      <div className="event-details-container">
         <h1>
           {EventDetails?.title} at{" "}
-          {EventDetails?.location && <p>{EventDetails?.location}</p>}
+          {EventDetails?.location && <h1>{EventDetails?.location}</h1>}
         </h1>
         <h2>Event added on {EventDetails?.date_added.toString()}</h2>
         <h2>
@@ -107,7 +108,7 @@ export default function EventView(): JSX.Element {
         />
       </div>
       <div className="notes-section">
-        {EventDetails?.notes && <h3>Notes</h3>}
+        {EventDetails?.notes && <h2>Notes</h2>}
         <div className="notes-container">
           {EventDetails?.notes &&
             EventDetails?.notes?.map((n, i) => {
