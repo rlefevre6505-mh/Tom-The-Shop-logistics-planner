@@ -11,6 +11,9 @@ import Spinner from "../components/Spinner.tsx";
 export default function ListOfEvents(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
   const [eventsList, setEventsList] = useState<Event[]>([]);
+  const [sortOrder, setSortOrder] = useState<"start" | "name">("start");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -46,6 +49,43 @@ export default function ListOfEvents(): JSX.Element {
   return (
     <>
       <h1>Current & Upcoming Events</h1>
+      <div className="options">
+        <div>
+          <label htmlFor="event-sort-order">Order by</label>
+          <select
+            id="event-sort-order"
+            value={sortOrder}
+            onChange={(event) =>
+              setSortOrder(event.target.value as "start" | "name")
+            }
+          >
+            <option value="start">Start date</option>
+            <option value="name">Event name</option>
+          </select>
+        </div>
+
+        <div className="event-date-filter">
+          <label>
+            From
+            <input
+              className="date-picker"
+              type="date"
+              value={dateFrom}
+              onChange={(event) => setDateFrom(event.target.value)}
+            />
+          </label>
+          <label>
+            To
+            <input
+              className="date-picker"
+              type="date"
+              value={dateTo}
+              min={dateFrom || undefined}
+              onChange={(event) => setDateTo(event.target.value)}
+            />
+          </label>
+        </div>
+      </div>
       {loading ? (
         <Spinner />
       ) : (
@@ -55,7 +95,35 @@ export default function ListOfEvents(): JSX.Element {
             const today = new Date();
             const yesterday = new Date(today);
             yesterday.setDate(today.getDate() - 2);
-            return endDate >= yesterday;
+            const eventStart = new Date(e.start);
+            const fromDate = dateFrom
+              ? new Date(`${dateFrom}T00:00:00`)
+              : undefined;
+            const toDate = dateTo
+              ? new Date(`${dateTo}T23:59:59.999`)
+              : undefined;
+
+            return (
+              endDate >= yesterday &&
+              (!fromDate || eventStart >= fromDate) &&
+              (!toDate || eventStart <= toDate)
+            );
+          })
+          .sort((firstEvent, secondEvent) => {
+            if (sortOrder === "name") {
+              return firstEvent.title.localeCompare(
+                secondEvent.title,
+                undefined,
+                {
+                  sensitivity: "base",
+                },
+              );
+            }
+
+            return (
+              new Date(firstEvent.start).getTime() -
+              new Date(secondEvent.start).getTime()
+            );
           })
           .map((e, i) => {
             return (
