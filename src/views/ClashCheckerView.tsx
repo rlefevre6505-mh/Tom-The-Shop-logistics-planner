@@ -1,6 +1,7 @@
 import { useEffect, type JSX } from "react";
 import type { Event } from "../lib/types";
-import { toUKdate } from "../lib/functions";
+import EventClash from "../components/EventClash";
+// import { toUKdate } from "../lib/functions";
 import "./ClashChecker.css";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
@@ -95,40 +96,12 @@ export default function ClashCheckerView(): JSX.Element {
                       const sharedVehicles = getSharedVehicles(e1.event, e2);
 
                       return (
-                        <div
-                          key={`pair-${e1.event.id}-${e2.id}`}
-                          className="clash-block"
-                        >
-                          <p className="clash-title">
-                            {e1.event.title} overlaps {e2.title} from
-                          </p>
-                          <p className="clash-title">
-                            {toUKdate(e2.start)} to {toUKdate(e1.event.end)}.
-                          </p>
-
-                          {sharedShops.length > 0 && (
-                            <div className="clash-section shops">
-                              <h4>Shared Shops</h4>
-                              {sharedShops.map((shop) => (
-                                <p key={shop.id} className="warning">
-                                  {shop.shop_name} is allocated to both events.
-                                </p>
-                              ))}
-                            </div>
-                          )}
-
-                          {sharedVehicles.length > 0 && (
-                            <div className="clash-section vehicles">
-                              <h4>Shared Vehicles</h4>
-                              {sharedVehicles.map((vehicle) => (
-                                <p key={vehicle.id} className="warning">
-                                  {vehicle.vehicle_name} is allocated to both
-                                  events.
-                                </p>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+                        <EventClash
+                          e1={e1}
+                          e2={e2}
+                          sharedShops={sharedShops}
+                          sharedVehicles={sharedVehicles}
+                        />
                       );
                     })}
 
@@ -136,12 +109,14 @@ export default function ClashCheckerView(): JSX.Element {
                       <div className="clash-block">
                         <div className="clash-section equipment">
                           <h4>Equipment Shortages (Combined)</h4>
-                          {groupShortages.map((s) => (
-                            <p key={s.equipment_name} className="warning">
-                              {s.equipment_name}: required {s.required},
-                              available {s.available}, short by {s.shortage}.
-                            </p>
-                          ))}
+                          <div className="equipment-flex">
+                            {groupShortages.map((s) => (
+                              <p key={s.equipment_name} className="warning">
+                                {s.equipment_name}: required {s.required},
+                                available {s.available}, short by {s.shortage}.
+                              </p>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
