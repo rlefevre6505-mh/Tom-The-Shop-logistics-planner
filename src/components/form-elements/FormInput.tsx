@@ -22,7 +22,7 @@ export default function FormInput({
         type={type}
         id={name}
         name={name}
-        required
+        // required
         value={value}
         onChange={onChange}
       />

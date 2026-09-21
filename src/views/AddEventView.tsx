@@ -4,15 +4,18 @@ import "./AddEvent.css";
 import FormInput from "../components/form-elements/FormInput.tsx";
 import FormNumberInput from "../components/form-elements/FormNumberInput.tsx";
 import SubmitButton from "../components/buttons/SubmitButton.tsx";
+import ErrorModal from "../components/list-edit-views/ErrorModal.tsx";
 import type { shop, vehicle, addEventFormValues } from "../lib/types.ts";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { handleInputChangeFactory } from "../lib/functions.ts";
 
+
 export default function AddEventView(): JSX.Element {
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
   const dispatch = useAppDispatch();
+  const [errorState, setErrorState] = useState<string>("");
   const [formValues, setFormValues] = useState<addEventFormValues>({
     title: "",
     start: "",
@@ -26,6 +29,7 @@ export default function AddEventView(): JSX.Element {
   });
   const handleInputChange = handleInputChangeFactory(setFormValues);
 
+
   useEffect(() => {
     async function fetchShops() {
       const response = await fetch(
@@ -36,6 +40,7 @@ export default function AddEventView(): JSX.Element {
     }
     fetchShops();
   }, []);
+
 
   useEffect(() => {
     async function fetchVehicles() {
@@ -48,11 +53,13 @@ export default function AddEventView(): JSX.Element {
     fetchVehicles();
   }, []);
 
+
   async function handleSubmit(
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    await fetch(
+    setErrorState("");
+    const res = await fetch(
       "https://tom-the-shop-server-7h2n.onrender.com/event/add-event",
       {
         method: "POST",
@@ -62,19 +69,28 @@ export default function AddEventView(): JSX.Element {
         body: JSON.stringify(formValues),
       },
     );
-    setFormValues({
-      title: "",
-      start: "",
-      end: "",
-      date_added: new Date(),
-      location: "",
-      num_of_shops: 0,
-      shops: [],
-      num_of_vehicles: 0,
-      vehicles: [],
-    });
-    dispatch(changeView("calendar"));
+
+
+    if (!res.ok) {
+      const err = await res.json();
+      setErrorState(`${err.code || res.status}: ${err.message}`);
+      return;
+    } else {
+      setFormValues({
+        title: "",
+        start: "",
+        end: "",
+        date_added: new Date(),
+        location: "",
+        num_of_shops: 0,
+        shops: [],
+        num_of_vehicles: 0,
+        vehicles: [],
+      });
+      dispatch(changeView("calendar"));
+    }
   }
+
 
   function handleShopSelect(i: number, value: number) {
     const updated = [...formValues.shops];
@@ -83,6 +99,7 @@ export default function AddEventView(): JSX.Element {
   }
   const selectedShopIds = formValues.shops;
 
+
   function handleVehicleSelect(i: number, value: number) {
     const updated = [...formValues.vehicles];
     updated[i] = value;
@@ -90,10 +107,21 @@ export default function AddEventView(): JSX.Element {
   }
   const selectedVehicleIds = formValues.vehicles;
 
+
   return (
     <>
       <h1>Add A New Event</h1>
       <div className="form-div main-div">
+        {errorState !== "" && (
+          <ErrorModal
+            message={`ERROR: ${errorState}`}
+            onConfirm={() => {
+              setErrorState("");
+            }}
+          />
+        )}
+
+
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-row">
             <div>
@@ -114,6 +142,7 @@ export default function AddEventView(): JSX.Element {
             />
           </div>
 
+
           <div className="form-row">
             <FormInput
               name="start"
@@ -130,6 +159,7 @@ export default function AddEventView(): JSX.Element {
               labelText="End Date"
             />
           </div>
+
 
           <FormNumberInput
             name="num_of_shops"
@@ -171,6 +201,7 @@ export default function AddEventView(): JSX.Element {
                 ),
               )}
           </div>
+
 
           <FormNumberInput
             name="num_of_vehicles"
@@ -218,3 +249,5 @@ export default function AddEventView(): JSX.Element {
     </>
   );
 }
+
+
