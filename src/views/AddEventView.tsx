@@ -26,7 +26,7 @@ export default function AddEventView(): JSX.Element {
     shops: [],
     num_of_vehicles: 0,
     vehicles: [],
-  });
+  }); 
   const handleInputChange = handleInputChangeFactory(setFormValues);
 
 

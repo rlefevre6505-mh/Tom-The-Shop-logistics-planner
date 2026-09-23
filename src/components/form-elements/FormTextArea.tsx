@@ -20,7 +20,7 @@ export default function FormTextArea({
       <textarea
         id={name}
         name={name}
-        required
+        // required
         value={value}
         onChange={onChange}
       />

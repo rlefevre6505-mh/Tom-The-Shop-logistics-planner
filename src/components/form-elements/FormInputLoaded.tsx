@@ -23,7 +23,7 @@ export default function FormInputLoaded({
         type={type}
         id={name}
         name={name}
-        required
+        // required
         value={value}
         defaultValue={defaultValue}
         onChange={onChange}
