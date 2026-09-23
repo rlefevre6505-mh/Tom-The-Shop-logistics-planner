@@ -10,6 +10,7 @@ import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
+import ErrorModal from "../components/list-edit-views/ErrorModal.tsx";
 import "./CalendarView.css";
 import Spinner from "../components/Spinner.tsx";
 
@@ -28,6 +29,7 @@ export default function CalendarView() {
   const [loading, setLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<EventInput[]>([]);
   // const SelectedEvent = useAppSelector((state) => state.selectedEvent.value);
+  const [errorState, setErrorState] = useState<string>("");
   const dispatch = useAppDispatch();
   const aspect = window.innerWidth < 800 ? 0.65 : 1;
 
@@ -38,6 +40,17 @@ export default function CalendarView() {
         const response = await fetch(
           "https://tom-the-shop-server-7h2n.onrender.com/event/stored-events",
         );
+
+     if (!response.ok) {
+  let serverMessage = "";
+    try {
+      const err = await response.json();
+      serverMessage = `${err.code || response.status}: ${err.message}`;
+    } catch {
+      serverMessage = `Server error: ${response.status}`;
+    }    setErrorState(serverMessage);
+    return;
+  }
         const data = await response.json();
         const sortedEvents = (data as calendarEvent[])
           .slice()
@@ -58,6 +71,8 @@ export default function CalendarView() {
           },
         );
         setEvents(fixedEvents);
+      } catch (err:any){
+setErrorState(`${err.code}: ${err.message}`)
       } finally {
         setLoading(false);
       }
@@ -66,8 +81,9 @@ export default function CalendarView() {
   }, []);
 
   async function fetchSelectedEvent(id: number) {
-    const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
+    try{
+      const response = await fetch(
+      "https://om-the-shop-server-7h2n.onrender.com/event/selected-event",
       {
         method: "POST",
         headers: {
@@ -76,17 +92,46 @@ export default function CalendarView() {
         body: JSON.stringify({ id }),
       },
     );
+         if (!response.ok) {
+  let serverMessage = "";
+    try {
+      const err = await response.json();
+      serverMessage = `${err.code || response.status}: ${err.message}`;
+    } catch {
+      serverMessage = `Server error: ${response.status}`;
+    }    setErrorState(serverMessage);
+    return false
+  }
     const data = await response.json();
     dispatch(changeEventDetails(data));
+     return true
+    
+}catch (err:any){
+setErrorState(`${err.code}: ${err.message}`)
+ return false
+      } 
   }
 
-  return (
+  return (<>
+
+            {errorState !== "" && (
+                <ErrorModal
+                  message={`ERROR: ${errorState}`}
+                  onConfirm={() => {
+                    setErrorState("");
+                  }}
+                />
+              )}
+
+
     <div className="calendar">
       {loading && (
         <div className="calendar-loading-overlay">
           <Spinner />
         </div>
       )}
+
+
 
       <FullCalendar
         plugins={[
@@ -111,11 +156,13 @@ export default function CalendarView() {
         dateClick={undefined}
         aspectRatio={aspect}
         eventClick={async (info) => {
+          console.log("event clicked")
           dispatch(changeSelectedEvent(info.event.id));
-          await fetchSelectedEvent(parseInt(info.event.id));
+          const ok = await fetchSelectedEvent(parseInt(info.event.id));
+          if (!ok) return          
           dispatch(changeView("event-view"));
         }}
       />
-    </div>
+    </div></>
   );
 }

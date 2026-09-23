@@ -31,7 +31,7 @@ export default function FormNumberInput({
         type={type}
         id={name}
         name={name}
-        required
+        // required
         value={value}
         min={min}
         maxLength={maxLength}
