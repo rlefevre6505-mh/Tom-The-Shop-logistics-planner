@@ -83,7 +83,7 @@ setErrorState(`${err.code}: ${err.message}`)
   async function fetchSelectedEvent(id: number) {
     try{
       const response = await fetch(
-      "https://om-the-shop-server-7h2n.onrender.com/event/selected-event",
+      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
       {
         method: "POST",
         headers: {
