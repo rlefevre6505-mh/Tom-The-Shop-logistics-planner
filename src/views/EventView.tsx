@@ -5,30 +5,48 @@ import ViewButton from "../components/buttons/ViewButton.tsx";
 import Note from "../components/Note.tsx";
 import Spinner from "../components/Spinner.tsx";
 import { Icons } from "../components/Icons.tsx";
-import { toUKdate } from "../lib/functions.ts";
+import { apiRequest, toUKdate } from "../lib/functions.ts";
+import ErrorModal from "../components/list-edit-views/ErrorModal.tsx";
 import "./EventView.css";
 
 export default function EventView(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
   const [requirementState, setRequirementState] = useState<requirement[]>([]);
+  const [errorState, setErrorState] = useState<string>("");
 
-  useEffect(() => {
-    // console.log(EventDetails);
-  });
+  // useEffect(() => {
+  //   console.log(EventDetails);
+  // });
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   async function fetchRequiredVehicles() {
+  //     try {
+  //       const response = await fetch(
+  //         "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-required-vehicles",
+  //       );
+  //       const data: requirement[] = await response.json();
+  //       setRequirementState(data);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   fetchRequiredVehicles();
+  // }, []);
+
+    useEffect(() => {
     async function fetchRequiredVehicles() {
-      try {
-        const response = await fetch(
+     
+        const result = await apiRequest(
           "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-required-vehicles",
         );
-        const data: requirement[] = await response.json();
-        // console.log(data);
-        setRequirementState(data);
-      } finally {
-        setLoading(false);
-      }
+    if (!result.ok) {
+      setErrorState(result.error ?? "");
+      setLoading(false);
+      return;
+    }
+    setRequirementState(result.data as requirement[]);
+    setLoading(false);
     }
     fetchRequiredVehicles();
   }, []);
@@ -49,6 +67,16 @@ export default function EventView(): JSX.Element {
 
   return (
     <div className="event-container">
+            
+      {errorState !== "" && (
+        <ErrorModal
+          message={`ERROR: ${errorState}`}
+          onConfirm={() => {
+          setErrorState("");
+          }}
+        />
+       )}
+
       <div className="event-details-container">
         <h1>
           {EventDetails?.title} at{" "}

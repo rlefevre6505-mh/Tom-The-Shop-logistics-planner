@@ -1,11 +1,12 @@
 import { useEffect, useState, type JSX } from "react";
 import type { Event } from "../lib/types";
 import "./ListOfEventsView.css";
-import { toUKdate } from "../lib/functions";
+import { toUKdate, apiRequest } from "../lib/functions";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
+import ErrorModal from "../components/list-edit-views/ErrorModal.tsx";
 import Spinner from "../components/Spinner.tsx";
 
 export default function ListOfEvents(): JSX.Element {
@@ -14,25 +15,27 @@ export default function ListOfEvents(): JSX.Element {
   const [sortOrder, setSortOrder] = useState<"start" | "name">("start");
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
+  const [errorState, setErrorState] = useState<string>("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const response = await fetch(
+        const result = await apiRequest(
           "https://tom-the-shop-server-7h2n.onrender.com/event/all-event-details",
         );
-        const data: Event[] = await response.json();
-        setEventsList(data);
-      } finally {
+    if (!result.ok) {
+        setErrorState(result.error ?? "");
         setLoading(false);
-      }
+        return;
     }
+        setEventsList(result.data as Event[]);
+        setLoading(false)
+    } 
     fetchData();
   }, []);
 
   async function fetchSelectedEvent(id: number) {
-    const response = await fetch(
+    return await apiRequest(
       "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
       {
         method: "POST",
@@ -42,12 +45,19 @@ export default function ListOfEvents(): JSX.Element {
         body: JSON.stringify({ id }),
       },
     );
-    const data = await response.json();
-    dispatch(changeEventDetails(data));
   }
 
   return (
     <>
+    {errorState !== "" && (
+      <ErrorModal
+        message={`ERROR: ${errorState}`}
+        onConfirm={() => {
+        setErrorState("");
+        }}
+      />
+    )}
+
       <h1>Current & Upcoming Events</h1>
       <div className="options">
         <div>
@@ -132,7 +142,14 @@ export default function ListOfEvents(): JSX.Element {
                 key={`event${i}`}
                 onClick={async () => {
                   dispatch(changeSelectedEvent(e.id));
-                  await fetchSelectedEvent(e.id);
+
+                  const result = await fetchSelectedEvent(e.id)
+                  if (!result.ok) {
+                  setErrorState(result.error ?? "");
+                  return; 
+                  }
+
+                  dispatch(changeEventDetails(result.data));
                   dispatch(changeView("event-view"));
                 }}
               >

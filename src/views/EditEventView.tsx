@@ -10,6 +10,8 @@ import SubmitButton from "../components/buttons/SubmitButton.tsx";
 import ViewButton from "../components/buttons/ViewButton.tsx";
 import Spinner from "../components/Spinner.tsx";
 import { handleInputChangeFactory } from "../lib/functions.ts";
+import { apiRequest } from "../lib/functions.ts";
+import ErrorModal from "../components/list-edit-views/ErrorModal.tsx";
 import "./AddEvent.css";
 import { Icons } from "../components/Icons.tsx";
 
@@ -17,6 +19,10 @@ export default function EditEventView(): JSX.Element {
   const dispatch = useAppDispatch();
   const [isPending, startTransition] = useTransition();
   const [loading, setLoading] = useState<boolean>(false);
+  const [shopErrorState, setShopErrorState] = useState<string>("");
+  const [submitErrorState, setSubmitErrorState] = useState<string>("");
+  const [fetchErrorState, setFetchErrorState] = useState<string>("");
+  const [vehicleErrorState, setVehicleErrorState] = useState<string>("");
   const [shopsState, setShopsState] = useState<shop[]>([]);
   const [vehiclesState, setVehiclesState] = useState<vehicle[]>([]);
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
@@ -33,24 +39,53 @@ export default function EditEventView(): JSX.Element {
   });
   const handleInputChange = handleInputChangeFactory(setFormValues);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   async function fetchShops() {
+  //     const response = await fetch(
+  //       "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
+  //     );
+  //     const data: shop[] = await response.json();
+  //     setShopsState(data);
+  //   } 
+  //   fetchShops();
+  // }, []);
+
+    useEffect(() => {
     async function fetchShops() {
-      const response = await fetch(
+      const result = await apiRequest(
         "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
       );
-      const data: shop[] = await response.json();
-      setShopsState(data);
-    }
+
+      if (!result.ok) {
+        setShopErrorState(result.error ?? "");
+        return;
+      }
+      setShopsState(result.data as shop[]);
+    } 
     fetchShops();
   }, []);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   async function fetchVehicles() {
+  //     const response = await fetch(
+  //       "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
+  //     );
+  //     const data: vehicle[] = await response.json();
+  //     setVehiclesState(data);
+  //   }
+  //   fetchVehicles();
+  // }, []);
+
+    useEffect(() => {
     async function fetchVehicles() {
-      const response = await fetch(
+      const result = await apiRequest(
         "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
       );
-      const data: vehicle[] = await response.json();
-      setVehiclesState(data);
+      if (!result.ok) {
+        setVehicleErrorState(result.error ?? "");
+        return;
+      }
+      setVehiclesState(result.data as vehicle[]);
     }
     fetchVehicles();
   }, []);
@@ -84,27 +119,66 @@ export default function EditEventView(): JSX.Element {
     });
   }, [EventDetails]);
 
-  async function fetchSelectedEvent(id: number) {
-    const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      },
-    );
-    const data = await response.json();
-    dispatch(changeEventDetails(data));
-  }
 
-  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+  //   async function fetchSelectedEvent(id: number) {
+  //   const response = await fetch(
+  //     "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ id }),
+  //     },
+  //   );
+  //   const data = await response.json();
+  //   dispatch(changeEventDetails(data));
+  // }
+
+  // async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+  //   setLoading(true);
+  //   e.preventDefault();
+  //   // console.log("Form values being submitted:", formValues);
+  //   try {
+  //     const response = await fetch(
+  //       "https://tom-the-shop-server-7h2n.onrender.com/event/edit-event",
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(formValues),
+  //       },
+  //     );
+  //     if (!response.ok) {
+  //       const errorData = await response.text();
+  //       console.error("Server error:", response.status, errorData);
+  //       return;
+  //     }
+  //     setFormValues({
+  //       event_id: EventDetails?.id,
+  //       title: "",
+  //       start: "",
+  //       end: "",
+  //       location: "",
+  //       num_of_shops: 0,
+  //       shops: [],
+  //       num_of_vehicles: 0,
+  //       vehicles: [],
+  //     });
+  //   } catch (error) {
+  //     console.error("Network error:", error);
+  //   }
+  //   if (EventDetails?.id) {
+  //     await fetchSelectedEvent(EventDetails.id);
+  //   }
+  //   dispatch(changeView("event-view"));
+  // }
+
+    async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     setLoading(true);
     e.preventDefault();
-    // console.log("Form values being submitted:", formValues);
-    try {
-      const response = await fetch(
+      const result = await apiRequest(
         "https://tom-the-shop-server-7h2n.onrender.com/event/edit-event",
         {
           method: "PUT",
@@ -114,9 +188,9 @@ export default function EditEventView(): JSX.Element {
           body: JSON.stringify(formValues),
         },
       );
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error("Server error:", response.status, errorData);
+      if (!result.ok) {
+        setSubmitErrorState(result.error ?? "");
+        setLoading(false)
         return;
       }
       setFormValues({
@@ -130,14 +204,27 @@ export default function EditEventView(): JSX.Element {
         num_of_vehicles: 0,
         vehicles: [],
       });
-    } catch (error) {
-      console.error("Network error:", error);
+    
+      if (EventDetails?.id) {
+       const detailsResult = await apiRequest(
+      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: EventDetails.id }),
+      }
+    );
+
+        if (!detailsResult.ok) {
+      setFetchErrorState(detailsResult.error ?? "");
+      setLoading(false);
+      return; // stay here so modal is visible
     }
-    if (EventDetails?.id) {
-      await fetchSelectedEvent(EventDetails.id);
-    }
+
+    setLoading(false);
+
     dispatch(changeView("event-view"));
-  }
+  }}
 
   function handleShopSelect(i: number, id: number) {
     const selected = shopsState.find((s) => s.id === id);
@@ -181,6 +268,42 @@ export default function EditEventView(): JSX.Element {
 
   return (
     <>
+            {shopErrorState !== "" && (
+              <ErrorModal
+                message={`Shop fetch ERROR: ${shopErrorState}`}
+                onConfirm={() => {
+                  setShopErrorState("");
+                }}
+              />
+            )}
+            
+            {vehicleErrorState !== "" && (
+              <ErrorModal
+                 message={`Vehicle fetch ERROR: ${vehicleErrorState}`}
+                 onConfirm={() => {
+                 setVehicleErrorState("");
+                }}
+              />
+            )}
+
+            {submitErrorState !== "" && (
+              <ErrorModal
+                message={`Data submission ERROR: ${shopErrorState}`}
+                onConfirm={() => {
+                  setSubmitErrorState("");
+                }}
+              />
+            )}
+
+           {fetchErrorState !== "" && (
+              <ErrorModal
+                message={`Data fetch ERROR: ${shopErrorState}`}
+                onConfirm={() => {
+                  setFetchErrorState("");
+                }}
+              />
+            )}
+
       <h1>Edit Event Details</h1>
       <div className="form-div main-div">
         <form className="form" onSubmit={handleSubmit}>

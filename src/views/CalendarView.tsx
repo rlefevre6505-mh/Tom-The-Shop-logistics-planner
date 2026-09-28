@@ -11,6 +11,7 @@ import { changeView } from "../features/view/viewSlice.ts";
 import { changeSelectedEvent } from "../features/selectedEvent/SelectedEventSlice.ts";
 import { changeEventDetails } from "../features/eventDetails/EventDetailsSlice.ts";
 import ErrorModal from "../components/list-edit-views/ErrorModal.tsx";
+import { apiRequest } from "../lib/functions.ts";
 import "./CalendarView.css";
 import Spinner from "../components/Spinner.tsx";
 
@@ -80,37 +81,49 @@ setErrorState(`${err.code}: ${err.message}`)
     fetchData();
   }, []);
 
-  async function fetchSelectedEvent(id: number) {
-    try{
-      const response = await fetch(
-      "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      },
-    );
-         if (!response.ok) {
-  let serverMessage = "";
-    try {
-      const err = await response.json();
-      serverMessage = `${err.code || response.status}: ${err.message}`;
-    } catch {
-      serverMessage = `Server error: ${response.status}`;
-    }    setErrorState(serverMessage);
-    return false
-  }
-    const data = await response.json();
-    dispatch(changeEventDetails(data));
-     return true
+//   async function fetchSelectedEvent(id: number) {
+//     try{
+//       const response = await fetch(
+//       "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ id }),
+//       },
+//     );
+//          if (!response.ok) {
+//   let serverMessage = "";
+//     try {
+//       const err = await response.json();
+//       serverMessage = `${err.code || response.status}: ${err.message}`;
+//     } catch {
+//       serverMessage = `Server error: ${response.status}`;
+//     }    setErrorState(serverMessage);
+//     return false
+//   }
+//     const data = await response.json();
+//     dispatch(changeEventDetails(data));
+//      return true
     
-}catch (err:any){
-setErrorState(`${err.code}: ${err.message}`)
- return false
-      } 
-  }
+// }catch (err:any){
+// setErrorState(`${err.code}: ${err.message}`)
+//  return false
+//       } 
+//   }
+
+async function fetchSelectedEvent(id: number) {
+  return apiRequest(
+    "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    }
+  );
+}
+
 
   return (<>
 
@@ -157,10 +170,14 @@ setErrorState(`${err.code}: ${err.message}`)
         aspectRatio={aspect}
         eventClick={async (info) => {
           console.log("event clicked")
-          dispatch(changeSelectedEvent(info.event.id));
-          const ok = await fetchSelectedEvent(parseInt(info.event.id));
-          if (!ok) return          
-          dispatch(changeView("event-view"));
+  dispatch(changeSelectedEvent(info.event.id));
+  const result = await fetchSelectedEvent(parseInt(info.event.id));
+  if (!result.ok) {
+    setErrorState(result.error?? "");
+    return;  
+  }
+  dispatch(changeEventDetails(result.data));
+  dispatch(changeView("event-view"));
         }}
       />
     </div></>

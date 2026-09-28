@@ -9,6 +9,7 @@ import type { shop, vehicle, addEventFormValues } from "../lib/types.ts";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice.ts";
 import { handleInputChangeFactory } from "../lib/functions.ts";
+import { apiRequest } from "../lib/functions.ts";
 
 
 export default function AddEventView(): JSX.Element {
@@ -30,65 +31,128 @@ export default function AddEventView(): JSX.Element {
   const handleInputChange = handleInputChangeFactory(setFormValues);
 
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   async function fetchShops() {
+  //     const response = await fetch(
+  //       "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
+  //     );
+  //     const data: shop[] = await response.json();
+  //     setShopsState(data);
+  //   }
+  //   fetchShops();
+  // }, []);
+
+    useEffect(() => {
     async function fetchShops() {
-      const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops",
+      const result = await apiRequest(
+        "https://tom-the-shop-server-7h2n.onrender.com/shop/get-shops"
       );
-      const data: shop[] = await response.json();
-      setShopsState(data);
+
+      if (!result.ok) {
+        setErrorState(result.error ?? "");
+        return;
+      }
+      setShopsState(result.data);
     }
     fetchShops();
   }, []);
 
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   async function fetchVehicles() {
+  //     const response = await fetch(
+  //       "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
+  //     );
+  //     const data: vehicle[] = await response.json();
+  //     setVehiclesState(data);
+  //   }
+  //   fetchVehicles();
+  // }, []);
+
+    useEffect(() => {
     async function fetchVehicles() {
-      const response = await fetch(
-        "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles",
+      const result = await apiRequest(
+        "https://tom-the-shop-server-7h2n.onrender.com/vehicle/get-vehicles"
       );
-      const data: vehicle[] = await response.json();
-      setVehiclesState(data);
+
+      if (!result.ok) {
+        setErrorState(result.error ?? "");
+        return;
+      }
+      setVehiclesState(result.data);
     }
     fetchVehicles();
   }, []);
 
 
-  async function handleSubmit(
-    e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
+  // async function handleSubmit(
+  //   e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
+  // ) {
+  //   e.preventDefault();
+  //   setErrorState("");
+  //   const res = await fetch(
+  //     "https://tom-the-shop-server-7h2n.onrender.com/event/add-event",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formValues),
+  //     },
+  //   );
+
+  //   if (!res.ok) {
+  //     const err = await res.json();
+  //     setErrorState(`${err.code || res.status}: ${err.message}`);
+  //     return;
+  //   } else {
+  //     setFormValues({
+  //       title: "",
+  //       start: "",
+  //       end: "",
+  //       date_added: new Date(),
+  //       location: "",
+  //       num_of_shops: 0,
+  //       shops: [],
+  //       num_of_vehicles: 0,
+  //       vehicles: [],
+  //     });
+  //     dispatch(changeView("calendar"));
+  //   }
+  // }
+
+    async function handleSubmit(
+    e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>
   ) {
     e.preventDefault();
     setErrorState("");
-    const res = await fetch(
+    const result = await apiRequest(
       "https://tom-the-shop-server-7h2n.onrender.com/event/add-event",
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formValues),
-      },
+      }
     );
 
-
-    if (!res.ok) {
-      const err = await res.json();
-      setErrorState(`${err.code || res.status}: ${err.message}`);
+    if (!result.ok) {
+      setErrorState(result.error ?? "");
       return;
-    } else {
-      setFormValues({
-        title: "",
-        start: "",
-        end: "",
-        date_added: new Date(),
-        location: "",
-        num_of_shops: 0,
-        shops: [],
-        num_of_vehicles: 0,
-        vehicles: [],
-      });
-      dispatch(changeView("calendar"));
     }
+
+    setFormValues({
+      title: "",
+      start: "",
+      end: "",
+      date_added: new Date(),
+      location: "",
+      num_of_shops: 0,
+      shops: [],
+      num_of_vehicles: 0,
+      vehicles: [],
+    }); 
+
+    dispatch(changeView("calendar"));
   }
 
 
