@@ -42,3 +42,28 @@ export function handleEditChangeFactory<T>(
 //     [name]: value,
 //   }));
 // }
+
+export async function apiRequest(url: string, options: RequestInit = {}) {
+  try {
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      let serverMessage = "";
+
+      try {
+        const err = await response.json();
+        serverMessage = `${err.code || response.status}: ${err.message}`;
+      } catch {
+        serverMessage = `Server error: ${response.status}`;
+      }
+
+      return { ok: false, data: null, error: serverMessage };
+    }
+
+    const data = await response.json();
+    return { ok: true, data, error: null };
+
+  } catch {
+    return { ok: false, data: null, error: "Network error — server unreachable" };
+  }
+}

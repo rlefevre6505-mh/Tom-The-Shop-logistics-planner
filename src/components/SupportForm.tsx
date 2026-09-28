@@ -5,6 +5,8 @@ import SubmitButton from "../components/buttons/SubmitButton";
 import { handleInputChangeFactory } from "../lib/functions";
 import { useAppDispatch } from "../app/hooks.ts";
 import { changeView } from "../features/view/viewSlice";
+import { apiRequest } from "../lib/functions";
+import ErrorModal from "./list-edit-views/ErrorModal.tsx";
 import type { Email } from "../lib/types";
 import "../views/HelpView.css";
 
@@ -14,6 +16,7 @@ export default function SupportForm(): JSX.Element {
     email: "",
     message: "",
   });
+  const [errorState, setErrorState] = useState<string>("")
   const dispatch = useAppDispatch();
 
   const handleInputChange = handleInputChangeFactory(setFormValues);
@@ -25,24 +28,41 @@ export default function SupportForm(): JSX.Element {
     e: React.SyntheticEvent<HTMLFormElement | HTMLTextAreaElement>,
   ) {
     e.preventDefault();
-    await fetch("https://tom-the-shop-server-7h2n.onrender.com/email/support", {
+    setErrorState("");
+
+    const result = await apiRequest("https://tom-the-shop-server-7h2n.onrender.com/email/support", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formValues),
     });
+
+    if (!result.ok) {
+    setErrorState(result.error ?? "");
+    return; 
+  }
+
     setFormValues({
       name: "",
       email: "",
       message: "",
     });
-    console.log("sending formvalues:", formValues);
-    dispatch(changeView("help"));
+    // console.log("sending formvalues:", formValues);
+    dispatch(changeView("help")); //! update to reroute to how-to guide
   }
 
   return (
     <>
+        {errorState !== "" && (
+          <ErrorModal
+            message={`ERROR: ${errorState}`}
+            onConfirm={() => {
+            setErrorState("");
+            }}
+          />
+        )}
+
       <form className="form" onSubmit={handleSubmit}>
         <FormInput
           name="name"

@@ -9,6 +9,9 @@ import FormTextArea from "../components/form-elements/FormTextArea.tsx";
 import ViewButton from "../components/buttons/ViewButton";
 import "./AddNotes.css";
 import { Icons } from "../components/Icons.tsx";
+import ErrorModal from "../components/list-edit-views/ErrorModal.tsx";
+import { apiRequest } from "../lib/functions.ts";
+
 
 export default function AddEventView(): JSX.Element {
   const EventDetails = useAppSelector((state) => state.EventDetails.value);
@@ -17,6 +20,7 @@ export default function AddEventView(): JSX.Element {
     note: "",
     event_id: EventDetails?.id,
   });
+    const [errorState, setErrorState] = useState<string>("");
 
   function handleTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -24,45 +28,93 @@ export default function AddEventView(): JSX.Element {
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    await fetch(
+    setErrorState("");
+
+    const addNoteResult = await apiRequest(
       "https://tom-the-shop-server-7h2n.onrender.com/event/add-note",
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formValues),
-      },
+      }
     );
 
-    async function fetchSelectedEvent(id: number) {
-      const response = await fetch(
+    if (!addNoteResult.ok) {
+      setErrorState(addNoteResult.error ?? "");
+      return; 
+    }
+
+    if (EventDetails?.id) {
+      const detailsResult = await apiRequest(
         "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id }),
-        },
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: EventDetails.id }),
+        }
       );
-      const data = await response.json();
-      dispatch(changeEventDetails(data));
-      // console.log(data);
+
+      if (!detailsResult.ok) {
+        setErrorState(detailsResult.error ?? "");
+        return; // stay here so modal is visible
+      }
+      dispatch(changeEventDetails(detailsResult.data));
     }
-    if (EventDetails?.id) {
-      fetchSelectedEvent(EventDetails.id);
-    }
+
     setFormValues({
       note: "",
       event_id: EventDetails?.id,
     });
-    // console.log("updated");
+
     dispatch(changeView("event-view"));
   }
+  //   await fetch(
+  //     "https://tom-the-shop-server-7h2n.onrender.com/event/add-note",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formValues),
+  //     },
+  //   );
+
+  //   async function fetchSelectedEvent(id: number) {
+  //     const response = await fetch(
+  //       "https://tom-the-shop-server-7h2n.onrender.com/event/selected-event",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ id }),
+  //       },
+  //     );
+  //     const data = await response.json();
+  //     dispatch(changeEventDetails(data));
+  //     // console.log(data);
+  //   }
+  //   if (EventDetails?.id) {
+  //     fetchSelectedEvent(EventDetails.id);
+  //   }
+  //   setFormValues({
+  //     note: "",
+  //     event_id: EventDetails?.id,
+  //   });
+  //   // console.log("updated");
+  //   dispatch(changeView("event-view"));
+  // }
 
   return (
-    <>
+    <>        
+    {errorState !== "" && (
+      <ErrorModal
+          message={`ERROR: ${errorState}`}
+          onConfirm={() => {
+          setErrorState("");
+         }}
+        />
+      )}
       <form className="form" onSubmit={handleSubmit}>
         <FormTextArea
           name="note"
